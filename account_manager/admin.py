@@ -10,4 +10,4 @@ class CustomUserAdmin(admin.ModelAdmin):
     """
     admin class for CustomUser model.
     """
-    pass
+    search_fields = ("email", "username", "first_name", "last_name")
