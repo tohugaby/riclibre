@@ -1,3 +1,7 @@
+"""
+Referendum app: Vote's models admin representation
+"""
+
 from django.contrib import admin
 
 from referendum.admin.utils import ReadOnlyModelAdmin
@@ -12,7 +16,7 @@ class VoteModelAdmin(ReadOnlyModelAdmin):
     list_display = ("referendum", "choice", "vote_date")
     readonly_fields = ("referendum", "choice", "vote_date")
     search_fields = ("referendum",)
-    list_filter = ("referendum", "vote_date")
+    list_filter = ("vote_date",)
 
 
 @admin.register(VoteToken)

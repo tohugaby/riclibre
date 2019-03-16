@@ -1,6 +1,10 @@
+"""
+Referendum app: Like's models admin representation
+"""
+
 from django.contrib import admin
 
-from referendum.admin import ReadOnlyModelAdmin
+from referendum.admin.utils import ReadOnlyModelAdmin
 from referendum.models import Like
 
 

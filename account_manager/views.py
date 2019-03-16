@@ -1,3 +1,5 @@
-from django.shortcuts import render
+"""
+Account manager app: Views module
+"""
 
 # Create your views here.

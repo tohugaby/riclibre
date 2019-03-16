@@ -1,3 +1,5 @@
-from django.shortcuts import render
+"""
+Referendum's app: Views
+"""
 
 # Create your views here.

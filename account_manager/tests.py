@@ -1,3 +1,5 @@
-from django.test import TestCase
+"""
+Account manager app: Tests module
+"""
 
 # Create your tests here.

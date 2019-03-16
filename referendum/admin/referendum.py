@@ -1,3 +1,6 @@
+"""
+Referendum app: Referendum's models admin representation
+"""
 from django.contrib import admin
 from django.utils.html import format_html
 
@@ -5,6 +8,9 @@ from referendum.models import Referendum, Category, Choice
 
 
 class ChoiceInline(admin.TabularInline):
+    """
+    admin Inline for Choice.
+    """
     model = Choice
 
 
@@ -13,10 +19,10 @@ class ReferendumAdmin(admin.ModelAdmin):
     """
     admin class for Referendum model.
     """
-    list_display = ("title", "description", "question", "creation_date", "last_update", "publication_date",
-                    "event_start", "event_end", "nb_votes", "results")
-    list_filter = ("categories", "creation_date", "last_update", "publication_date",
-                   "event_start", "event_end",)
+    list_display = (
+        "title", "question", "creation_date", "last_update", "publication_date", "event_start", "duration",
+        "event_end", "is_published", "is_in_progress", "is_over", "nb_votes", "results")
+    list_filter = ("categories", "creation_date", "last_update", "publication_date", "event_start", "duration")
     search_fields = ("title", "description", "question")
     inlines = [ChoiceInline, ]
 
@@ -27,7 +33,7 @@ class ReferendumAdmin(admin.ModelAdmin):
         :return:
         """
         return format_html("<br>".join([f"{choice.title} : {choice.votes_percentage}%" for choice in sorted(
-            obj.choice_set.all(),
+            obj.get_results(),
             key=lambda choice:
             choice.nb_votes,
             reverse=True)]))
@@ -52,6 +58,9 @@ class ChoiceAdmin(admin.ModelAdmin):
     autocomplete_fields = ["referendum"]
 
     def percentage(self, obj):
+        """
+        display percentage with symbol.
+        """
         return f"{obj.votes_percentage}%"
 
     percentage.short_description = "Pourcentage"

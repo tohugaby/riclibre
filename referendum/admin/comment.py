@@ -1,3 +1,7 @@
+"""
+Referendum app: Comment's models admin representation
+"""
+
 from django.contrib import admin
 
 from referendum.models import Comment, Report

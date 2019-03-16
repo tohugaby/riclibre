@@ -1,2 +1,7 @@
 django
 psycopg2-binary
+
+coverage
+flake8
+pylint
+pylint-django
