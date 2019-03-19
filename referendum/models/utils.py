@@ -1,13 +1,17 @@
 """
 Referendum's app :  model's utils
 """
+from django.db import models
 
 
-class FieldUpdateControlMixin:
+class FieldUpdateControlMixin(models.Model):
     """
     Mixin that add field update control.
     """
     __control_fields = []
+
+    class Meta:
+        abstract = True
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -21,4 +25,6 @@ class FieldUpdateControlMixin:
         fields = control_fields if control_fields else self.__control_fields
         for field in fields:
             original_field = "__original_%s" % field
-            setattr(self, original_field, getattr(self, field))
+            if self.pk:
+                old_instance = self._meta.model.objects.get(pk=self.pk)
+                setattr(self, original_field, getattr(old_instance, field))

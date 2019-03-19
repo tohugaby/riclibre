@@ -1,0 +1,33 @@
+<nav class="navbar navbar-expand-lg navbar-light greyfr-bg">
+    <a class="navbar-brand" href="#">
+        <span class="col-1 white-text bluefr-bg mx-0">R</span>
+        <span class="col-1 white-bg mx-0 greyfr">I</span>
+        <span class="col-1 white-text redfr-bg mx-0">C</span>
+        Libre
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-lg-auto col-lg-6 col-xl-5">
+            {% if not user.is_authenticated %}
+                <li class="nav-item mx-1 my-1 col-lg-6">
+                    <button class="btn bluefr-bg my-2 my-sm-0 col-12 white-text" type="submit">S'inscrire</button>
+                </li>
+                <li class="nav-item mx-1 my-1 col-lg-6">
+                    <button class="btn redfr-bg my-2 my-sm-0 col-12 white-text" type="submit">Se connecter</button>
+                </li>
+            {% endif %}
+            {% if user.is_authenticated %}
+                <li class="nav-item mx-1 my-1 col-lg-6">
+                    <button class="btn bluefr-bg my-2 my-sm-0 col-12 white-text" type="submit">Mon compte</button>
+                </li>
+                <li class="nav-item mx-1 my-1 col-lg-6">
+                    <button class="btn redfr-bg my-2 my-sm-0 col-12 white-text" type="submit">Se déconnecter</button>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>

@@ -3,10 +3,11 @@ Referendum's app: Referendum's models
 """
 
 import logging
-from functools import reduce
-
+from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models import CASCADE
 from django.utils import timezone
+from functools import reduce
 
 from referendum.models.utils import FieldUpdateControlMixin
 
@@ -28,9 +29,11 @@ class Referendum(FieldUpdateControlMixin, models.Model):
     creation_date = models.DateTimeField(verbose_name="Date de création", auto_now_add=True)
     last_update = models.DateTimeField(verbose_name="Date de la dernière modification", auto_now=True)
     publication_date = models.DateTimeField(verbose_name="Date de publication", blank=True, null=True)
+    # TODO: add validator to check that event_start new value is not today
     event_start = models.DateTimeField(verbose_name="Début des votes", blank=True, null=True)
     duration = models.IntegerField(verbose_name="Durée des votes", choices=DURATION_CHOICES,
                                    default=DURATION_CHOICES[0][0])
+    creator = models.ForeignKey(get_user_model(), verbose_name="Créateur", on_delete=CASCADE)
 
     __control_fields = ["publication_date", "event_start", "duration"]
 
@@ -45,7 +48,7 @@ class Referendum(FieldUpdateControlMixin, models.Model):
              update_fields=None):
         control_fields = self.__control_fields
         message = None
-
+        self.update_control_fields(*control_fields)
         if self.pk and self.__was_published_before_update:
             update_fields = ['last_update', 'event_start', 'duration']
             message = "Referendum already published. Updating only allowed fields: last_update, event_start, event_end"
@@ -154,7 +157,10 @@ class Referendum(FieldUpdateControlMixin, models.Model):
         The number of votes for this referendum.
         :return: a number of votes
         """
-        return reduce(lambda a, b: a + b, [choice.nb_votes for choice in self.choice_set.all()])
+        nb_votes_list = [choice.nb_votes for choice in self.choice_set.all() if choice]
+        if nb_votes_list:
+            return reduce(lambda a, b: a + b, nb_votes_list)
+        return 0
 
     def get_results(self):
         """
@@ -210,3 +216,6 @@ class Choice(models.Model):
         if self.referendum.nb_votes:
             percentage = (self.nb_votes / self.referendum.nb_votes) * 100
         return percentage
+
+    def votes_percentage_html(self):
+        return str(self.votes_percentage).replace(",", ".")

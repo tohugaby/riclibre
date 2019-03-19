@@ -1,0 +1,105 @@
+body
+{
+    background-image: url('../images/ballons.jpg');
+    background-size: cover;
+    /*font-family: 'Montserrat', sans-serif;*/
+}
+
+.content
+{
+    min-height: calc(100vh - 98px);
+}
+
+.footer
+{
+    height: 50px;
+    margin: 0;
+}
+
+h1
+{
+    font-size: 2rem;
+}
+
+h2
+{
+    font-size: 1.6rem;
+}
+
+a,
+a:hover,
+a:focus,
+a:active
+{
+    color: #4c86c5;
+}
+
+.redfr
+{
+    color: #ae1a2c;
+}
+
+.redfr-bg
+{
+    background-color: #ae1a2c;
+}
+
+.bluefr
+{
+    color: #133086;
+}
+
+.bluefr-bg
+{
+    background-color: #133086;
+}
+
+.blue2
+{
+    color: #4c86c5;
+}
+
+.blue2-bg
+{
+    background-color: #4c86c5;
+}
+
+.blue3
+{
+    color: #486f91;
+}
+
+.blue3-bg
+{
+    background-color: #486f91;
+}
+
+.white-bg
+{
+    background-color: white;
+}
+
+.white-transp-bg
+{
+    background-color: rgba(255, 255, 255, .8);
+}
+
+.white-very-transp-bg
+{
+    background-color: rgba(255, 255, 255, .4);
+}
+
+.greyfr
+{
+    color: #91a3ad;
+}
+
+.greyfr-bg
+{
+    background-color: #91a3ad;
+}
+
+.white-text
+{
+    color: white;
+}
