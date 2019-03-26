@@ -1,18 +1,16 @@
-{% extends 'referendum/base.html' %}
+{% extends 'base.html' %}
 {% load referendum_extras %}
 
 {% block main_title %}
-    <h1 class="blue3 white-transp-bg text-center my-5">
         Première application française d'organisation de <br>
         Référendum d'Initiative Citoyenne
-    </h1>
 {% endblock %}
 
 {% block content %}
     <div class="row">
      {% if user.is_authenticated %}
                 <div class=" col-12">
-                    <button class="btn blue2-bg col-12 white-text" type="submit">Créer un nouveau référendum</button>
+                    <button class="btn blue2-bg col-12 white-text">Créer un nouveau référendum</button>
                 </div>
             {% endif %}
     </div>

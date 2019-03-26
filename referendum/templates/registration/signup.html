@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block main_title %}
+        Inscrivez-vous sur la première application française d'organisation de <br>
+        Référendum d'Initiative Citoyenne
+{% endblock %}
+{% block content %}
+    <form action="" method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="form-group row">
+                {{ field.errors }}
+                <label for="{{ field.id_for_label }}" class="col-xl-2 col-form-label">{{ field.label }}</label>
+                <div class="col-xl-4">
+                {{ field }}
+                </div>
+                <div class="col-xl-6">
+                <p class="small text-muted">{{ field.help_text|safe }}</p>
+                </div>
+
+            </div>
+        {% endfor %}
+        <button type="submit" class="btn bluefr-bg white-text">Créer le compte</button>
+    </form>
+
+{% endblock %}
+{% block footer %}{% endblock %}

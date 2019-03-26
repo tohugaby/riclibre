@@ -3,11 +3,13 @@ Referendum's app: Referendum's models
 """
 
 import logging
+from functools import reduce
+
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import CASCADE
 from django.utils import timezone
-from functools import reduce
+
 
 from referendum.models.utils import FieldUpdateControlMixin
 
@@ -218,4 +220,8 @@ class Choice(models.Model):
         return percentage
 
     def votes_percentage_html(self):
+        """
+        The percentage of votes for this choice formated for html
+        :return: percentage of votes a html string.
+        """
         return str(self.votes_percentage).replace(",", ".")

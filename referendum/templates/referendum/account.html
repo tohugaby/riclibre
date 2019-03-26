@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% load referendum_extras %}
+
+
+{% block main_title %}
+    Votre compte
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        {% if user.is_authenticated %}
+            <div class=" col-6">
+                <button class="btn blue2-bg col-12 white-text">Créer un nouveau référendum</button>
+            </div>
+            <div class=" col-6">
+                <a class="btn blue3-bg col-12 white-text">Accéder à vos référendum</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="row my-5">
+        <div class="col-lg-6 my-1">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Vos informations actuelles</h5>
+                    <small class="muted greyfr">
+                        Profil créé le {{ user.date_joined | date }} / modifié le {{ user.last_update | date }}
+                    </small>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="font-weight-bold bluefr">
+                            {{ user|verbose_name_filter:'username'|capfirst }}
+                        </span>
+                        <span class="col-6">
+                            {{ user.username }}
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="font-weight-bold redfr">
+                        {{ user|verbose_name_filter:'email'|capfirst }}
+                        </span>
+                        <span class="col-6">
+                        {{ user.email }}
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="font-weight-bold greyfr">
+                        {{ user|verbose_name_filter:'first_name'|capfirst }}
+                        </span>
+                        <span class="col-6">
+                        {{ user.first_name }}
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="font-weight-bold blue2">
+                        {{ user|verbose_name_filter:'last_name'|capfirst }}
+                        </span>
+                        <span class="col-6">
+                        {{ user.last_name }}
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="font-weight-bold blue3">
+                        Statut citoyen
+                        </span>
+                        <span class="col-6">
+                        Non
+                        </span>
+                    </li>
+                </ul>
+                <div class="card-body">
+                    <a class="btn blue2-bg white-text" href="{% url 'password_change' %}">Ajouter une pièce
+                        d'identité</a>
+                    {#                    <a href="#" class="card-link">Another link</a>#}
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-6 my-1">
+            <form class="card" action="" method="post">
+                {% csrf_token %}
+                <div class="card-body">
+                    <h5 class="card-title">Modifier vos informations</h5>
+                    <small class="muted greyfr">
+                        Profil créé le {{ user.date_joined | date }} / modifié le {{ user.last_update | date }}
+
+                    </small>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="font-weight-bold bluefr">
+                            {{ user|verbose_name_filter:'username'|capfirst }}
+                        </span>
+                        <span class="col-6">
+                        {{ form.username }}
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="font-weight-bold redfr">
+                        {{ user|verbose_name_filter:'email'|capfirst }}
+                        </span>
+                        <span class="col-6">
+                        {{ form.email }}
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="font-weight-bold greyfr">
+                        {{ user|verbose_name_filter:'first_name'|capfirst }}
+                        </span>
+                        <span class="col-6">
+                        {{ form.first_name }}
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="font-weight-bold blue2">
+                        {{ user|verbose_name_filter:'last_name'|capfirst }}
+                        </span>
+                        <span class="col-6">
+                        {{ form.last_name }}
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span class="font-weight-bold blue3">
+                        Statut citoyen
+                        </span>
+                        <span class="col-6">
+                        Non
+                        </span>
+                    </li>
+                </ul>
+                <div class="card-body">
+                    <button type="submit" class="btn bluefr-bg white-text">Mettre à jour mes informations</button>
+                    <a class="btn redfr-bg white-text" href="{% url 'password_change' %}">Changer mon mot de passe</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+{% endblock %}

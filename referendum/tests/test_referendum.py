@@ -22,12 +22,7 @@ class ReferendumTestCase(TestCase):
 
         :return:
         """
-        self.referendum_data = {
-            "title": "referendum de test",
-            "description": "ceci est un referendum de test",
-            "question": "êtes-vous d'accord ?",
-            "creator_id": 1
-        }
+        self.referendum_data = REFERENDUM_DATA
 
     def test_create(self):
         """

@@ -15,11 +15,13 @@
 </head>
 <body>
 <div class="content">
-{% block header %}{% include 'referendum/snippets/navbar.html' %}{% endblock %}
-<div class="container">
-    {% block main_title %}{% endblock %}
-    {% block content %}{% endblock %}
-</div>
+    {% block header %}{% include 'referendum/snippets/navbar.html' %}{% endblock %}
+    <div class="container">
+        <h1 class="blue3 white-transp-bg text-center my-5">
+            {% block main_title %}{% endblock %}
+        </h1>
+        {% block content %}{% endblock %}
+    </div>
 </div>
 
 {% block footer %}

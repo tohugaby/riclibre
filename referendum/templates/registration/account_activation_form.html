@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+
+{% block title %}{{ title }}{% endblock %}
+{% block main_title %}
+    Demande d'activation de compte
+{% endblock %}
+{% block content %}
+
+
+    <div class="col white-transp-bg bluefr lead">
+        <p>
+            Pour activer votre compte veuillez remplir le formulaire ci-dessous:
+        </p>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.email.errors }}
+            <label for="id_email">{% trans 'Email address:' %}</label>
+            {{ form.email }}
+        </div>
+        <input type="submit" class="btn bluefr-bg white-text" value="Recevoir le lien d'activation">
+    </form>
+
+{% endblock %}

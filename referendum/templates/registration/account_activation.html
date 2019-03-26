@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block main_title %}
+    Activation de votre compte.
+{% endblock %}
+{% block content %}
+    {% if valid_token %}
+        <div class="col white-transp-bg bluefr lead">
+            <p>
+                Votre compte a bien été activé. Vous pouvez désormais
+                <a href="{% url 'login' %}" class="font-weight-bold bluefr">
+                    vous connecter
+                </a>.
+            </p>
+        </div>
+    {% else %}
+        <div class="col white-transp-bg bluefr lead">
+            <p>
+                Ce lien n'est plus valide. Votre compte est peut-être déjà actif, ou vous avez trop attendu pour
+                activer votre compte. Souhaitez-vous
+                <a href="{% url 'ask_account_activation' %}" class="font-weight-bold bluefr">
+                recevoir un nouveau mail d'activation
+                </a> ?
+            </p>
+        </div>
+    {% endif %}
+
+
+{% endblock %}
