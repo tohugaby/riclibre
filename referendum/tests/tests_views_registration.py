@@ -6,6 +6,7 @@ from django.core import mail
 from django.test import TestCase, Client, LiveServerTestCase
 from django.urls import reverse
 
+from referendum.tests import create_test_user
 from referendum.utils import get_account_validation_context
 from referendum.validators import RequiredCharactersValidator
 from referendum.views import SignupConfirmView, SignupView
@@ -77,9 +78,8 @@ class SignupConfirmViewTestCase(TestCase):
 
     def setUp(self):
         self.client = Client()
-        self.user = get_user_model().objects.create(username='test', email='test@test.fr', is_active=True)
-        self.password = "test"
-        self.user.set_password(self.password)
+        self.password = "Azer123@"
+        self.user = create_test_user(self.password)
 
     def test_rediction_when_logged_in(self):
         """
@@ -87,7 +87,7 @@ class SignupConfirmViewTestCase(TestCase):
         """
         self.client.login(username=self.user.email, password=self.password)
         response = self.client.get(reverse('signup_confirm'))
-        self.assertEqual(response.status_code, 200)
+        self.assertRedirects(response, reverse('index'))
 
 
 class AskAccountActivationViewTestCase(LiveServerTestCase):
@@ -97,9 +97,8 @@ class AskAccountActivationViewTestCase(LiveServerTestCase):
 
     def setUp(self):
         self.client = Client()
-        self.user = get_user_model().objects.create(username='test', email='test@test.fr', is_active=False)
-        self.password = "test"
-        self.user.set_password(self.password)
+        self.password = 'Azer123@'
+        self.user = create_test_user(self.password, is_active=False)
 
     def test_ask_activation(self):
         """Test asking for account validation."""
@@ -119,9 +118,8 @@ class AccountActivationViewTestCase(LiveServerTestCase):
 
     def setUp(self):
         self.client = Client()
-        self.user = get_user_model().objects.create(username='test', email='test@test.fr', is_active=False)
-        self.password = "test"
-        self.user.set_password(self.password)
+        self.password = 'Azer123@'
+        self.user = create_test_user(self.password, is_active=False)
 
     def test_activation_for_inactive_account(self):
         """

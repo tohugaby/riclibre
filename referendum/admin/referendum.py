@@ -20,8 +20,8 @@ class ReferendumAdmin(admin.ModelAdmin):
     admin class for Referendum model.
     """
     list_display = (
-        "title", "question", "creation_date", "last_update", "publication_date", "event_start", "duration",
-        "event_end", "is_published", "is_in_progress", "is_over", "nb_votes", "results")
+        "title", "question", "creator", "slug", "creation_date", "last_update", "publication_date", "event_start",
+        "duration", "event_end", "is_published", "is_in_progress", "is_over", "nb_votes", "results")
     list_filter = ("categories", "creation_date", "last_update", "publication_date", "event_start", "duration")
     search_fields = ("title", "description", "question")
     inlines = [ChoiceInline, ]
@@ -44,7 +44,7 @@ class CategoryAdmin(admin.ModelAdmin):
     """
     admin class for Category model.
     """
-    list_display = ("title",)
+    list_display = ("title", "slug")
     search_fields = ("title",)
 
 

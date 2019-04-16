@@ -1,0 +1,34 @@
+<div class="col-lg-3">
+    {% if not request.path == '/' %}
+        <a href="/" class="btn blue2-bg col-12 white-text">Accueil</a>
+    {% else %}
+        <button class="btn blue2-bg col-12 greyfr" disabled>Accueil</button>
+    {% endif %}
+</div>
+<div class="col-lg-3">
+    {% if not request.path == '/referendums' %}
+        <a href="{% url 'referendum_list' %}" class="btn blue2-bg col-12 white-text">Tous les
+            référendums</a>
+    {% else %}
+        <button class="btn blue2-bg col-12 greyfr" disabled>Tous les référendums</button>
+    {% endif %}
+</div>
+
+<div class="col-lg-3">
+    {% if user.is_authenticated %}
+        {% if not request.path == '/referendum/create' %}
+            <a href="{% url 'referendum_create' %}" class="btn blue3-bg col-12 white-text">Nouveau référendum</a>
+        {% else %}
+            <button class="btn blue3-bg col-12 greyfr" disabled>Nouveau référendum</button>
+        {% endif %}
+    {% endif %}
+</div>
+<div class="col-lg-3">
+    {% if user.is_authenticated %}
+        {% if not request.path == '/my-referendums' %}
+            <a href="{% url 'my_referendums' %}" class="btn blue3-bg col-12 white-text">Vos référendums</a>
+        {% else %}
+            <button class="btn blue3-bg col-12 greyfr" disabled>Vos référendums</button>
+        {% endif %}
+    {% endif %}
+</div>

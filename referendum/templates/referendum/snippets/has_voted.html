@@ -1,0 +1,5 @@
+{% load referendum_extras %}
+{% user_has_voted referendum user as has_voted %}
+{% if has_voted %}
+    <small class="badge badge-pill white-text redfr-bg">A voté !</small>
+{% endif %}

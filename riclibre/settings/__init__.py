@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'tempus_dominus',
     'debug_toolbar',
     'account_manager.apps.AccountManagerConfig',
     'referendum.apps.ReferendumConfig',
@@ -142,3 +143,4 @@ LOGIN_REDIRECT_URL = LOGOUT_REDIRECT_URL = '/'
 
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+

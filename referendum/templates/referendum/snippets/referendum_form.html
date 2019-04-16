@@ -1,0 +1,11 @@
+<form action="" method="post">
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="form-group">
+            <label for="field.label_for_id">{{ field.label }}</label>
+            {{ field }}
+            <small id="{{ field.name }}" class="form-text text-muted">{{ field.help_text }}</small>
+        </div>
+    {% endfor %}
+    <button type="submit" class="btn bluefr-bg white-text">Valider</button>
+</form>

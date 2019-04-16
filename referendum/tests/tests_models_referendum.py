@@ -3,11 +3,13 @@ Referendum's app: Referendum's model's tests
 """
 
 import logging
+
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.utils import timezone
 
 from referendum.models import Referendum, Vote, Choice
-from referendum.tests import REFERENDUM_DATA
+from referendum.tests import REFERENDUM_DATA, create_test_user
 
 LOGGER = logging.getLogger(__name__)
 
@@ -22,6 +24,8 @@ class ReferendumTestCase(TestCase):
 
         :return:
         """
+        self.password = 'Azer123@'
+        self.user = create_test_user(self.password)
         self.referendum_data = REFERENDUM_DATA
 
     def test_create(self):
@@ -145,6 +149,10 @@ class ChoiceTestCase(TestCase):
     """
 
     def setUp(self):
+        self.user = get_user_model().objects.create(username='test', email='test@test.fr', is_active=True)
+        self.password = "test"
+        self.user.set_password(self.password)
+        self.user.save()
         self.new_referendum = Referendum.objects.create(**REFERENDUM_DATA)
 
         self.choices_data = [

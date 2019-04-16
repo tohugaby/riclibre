@@ -1,0 +1,9 @@
+{% if referendum.is_in_progress %}
+    <small class="badge badge-pill redfr white-bg">Vote en cours</small>
+{% elif referendum.is_over %}
+    <small class="badge badge-pill redfr white-bg">Voté le {{ referendum.event_end|date }} </small>
+{% elif referendum.event_start %}
+    <small class="badge badge-pill bluefr white-bg">Vote le {{ referendum.event_start|date }} </small>
+{% else %}
+    <small class="badge badge-pill blue3 white-bg">Non planifié</small>
+{% endif %}

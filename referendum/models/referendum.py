@@ -6,14 +6,18 @@ import logging
 from functools import reduce
 
 from django.contrib.auth import get_user_model
-from django.db import models
+from django.db import models, IntegrityError, transaction
 from django.db.models import CASCADE
+from django.db.models.signals import post_save
+from django.urls import reverse
 from django.utils import timezone
-
+from django.utils.text import slugify
 
 from referendum.models.utils import FieldUpdateControlMixin
 
 LOGGER = logging.getLogger(__name__)
+
+DEFAULT_VOTE_CHOICES = ['Oui', 'Non', 'Vote blanc']
 
 
 class Referendum(FieldUpdateControlMixin, models.Model):
@@ -24,7 +28,7 @@ class Referendum(FieldUpdateControlMixin, models.Model):
         (86399, '24h'),
     )
 
-    title = models.CharField(verbose_name="Titre du référendum", max_length=300)
+    title = models.CharField(verbose_name="Titre du référendum", max_length=300, unique=True, blank=False, null=False)
     description = models.TextField(verbose_name="Description du référendum", max_length=10000)
     question = models.CharField(verbose_name="Question posée aux citoyens", max_length=300)
     categories = models.ManyToManyField("Category")
@@ -36,20 +40,42 @@ class Referendum(FieldUpdateControlMixin, models.Model):
     duration = models.IntegerField(verbose_name="Durée des votes", choices=DURATION_CHOICES,
                                    default=DURATION_CHOICES[0][0])
     creator = models.ForeignKey(get_user_model(), verbose_name="Créateur", on_delete=CASCADE)
+    slug = models.SlugField(max_length=300, null=True, blank=True)
 
     __control_fields = ["publication_date", "event_start", "duration"]
 
     class Meta:
         verbose_name = "Référendum"
         verbose_name_plural = "Référendums"
+        ordering = ('publication_date',)
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        """
+        Define a referendum instance url
+        :return:
+        """
+        return reverse('referendum', kwargs={'slug': self.slug})
+
+    def get_updatable_fields(self):
+        """
+        Define a list that can be updated on referendum according to its status.
+        :return:
+        """
+        fields = ["title", "description", "question", "categories", "publication_date", "event_start"]
+        if self.is_published:
+            fields = ["event_start", ]
+        if self.is_in_progress or self.is_over:
+            fields = []
+        return fields
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
         control_fields = self.__control_fields
         message = None
+
         self.update_control_fields(*control_fields)
         if self.pk and self.__was_published_before_update:
             update_fields = ['last_update', 'event_start', 'duration']
@@ -60,6 +86,13 @@ class Referendum(FieldUpdateControlMixin, models.Model):
             update_fields = []
             message = "Referendum is in progress or is over . You can't update it."
             control_fields = []
+
+        # define slug
+        if not self.slug:
+            if isinstance(update_fields, list):
+                update_fields.append('slug')
+
+            self.slug = slugify(self.title)
 
         if message:
             LOGGER.warning(message)
@@ -176,7 +209,8 @@ class Category(models.Model):
     """
     Category is used to describe and organise referendums.
     """
-    title = models.CharField(verbose_name="Titre de la catégorie", max_length=150)
+    title = models.CharField(verbose_name="Titre de la catégorie", max_length=150, unique=True)
+    slug = models.SlugField(max_length=300, null=True, blank=True)
 
     class Meta:
         verbose_name = "Catégorie"
@@ -184,6 +218,12 @@ class Category(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        self.slug = slugify(self.title)
+        return super().save(force_insert=force_insert, force_update=force_update, using=using,
+                            update_fields=update_fields)
 
 
 class Choice(models.Model):
@@ -196,9 +236,26 @@ class Choice(models.Model):
     class Meta:
         verbose_name = "Choix"
         verbose_name_plural = "Choix"
+        constraints = [
+            models.UniqueConstraint(fields=['title', 'referendum'], name='unique_choice')
+        ]
 
     def __str__(self):
         return f"{self.referendum}:{self.title} - {self.nb_votes} soit {self.votes_percentage}% des voix"
+
+    @classmethod
+    def create_default_choices(cls, referendum):
+        """
+        Create default choices for a given referendum
+        :param referendum: a Referendum instance
+        """
+        for vote_choice in DEFAULT_VOTE_CHOICES:
+            with transaction.atomic():
+                try:
+                    Choice.objects.create(title=vote_choice, referendum=referendum)
+                except IntegrityError as integiry_error:
+                    LOGGER.warning(integiry_error)
+                    pass
 
     @property
     def nb_votes(self):
@@ -225,3 +282,16 @@ class Choice(models.Model):
         :return: percentage of votes a html string.
         """
         return str(self.votes_percentage).replace(",", ".")
+
+
+def referendum_post_save(sender, instance, **kwargs):
+    """
+    Launch after Referendum instance save.
+    :param sender:
+    :param kwargs:
+    :return:
+    """
+    Choice.create_default_choices(referendum=instance)
+
+
+post_save.connect(referendum_post_save, sender=Referendum)

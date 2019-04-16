@@ -7,16 +7,17 @@
 {% endblock %}
 
 {% block content %}
-    <div class="row">
-        {% if user.is_authenticated %}
-            <div class=" col-6">
-                <button class="btn blue2-bg col-12 white-text">Créer un nouveau référendum</button>
-            </div>
-            <div class=" col-6">
-                <a class="btn blue3-bg col-12 white-text">Accéder à vos référendum</a>
-            </div>
-        {% endif %}
-    </div>
+{#    <div class="row">#}
+{#        {% if user.is_authenticated %}#}
+{#            <div class=" col-6">#}
+{#                <a href="{% url 'referendum_create' %}" class="btn blue2-bg col-12 white-text">Créer un nouveau référendum</a>#}
+{#            </div>#}
+{#            <div class=" col-6">#}
+{#                <a href="{% url 'my_referendums' %}" class="btn blue3-bg col-12 white-text">Accéder à vos#}
+{#                    référendum</a>#}
+{#            </div>#}
+{#        {% endif %}#}
+{#    </div>#}
 
     <div class="row my-5">
         <div class="col-lg-6 my-1">
@@ -65,12 +66,16 @@
                         Statut citoyen
                         </span>
                         <span class="col-6">
-                        Non
+                            {% if perms.referendum.is_citizen %}
+                                Oui
+                            {% else %}
+                                Non
+                            {% endif %}
                         </span>
                     </li>
                 </ul>
                 <div class="card-body">
-                    <a class="btn blue2-bg white-text" href="{% url 'password_change' %}">Ajouter une pièce
+                    <a class="btn blue2-bg white-text" href="">Ajouter une pièce
                         d'identité</a>
                     {#                    <a href="#" class="card-link">Another link</a>#}
                 </div>

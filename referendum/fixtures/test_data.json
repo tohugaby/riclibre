@@ -1,0 +1,301 @@
+[
+  {
+    "model": "account_manager.customuser",
+    "fields": {
+      "password": "pbkdf2_sha256$120000$2zZRY1osA5AJ$vAklmBFKyoW7Z0VjVelfkV0tfn3Ddz2Pn2P+ZEjCb2k=",
+      "last_login": "2019-04-02T15:09:34.165Z",
+      "is_superuser": true,
+      "username": "Tom",
+      "first_name": "Tom",
+      "last_name": "Gabri\u00e8le",
+      "is_staff": true,
+      "is_active": true,
+      "date_joined": "2019-03-05T15:13:31Z",
+      "email": "tom.gabriele@free.fr",
+      "last_update": "2019-03-24T14:13:51.391Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "account_manager.customuser",
+    "fields": {
+      "password": "pbkdf2_sha256$120000$DkEIWQorOhbp$RPWW1bY2vhZpNgMEi3wKimep9ndrvtHI7KXvI/sOFIw=",
+      "last_login": "2019-04-02T14:57:38Z",
+      "is_superuser": false,
+      "username": "nana",
+      "first_name": "",
+      "last_name": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2019-03-24T17:58:17Z",
+      "email": "nana@youpi.fr",
+      "last_update": "2019-04-03T20:09:26.343Z",
+      "groups": [],
+      "user_permissions": [
+        [
+          "is_citizen",
+          "referendum",
+          "votetoken"
+        ]
+      ]
+    }
+  },
+  {
+    "model": "referendum.referendum",
+    "pk": 8,
+    "fields": {
+      "title": "lorem ipsum 1",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum quis tellus in lacus hendrerit mollis non a mauris. Aliquam consectetur aliquam fermentum. Maecenas posuere lectus lacus, at tincidunt metus accumsan vel. Phasellus semper augue ac pharetra volutpat. Morbi vitae nisi ut erat malesuada consectetur vitae nec tortor. Curabitur tristique orci ex, in sodales libero porttitor sit amet. Nulla facilisi. Praesent vitae nibh in nulla imperdiet rhoncus. Quisque volutpat eleifend nunc, vel blandit lacus aliquam consectetur. Suspendisse vitae nisl dapibus eros faucibus lacinia non porta mi. Aliquam nec tempus metus. Ut suscipit condimentum nulla, id tempus sem dapibus nec. Quisque tortor metus, luctus vel tristique aliquam, faucibus eget turpis. Mauris ullamcorper, quam eu mollis dapibus, lectus massa suscipit augue, sit amet efficitur tortor urna vel lectus. Duis nec nulla ac tortor ultrices malesuada eu sit amet nibh. Phasellus nec efficitur ipsum.",
+      "question": "lorem ipsum 1 ?",
+      "creation_date": "2019-03-28T16:00:13.125Z",
+      "last_update": "2019-04-03T20:01:34.581Z",
+      "publication_date": "2019-03-28T16:40:00Z",
+      "event_start": "2019-04-02T22:00:00Z",
+      "duration": 86399,
+      "creator": [
+        "tom.gabriele@free.fr"
+      ],
+      "slug": "lorem-ipsum-1",
+      "categories": [
+        4,
+        3,
+        2,
+        1
+      ]
+    }
+  },
+  {
+    "model": "referendum.referendum",
+    "pk": 9,
+    "fields": {
+      "title": "lorem ipsum 2",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean a sapien sit amet lectus mattis feugiat. Nam venenatis nec justo sed semper. Quisque sodales egestas tortor nec suscipit. Donec ultricies lorem arcu, non ultrices dui porta a. In vitae semper nibh. Vivamus vel sollicitudin lectus. Proin ultricies nisl eget tempor bibendum. Maecenas nec elementum augue. Vestibulum est purus, elementum in ligula at, fermentum laoreet tortor. In sed tincidunt arcu, a mollis nisi.",
+      "question": "lorem ipsum 2 ?",
+      "creation_date": "2019-03-28T16:17:30.550Z",
+      "last_update": "2019-04-10T20:51:06.633Z",
+      "publication_date": "2019-03-28T16:40:29Z",
+      "event_start": "2019-04-09T22:00:00Z",
+      "duration": 86399,
+      "creator": [
+        "tom.gabriele@free.fr"
+      ],
+      "slug": "lorem-ipsum-2",
+      "categories": [
+        3,
+        2
+      ]
+    }
+  },
+  {
+    "model": "referendum.referendum",
+    "pk": 10,
+    "fields": {
+      "title": "lorem ipsum 3",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus bibendum enim eu blandit laoreet. Etiam quis massa vitae urna consectetur luctus id maximus tortor. Nullam pellentesque congue dolor in sodales. Vestibulum non ipsum cursus nibh volutpat rutrum eu sed lorem. Aliquam eu tincidunt libero. Integer viverra mattis neque, a finibus lacus gravida quis. Mauris interdum at purus et semper. Integer egestas luctus eros, varius bibendum nunc dignissim et. Aenean vitae imperdiet felis.",
+      "question": "lorem ipsum 3 ?",
+      "creation_date": "2019-03-28T16:28:43.651Z",
+      "last_update": "2019-04-02T13:15:09.597Z",
+      "publication_date": "2019-03-27T11:00:00Z",
+      "event_start": "2019-04-01T22:00:00Z",
+      "duration": 86399,
+      "creator": [
+        "tom.gabriele@free.fr"
+      ],
+      "slug": "lorem-ipsum-3",
+      "categories": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "referendum.referendum",
+    "pk": 11,
+    "fields": {
+      "title": "lorem ipsum 4",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec interdum condimentum libero eget ultrices. Vestibulum feugiat dapibus massa, sit amet dignissim mauris eleifend vitae. Nulla elit magna, egestas in blandit a, semper id justo. Proin consectetur massa non aliquam facilisis. In facilisis, erat quis consectetur tempor, eros odio sodales turpis, a tempor massa mauris pretium eros. Donec consequat sapien quis dictum ultricies. Ut lectus arcu, tempor vel nisl nec, euismod fringilla nunc. Mauris at vehicula massa. Nulla facilisi. Sed ut lorem ut est imperdiet maximus non facilisis erat. Vivamus viverra odio interdum, imperdiet sapien non, posuere nulla. Nulla ac laoreet massa, ut commodo quam. Phasellus facilisis convallis metus at porta.",
+      "question": "lorem ipsum 4 ?",
+      "creation_date": "2019-03-28T16:29:43.745Z",
+      "last_update": "2019-04-11T13:55:31.749Z",
+      "publication_date": null,
+      "event_start": null,
+      "duration": 86399,
+      "creator": [
+        "nana@youpi.fr"
+      ],
+      "slug": "lorem-ipsum-4",
+      "categories": [
+        3
+      ]
+    }
+  },
+  {
+    "model": "referendum.referendum",
+    "pk": 12,
+    "fields": {
+      "title": "lorem ipsum 5",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce id lacinia est. Sed orci erat, rhoncus nec ultricies id, fringilla sit amet nisi. Vivamus pretium lobortis commodo. Mauris tempor fringilla massa in cursus. Sed mattis leo et turpis vehicula, et fermentum felis consequat. Quisque quis dolor facilisis, convallis orci nec, tempus velit. Integer tincidunt tempor ante vitae pellentesque. Vivamus vel ante pretium, tincidunt ex vitae, laoreet massa. Fusce interdum at ligula vel lacinia. Morbi mollis laoreet lectus in interdum. Fusce at ultricies magna. In quam sapien, accumsan ac vulputate quis, cursus id dolor.\r\n\r\nNunc vitae tellus maximus, pulvinar felis quis, dapibus sapien. Morbi tincidunt odio massa. Nunc ultricies ex id quam venenatis, at mollis nibh porta. In bibendum eleifend sem eu feugiat. Etiam fermentum aliquet ligula et facilisis. Ut imperdiet mollis velit iaculis consectetur. Mauris et massa nec erat tincidunt tincidunt. Cras tristique eu augue et scelerisque. Vivamus eu elit nulla.",
+      "question": "lorem ipsum 5 ?",
+      "creation_date": "2019-03-28T16:35:19.146Z",
+      "last_update": "2019-04-11T13:56:28.763Z",
+      "publication_date": null,
+      "event_start": null,
+      "duration": 86399,
+      "creator": [
+        "nana@youpi.fr"
+      ],
+      "slug": "lorem-ipsum-5",
+      "categories": [
+        5
+      ]
+    }
+  },
+  {
+    "model": "referendum.referendum",
+    "pk": 13,
+    "fields": {
+      "title": "lorem ipsum 6",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent massa ante, ultrices quis tellus a, tincidunt tincidunt velit. Praesent eleifend massa non sem dictum dictum. Nunc nec diam et nisi commodo dignissim. Nulla id turpis eu justo auctor malesuada. Nunc hendrerit sem eget metus luctus, et egestas erat rutrum. Morbi eu turpis vel dolor pellentesque dictum in accumsan sapien. Nulla eleifend vulputate orci, id aliquet nisl interdum a. Etiam eget sem vehicula, dapibus orci scelerisque, dignissim dolor. Morbi at libero in nisl congue placerat in eget nisl. Integer mollis aliquet sem, nec auctor sapien volutpat sed. Ut dolor justo, fringilla sed luctus et, lobortis at nunc. Vestibulum at mi enim. Aliquam cursus, mi ultricies semper dictum, sapien lectus viverra purus, nec convallis tortor ligula nec est.\r\n\r\nDonec nec magna at ex finibus dictum. Praesent rhoncus magna a lacus auctor hendrerit. Duis aliquet magna velit, non ultrices dolor semper at. Donec rhoncus enim in risus egestas, vel suscipit risus placerat. Aenean lobortis sem eget erat bibendum scelerisque. Sed pellentesque velit ut ullamcorper cursus. Cras accumsan augue ipsum, vitae gravida mi gravida non. Nam malesuada nisl lectus, nec efficitur ex porta a. Ut vitae mollis mauris. Suspendisse potenti. Maecenas hendrerit aliquet lobortis. Ut scelerisque, nulla non ornare laoreet, tortor arcu pellentesque sem, vel congue massa nibh non risus. Cras scelerisque mi vitae nunc pretium, eu aliquet lectus aliquam. Donec egestas nibh vitae rutrum consequat. Nulla facilisis elit iaculis, semper nibh vitae, accumsan justo. Curabitur at sem ut justo consequat ullamcorper.",
+      "question": "lorem ipsum 6 ?",
+      "creation_date": "2019-03-28T16:35:55.769Z",
+      "last_update": "2019-03-28T16:42:48.163Z",
+      "publication_date": "2019-03-21T17:00:00Z",
+      "event_start": "2019-03-27T23:00:00Z",
+      "duration": 86399,
+      "creator": [
+        "nana@youpi.fr"
+      ],
+      "slug": "lorem-ipsum-6",
+      "categories": [
+        5
+      ]
+    }
+  },
+  {
+    "model": "referendum.referendum",
+    "pk": 17,
+    "fields": {
+      "title": "lorem ipsum 7",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur tincidunt nibh vitae tellus lacinia dapibus. Sed consequat accumsan nulla. Suspendisse quis iaculis neque, ut laoreet velit. Donec sit amet luctus diam. Sed et leo efficitur, posuere diam eget, fermentum massa. Sed iaculis aliquet nunc a euismod. Maecenas non augue ultricies, rhoncus metus nec, cursus urna. Maecenas felis ex, iaculis at feugiat quis, convallis eget tellus. Integer id commodo felis. Sed non volutpat nulla. Ut a magna eget purus convallis scelerisque.\r\n\r\nInteger id erat pellentesque diam interdum tempus et nec risus. Aliquam in auctor diam. Praesent vel lorem semper, iaculis odio et, facilisis tellus. Etiam congue libero et lectus congue, quis sollicitudin dui fringilla. Nam vitae erat interdum nisi rhoncus iaculis. Etiam commodo eu ligula in venenatis. Aenean vel interdum nunc. Vestibulum dictum tristique felis ut ultrices.",
+      "question": "lorem ipsum 7 ?",
+      "creation_date": "2019-04-04T14:40:32.179Z",
+      "last_update": "2019-04-11T15:56:49.972Z",
+      "publication_date": "2019-04-10T22:00:00Z",
+      "event_start": "2019-04-10T22:00:00Z",
+      "duration": 86399,
+      "creator": [
+        "tom.gabriele@free.fr"
+      ],
+      "slug": "lorem-ipsum-7",
+      "categories": [
+        4,
+        3
+      ]
+    }
+  },
+  {
+    "model": "referendum.referendum",
+    "pk": 18,
+    "fields": {
+      "title": "lorem ipsum 8",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec imperdiet orci ac blandit aliquet. Mauris ac finibus lacus, nec lobortis sapien. Fusce sem metus, elementum ut diam eu, tempus ullamcorper orci. Integer ac nulla et leo placerat tincidunt. Interdum et malesuada fames ac ante ipsum primis in faucibus. Fusce ut ipsum bibendum augue bibendum egestas. Quisque et convallis risus. Sed at tortor nisi.\r\n\r\nMorbi enim erat, porta aliquet enim iaculis, pharetra pulvinar sapien. Nulla vulputate ante ut auctor mattis. Maecenas ut est nisi. Integer tempor, est nec luctus eleifend, sem enim congue urna, et faucibus est dolor sit amet risus. Quisque vitae sagittis erat. Donec consequat, dui nec cursus convallis, justo odio ornare nisi, at egestas erat diam elementum urna. Maecenas a lorem vehicula, fermentum augue egestas, aliquet nibh. Quisque pellentesque, enim a tempus volutpat, nisi magna egestas massa, vitae tempus velit felis eu ipsum. Aenean rutrum a orci quis sollicitudin. Morbi et orci bibendum orci pharetra rutrum id sed ante. Etiam a turpis ut metus malesuada feugiat eget gravida dui. Vivamus finibus mi vitae nisi porta, quis posuere ipsum condimentum. Sed sodales bibendum pharetra.\r\n\r\nCras ac nulla vulputate elit tincidunt scelerisque. Proin eget placerat ligula. Pellentesque tincidunt risus accumsan neque bibendum, non mollis purus venenatis. Cras fringilla mi et varius iaculis. Nam efficitur rhoncus erat nec accumsan. Nunc vitae dui vitae leo ornare blandit ullamcorper et mi. Suspendisse tincidunt nisi sit amet scelerisque euismod. Mauris varius pulvinar erat, nec sagittis nunc semper id. Nullam suscipit justo ut velit elementum, eget vulputate arcu feugiat. Ut aliquam lorem nulla. Duis vel facilisis sapien. Fusce lacinia, leo at iaculis interdum, libero quam rhoncus mauris, quis tempus erat ligula vel libero. Integer et suscipit erat, sed finibus libero.\r\n\r\nAenean nisl neque, maximus ut est eget, ultricies imperdiet justo. Donec rutrum, nisl varius ornare consequat, lacus odio tempor velit, eget auctor risus felis vitae dolor. Quisque cursus lectus eget ultricies imperdiet. Etiam elementum lacus lectus, eu cursus leo posuere in. Sed ac mauris elementum dolor pharetra pulvinar. Aliquam porta est justo, non ornare nulla malesuada vitae. Vestibulum tempus accumsan tellus at semper. In id ex ultrices, bibendum nibh euismod, iaculis nisi. Nullam ullamcorper tincidunt urna eu suscipit. Praesent volutpat aliquam mollis.",
+      "question": "lorem ipsum 8 ?",
+      "creation_date": "2019-04-10T21:18:38.828Z",
+      "last_update": "2019-04-11T14:07:20.316Z",
+      "publication_date": null,
+      "event_start": null,
+      "duration": 86399,
+      "creator": [
+        "nana@youpi.fr"
+      ],
+      "slug": "lorem-ipsum-8",
+      "categories": [
+        5
+      ]
+    }
+  },
+  {
+    "model": "referendum.referendum",
+    "pk": 19,
+    "fields": {
+      "title": "lorem ipsum 9",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam viverra, quam nec tincidunt dapibus, arcu quam iaculis nisi, eu tempus orci ex nec libero. Quisque blandit fermentum erat. Nullam tempus risus a tristique varius. Cras luctus ex enim, sed rutrum ante lobortis a. Vestibulum feugiat accumsan condimentum. Aenean quis nisl nulla. Nullam finibus quam ac consectetur vulputate. Etiam non eleifend turpis, et efficitur massa.\r\n\r\nDonec at mollis mi. Morbi bibendum ante sed porta posuere. Suspendisse non orci fringilla, vehicula dui sit amet, posuere ipsum. Sed fermentum velit quis risus sollicitudin, sed fringilla dolor tristique. Etiam id facilisis ligula. Sed at interdum urna, sed facilisis leo. Sed nibh purus, mollis at mauris id, vehicula facilisis elit. Nunc malesuada ornare enim, at eleifend orci euismod id.\r\n\r\nSuspendisse venenatis pharetra imperdiet. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Integer ut justo volutpat, sollicitudin ipsum eget, lacinia justo. Nulla sodales, ex eu feugiat suscipit, enim sapien condimentum nisl, sed condimentum purus metus vitae risus. Sed lectus neque, laoreet eget libero eget, ultricies efficitur dolor. Praesent quis purus nunc. Nullam sed orci sapien. Donec maximus turpis orci, nec placerat dui malesuada vel. Maecenas consequat et dui et tincidunt. Sed sagittis accumsan felis vel malesuada. Aliquam aliquam laoreet auctor. Fusce accumsan diam sit amet rhoncus eleifend. Duis ultricies, ligula in rhoncus blandit, nisl est tristique felis, at pharetra enim nibh at lectus. Aenean egestas sit amet dolor non dictum. Etiam vitae diam purus. Praesent accumsan sodales odio, vel elementum justo commodo sit amet.\r\n\r\nIn volutpat vel sem in sagittis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Nullam rhoncus rhoncus sem eget pulvinar. Sed tempor ante et ligula mollis elementum. Nam porta libero lorem, dictum ultrices est interdum at. Praesent odio purus, faucibus eu massa id, accumsan vestibulum purus. Maecenas dolor orci, aliquam bibendum massa eget, semper convallis eros. In erat nulla, porta sollicitudin faucibus sed, blandit ac risus. Ut urna velit, luctus eget arcu nec, maximus venenatis est. Nunc consequat rhoncus lorem, quis elementum quam tincidunt vel. Morbi vitae ex elit. Vestibulum vitae egestas purus.\r\n\r\nInteger viverra, ante in auctor placerat, nulla enim volutpat massa, quis cursus sem urna ut enim. Suspendisse commodo tellus nec consectetur ullamcorper. Sed faucibus ligula semper risus ultrices, ut porttitor augue posuere. Sed vel dui non leo molestie commodo. Curabitur nec quam sit amet magna tincidunt finibus sit amet quis odio. Sed vitae tincidunt massa. Nullam eu auctor ipsum. Ut feugiat quam turpis, sit amet tincidunt tellus vehicula eget.",
+      "question": "lorem ipsum 9 ?",
+      "creation_date": "2019-04-11T13:13:22.134Z",
+      "last_update": "2019-04-11T14:48:02.293Z",
+      "publication_date": "2019-04-10T22:00:00Z",
+      "event_start": "2019-04-10T22:00:00Z",
+      "duration": 86399,
+      "creator": [
+        "tom.gabriele@free.fr"
+      ],
+      "slug": "lorem-ipsum-9",
+      "categories": [
+        3,
+        2
+      ]
+    }
+  },
+  {
+    "model": "referendum.referendum",
+    "pk": 20,
+    "fields": {
+      "title": "lorem ipsum 10",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque odio risus, imperdiet eu auctor et, efficitur non enim. Sed erat ligula, cursus ut molestie vel, rhoncus in odio. Sed semper pretium metus sed luctus. Nullam vitae arcu quis velit accumsan faucibus. Vestibulum porta auctor magna lobortis consectetur. Aenean euismod diam a erat tincidunt, sed suscipit dolor interdum. Vestibulum non tortor arcu. Vestibulum eget congue ipsum.\r\n\r\nDuis ultrices quis nisi eu tincidunt. Sed tempus at leo et tristique. Vestibulum eleifend risus in fringilla porta. Vestibulum hendrerit ligula vel pharetra convallis. Etiam vulputate magna sit amet augue fermentum, a imperdiet orci suscipit. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse augue ipsum, volutpat vehicula augue sit amet, cursus scelerisque lorem. Sed fringilla semper volutpat. Ut ac porttitor urna. Nunc sed mi at eros pellentesque imperdiet. Curabitur pellentesque blandit nibh, ut congue mauris placerat sit amet. Nulla sed accumsan nisi.",
+      "question": "lorem ipsum 10 ?",
+      "creation_date": "2019-04-11T14:42:27.288Z",
+      "last_update": "2019-04-11T14:44:41.746Z",
+      "publication_date": "2019-04-10T22:00:00Z",
+      "event_start": null,
+      "duration": 86399,
+      "creator": [
+        "tom.gabriele@free.fr"
+      ],
+      "slug": "lorem-ipsum-10",
+      "categories": [
+        5,
+        4
+      ]
+    }
+  },
+  {
+    "model": "referendum.category",
+    "pk": 1,
+    "fields": {
+      "title": "Vie politique",
+      "slug": "vie-politique"
+    }
+  },
+  {
+    "model": "referendum.category",
+    "pk": 2,
+    "fields": {
+      "title": "\u00c9ducation",
+      "slug": "education"
+    }
+  },
+  {
+    "model": "referendum.category",
+    "pk": 3,
+    "fields": {
+      "title": "Emploi",
+      "slug": "emploi"
+    }
+  },
+  {
+    "model": "referendum.category",
+    "pk": 4,
+    "fields": {
+      "title": "Agriculture",
+      "slug": "agriculture"
+    }
+  },
+  {
+    "model": "referendum.category",
+    "pk": 5,
+    "fields": {
+      "title": "S\u00e9curit\u00e9",
+      "slug": "securite"
+    }
+  }
+]

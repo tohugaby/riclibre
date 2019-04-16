@@ -3,10 +3,10 @@ Referendum's app: Test registration views
 """
 
 from django.conf import settings
-from django.contrib.auth import get_user_model
 from django.test import Client, LiveServerTestCase
 from django.urls import reverse
 
+from referendum.tests import create_test_user
 from referendum.views.account import AccountView
 
 
@@ -17,16 +17,14 @@ class AccountViewTestCase(LiveServerTestCase):
 
     def setUp(self):
         self.client = Client()
-        self.user = get_user_model().objects.create(username='test', email='test@test.fr', is_active=True)
-        self.password = "test"
-        self.user.set_password(self.password)
-        self.user.save()
+        self.password = 'Azer123@'
+        self.user = create_test_user(self.password)
 
     def test_page_access_when_logged_in(self):
         """
         Test access to account page when logged in.
         """
-        print(self.client.login(username=self.user.email, password=self.password))
+        self.client.login(username=self.user.email, password=self.password)
         response = self.client.get(reverse('account', kwargs={'pk': self.user.pk}))
         self.assertEqual(response.status_code, 200)
 
@@ -43,7 +41,6 @@ class AccountViewTestCase(LiveServerTestCase):
         self.client.login(username=self.user.email, password=self.password)
         user_initial_first_name = self.user.first_name
         self.assertEqual(user_initial_first_name, '')
-        print(self.user.pk)
         new_user_values = {
             'username': self.user.username,
             'email': self.user.email,

@@ -2,6 +2,9 @@
 Referendum's app: template's custom filters and tags
 """
 from django import template
+from django.contrib.auth.models import AnonymousUser
+
+from referendum.models import VoteToken
 
 register = template.Library()
 
@@ -26,3 +29,20 @@ def verbose_name_filter(obj, field_name):
     :return: a field verbose name
     """
     return obj._meta.get_field(field_name).verbose_name
+
+
+@register.simple_tag
+def user_has_voted(referendum, user):
+    """
+    Check if a given user has voted for a given referendum.
+    :param referendum: a Referendum instance.
+    :param user: a user model instance.
+    :return: a boolean
+    """
+    if isinstance(user,AnonymousUser):
+        return False
+    try:
+        token = VoteToken.objects.get(referendum=referendum, user=user)
+        return token.voted
+    except VoteToken.DoesNotExist as vote_token_dne:
+        return False

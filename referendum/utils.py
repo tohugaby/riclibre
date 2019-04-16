@@ -45,7 +45,7 @@ def get_account_validation_context(email, request):
                    'site_name': current_site.name,
                    'protocol': 'http' if settings.DEBUG else 'https',
                    'domain': current_site.domain,
-                   'uid': urlsafe_base64_encode(force_bytes(user.pk)).decode(),
+                   'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                    'token': AccountActivationTokenGenerator().make_token(user)
                    }
     return context

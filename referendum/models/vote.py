@@ -2,11 +2,9 @@
 Referendum's app : Vote's models
 """
 import logging
-from secrets import token_urlsafe
-
-
 from django.contrib.auth import get_user_model
 from django.db import models
+from secrets import token_urlsafe
 
 from referendum.exceptions import UserHasAlreadyVotedError
 from referendum.models.utils import FieldUpdateControlMixin
@@ -60,7 +58,7 @@ class VoteToken(FieldUpdateControlMixin, models.Model):
     """
     referendum = models.ForeignKey("referendum.Referendum", verbose_name="Référendum", on_delete=models.CASCADE)
     user = models.ForeignKey(get_user_model(), verbose_name="Citoyen", on_delete=models.CASCADE)
-    token = models.CharField(verbose_name="Token", max_length=30, unique=True)
+    token = models.CharField(verbose_name="Token", max_length=50, unique=True)
     voted = models.BooleanField(verbose_name="A voté ?", default=False)
 
     __control_fields = ["voted"]
@@ -69,6 +67,9 @@ class VoteToken(FieldUpdateControlMixin, models.Model):
         verbose_name = "Token de vote"
         verbose_name_plural = "Tokens de vote"
         unique_together = (('referendum', 'user'),)
+        permissions = (
+            ("is_citizen", "Has citizen status"),
+        )
 
     def __str__(self):
         return "{}: L'utilisateur {} {} en utilisant le token {}".format(
@@ -83,6 +84,7 @@ class VoteToken(FieldUpdateControlMixin, models.Model):
         control_fields = self.__control_fields
         message = None
 
+        self.update_control_fields(*control_fields)
         if self.pk:
             update_fields = ['voted']
             if getattr(self, "__original_voted") is True:

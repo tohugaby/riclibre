@@ -1,9 +1,12 @@
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView, \
     PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 from django.urls import path
 
 from referendum.forms import CustomLoginForm, CustomPasswordResetForm, CustomSetPasswordForm, CustomPasswordChangeForm
-from referendum.views import IndexView, SignupView, SignupConfirmView, AccountActivationView, AskAccountActivationView
+from referendum.views import IndexView, SignupView, SignupConfirmView, AccountActivationView, AskAccountActivationView, \
+    ReferendumDetailView, ReferendumVoteView, ReferendumListView, CategoryView, ReferendumCreateView, \
+    MyReferendumsView, ReferendumUpdateView
 from referendum.views.account import AccountView
 
 urlpatterns = [
@@ -33,5 +36,12 @@ urlpatterns = [
          name='password_reset_confirm'),
     path('reser/done',
          PasswordResetCompleteView.as_view(template_name='registration/custom_password_reset_complete.html'),
-         name='password_reset_complete')
+         name='password_reset_complete'),
+    path('referendums/<slug>', ReferendumDetailView.as_view(), name='referendum'),
+    path('referendum/create', ReferendumCreateView.as_view(), name='referendum_create'),
+    path('referendum/<slug>/update', ReferendumUpdateView.as_view(), name='referendum_update'),
+    path('referendums', ReferendumListView.as_view(), name='referendum_list'),
+    path('my-referendums', MyReferendumsView.as_view(), name='my_referendums'),
+    path('category/<slug>', CategoryView.as_view(), name='category'),
+    path('vote/<token>', permission_required('referendum.is_citizen')(ReferendumVoteView.as_view()), name='vote')
 ]

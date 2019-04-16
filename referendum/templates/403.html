@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block main_title %}
+    L'accès au formulaire de modification a été refusé !
+{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-body text-center">
+            <h5 class="card-title text-center">
+                Vous n'êtes pas autorisé à consulter cette page.
+            </h5>
+            <small class="font-weight-bold redfr">HTTP ERROR 403</small>
+        </div>
+    </div>
+{% endblock %}

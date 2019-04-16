@@ -2,29 +2,22 @@
 {% load referendum_extras %}
 
 {% block main_title %}
-        Première application française d'organisation de <br>
-        Référendum d'Initiative Citoyenne
+    Première application française d'organisation de <br>
+    Référendum d'Initiative Citoyenne
 {% endblock %}
 
 {% block content %}
-    <div class="row">
-     {% if user.is_authenticated %}
-                <div class=" col-12">
-                    <button class="btn blue2-bg col-12 white-text">Créer un nouveau référendum</button>
-                </div>
-            {% endif %}
-    </div>
+
     <div class="row my-5">
         <div class="col-lg-6 col-md-12">
             <h2 class="white-transp-bg text-center bluefr">Derniers Référendums</h2>
             <div class="list-group">
                 {% for referendum in referendum_list %}
-                    <a href="#"
+                    <a href="{{ referendum.get_absolute_url }}"
                        class="list-group-item list-group-item-action white-transp-bg">
                         <span class="font-weight-bold {% cycle 'bluefr' 'redfr' 'greyfr' %}">{{ referendum|capfirst }}</span>
                         <br>
-                        <small class="font-weight-light">créé par {{ referendum.creator.username }} le
-                            {{ referendum.creation_date|date }}</small>
+                        <small class="font-weight-light">créé par {{ referendum.creator.username }}</small>
                     </a>
                 {% endfor %}
             </div>
@@ -32,14 +25,16 @@
         <div class="col-lg-6 col-md-12">
             <h2 class=" white-transp-bg text-center greyfr">Journées de votes à venir</h2>
             <div class="list-group">
-                {% for ref_vote in voted_soon %}
-                    <a href="#" class="list-group-item list-group-item-action white-transp-bg">
+                {% for referendum in voted_soon %}
+                    <a href="{{ referendum.get_absolute_url }}" class="list-group-item list-group-item-action
+                    white-transp-bg">
                         <span class="font-weight-bold {% cycle 'bluefr' 'redfr' 'greyfr' %}">
-                        {{ ref_vote|capfirst }}
+                        {{ referendum|capfirst }}
                         </span>
-                        <span class="badge badge-pill redfr-bg white-text">
-                        {{ ref_vote.event_start | date }}
-                    </span>
+                        <span class="float-right">
+                            {% include 'referendum/snippets/event_date.html' %}
+                            {% include 'referendum/snippets/has_voted.html' %}
+                        </span>
                     </a>
                 {% endfor %}
             </div>
@@ -49,19 +44,15 @@
         <div class="col-lg-12">
             <h2 class="white-transp-bg text-center redfr">Derniers résultats</h2>
             <div class="list-group">
-                {% for ref_res in results_available %}
-                    <a href="#" class="list-group-item list-group-item-action white-transp-bg">
+                {% for referendum in results_available %}
+                    <a href="{{ referendum.get_absolute_url }}" class="list-group-item list-group-item-action
+                    white-transp-bg">
                     <span class="row">
-                        <span class="col-6 font-weight-bold {% cycle 'bluefr' 'redfr' 'greyfr' %}">{{ ref_res|capfirst }}</span>
-                        {% for choice in ref_res.choice_set.all|order:'votes_percentage' %}
-                            <span class="col-2">
-                                <span class="badge badge-pill white-text {% if forloop.first %}bluefr-bg{% else %}greyfr-bg{% endif %}">
-                                    {{ choice.title }} :
-                                    {{ choice.votes_percentage }} %
-                                </span>
-                            </span>
-                        {% endfor %}
-                    </>
+                        <span class="col-6 font-weight-bold {% cycle 'bluefr' 'redfr' 'greyfr' %}">{{ referendum|capfirst }}</span>
+                        <span class="col-6 text-right">
+                        {% include 'referendum/snippets/results.html' %}
+                        </span>
+                    </span>
                     </a>
                 {% endfor %}
             </div>

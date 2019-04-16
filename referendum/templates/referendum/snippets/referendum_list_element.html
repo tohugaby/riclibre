@@ -1,0 +1,14 @@
+{% load referendum_extras %}
+
+<a href="{{ referendum.get_absolute_url }}" class="list-group-item list-group-item-action white-transp-bg">
+    <span class="row">
+        <span class="col-6 font-weight-bold {% cycle 'bluefr' 'redfr' 'greyfr' %}">
+            {{ referendum.question|capfirst }}
+            {% include 'referendum/snippets/has_voted.html' %}
+        </span>
+        <span class="col-6">
+        {% include 'referendum/snippets/publication.html' %}
+        {% include 'referendum/snippets/event_date.html' %}
+        </span>
+    </span>
+</a>

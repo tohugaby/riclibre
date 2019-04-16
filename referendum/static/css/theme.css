@@ -28,6 +28,13 @@ a:active {
     color: #4c86c5;
 }
 
+
+a.white-text:hover,
+a.white-text:focus,
+a.white-text:active {
+    color: white;
+}
+
 input {
     border-width: 0;
     padding: 0 2px;
@@ -88,4 +95,8 @@ input {
 
 .white-text {
     color: white;
+}
+
+.badge-med {
+    font-size: 1.2rem;
 }

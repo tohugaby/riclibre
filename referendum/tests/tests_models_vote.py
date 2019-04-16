@@ -9,7 +9,7 @@ from django.test import TestCase
 
 from referendum.exceptions import UserHasAlreadyVotedError
 from referendum.models import Referendum, VoteToken, Choice, Vote
-from referendum.tests import REFERENDUM_DATA
+from referendum.tests import REFERENDUM_DATA, create_test_user
 
 LOGGER = logging.getLogger(__name__)
 
@@ -24,7 +24,8 @@ class VoteTestCase(TestCase):
 
         self.choice1 = Choice.objects.create(referendum=self.new_referendum, title='oui')
         self.choice2 = Choice.objects.create(referendum=self.new_referendum, title='non')
-        self.user = get_user_model().objects.create(email="test@test.fr")
+        self.password = 'Azer123@'
+        self.user = create_test_user(self.password, is_active=False)
 
     def test_vote_cannot_be_changed(self):
         """
@@ -58,7 +59,8 @@ class VoteTokenTestCase(TestCase):
         self.new_referendum = Referendum.objects.create(**REFERENDUM_DATA)
 
         self.choice = Choice.objects.create(referendum=self.new_referendum, title='oui')
-        self.user = get_user_model().objects.create(email="test@test.fr")
+        self.password = 'Azer123@'
+        self.user = create_test_user(self.password, is_active=False)
 
     def test_create_token(self):
         """
