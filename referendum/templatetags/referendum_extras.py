@@ -4,7 +4,7 @@ Referendum's app: template's custom filters and tags
 from django import template
 from django.contrib.auth.models import AnonymousUser
 
-from referendum.models import VoteToken
+from referendum.models import VoteToken, Like
 
 register = template.Library()
 
@@ -39,10 +39,23 @@ def user_has_voted(referendum, user):
     :param user: a user model instance.
     :return: a boolean
     """
-    if isinstance(user,AnonymousUser):
+    if isinstance(user, AnonymousUser):
         return False
     try:
         token = VoteToken.objects.get(referendum=referendum, user=user)
         return token.voted
     except VoteToken.DoesNotExist as vote_token_dne:
         return False
+
+
+@register.simple_tag
+def like_referendum(referendum, user):
+    """
+    Check if a given user likes a given referendum.
+    :param referendum: a Referendum instance.
+    :param user: a user model instance.
+    :return: a boolean
+    """
+    if isinstance(user, AnonymousUser):
+        return False
+    return Like.objects.filter(referendum=referendum, user=user).exists()

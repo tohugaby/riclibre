@@ -8,6 +8,7 @@ from referendum.views import IndexView, SignupView, SignupConfirmView, AccountAc
     ReferendumDetailView, ReferendumVoteView, ReferendumListView, CategoryView, ReferendumCreateView, \
     MyReferendumsView, ReferendumUpdateView
 from referendum.views.account import AccountView
+from referendum.views.like import LikeView
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
@@ -40,6 +41,7 @@ urlpatterns = [
     path('referendums/<slug>', ReferendumDetailView.as_view(), name='referendum'),
     path('referendum/create', ReferendumCreateView.as_view(), name='referendum_create'),
     path('referendum/<slug>/update', ReferendumUpdateView.as_view(), name='referendum_update'),
+    path('referendum/<slug>/like', LikeView.as_view(), name='like'),
     path('referendums', ReferendumListView.as_view(), name='referendum_list'),
     path('my-referendums', MyReferendumsView.as_view(), name='my_referendums'),
     path('category/<slug>', CategoryView.as_view(), name='category'),
