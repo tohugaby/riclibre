@@ -1,3 +1,5 @@
+// Manage like button
+
 let likeBtn = document.querySelector('#like-btn i');
 let toggleLikeClass = function () {
     let el = likeBtn
@@ -10,22 +12,6 @@ let toggleLikeClass = function () {
         el.classList.remove(likeCssClass);
         el.classList.add(unLikeCssClass)
     }
-};
-
-let genericGetRequest = function (url, callback) {
-    const req = new XMLHttpRequest();
-    req.onreadystatechange = function (event) {
-        if (this.readyState == XMLHttpRequest.DONE) {
-            if (this.status === 200) {
-                callback()
-            } else {
-                console.log("Status de la réponse: %d (%s)", this.status, this.statusText)
-            }
-        }
-    };
-
-    req.open('GET', url, true);
-    req.send(null)
 };
 
 

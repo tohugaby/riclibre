@@ -1,0 +1,40 @@
+{% for comment in referendum.comment_set.all %}
+    <div class="card my-3 comment" id="comment_{{ comment.pk }}">
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <form action="{{ comment.update_url }}" method="post" class="comment_update_form d-none">
+                    {% csrf_token %}
+                    <textarea name="text" cols="40" rows="10" class="form-control" required=""
+                              id="id_text">{{ comment.text }}
+                    </textarea>
+                </form>
+                <p class="comment-text">{{ comment.text }}</p>
+                <footer class="blockquote-footer">
+                    <span class="comment-author">{{ comment.user.username }}</span>
+                    <cite title="date">
+                        / publié le
+                        <span class="comment-publication-date">{{ comment.publication_date|date }}</span> à
+                        <span class="comment-publication-time">{{ comment.publication_date|time }}</span>
+                    </cite>
+                    <cite title="update">
+                        / modifié le
+                        <span class="comment-last_update-date">{{ comment.last_update|date }}</span> à
+                        <span class="comment-last_update-time">{{ comment.last_update|time }}</span>
+                    </cite>
+                    {% if user == comment.user %}
+                        <button class="btn white-very-transp-bg bluefr float-right update_button">
+                            <i class="fa fa-pencil"></i>
+                        </button>
+                        <button class="btn white-very-transp-bg bluefr float-right d-none cancel_update">
+                            <i class="fa fa-times"></i>
+                        </button>
+                        <button class="btn white-very-transp-bg bluefr float-right d-none update_submit">
+                            <i class="fa fa-check"></i>
+                        </button>
+
+                    {% endif %}
+                </footer>
+            </blockquote>
+        </div>
+    </div>
+{% endfor %}

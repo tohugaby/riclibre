@@ -12,7 +12,7 @@ from django.views.generic import DetailView, ListView, CreateView, UpdateView
 from django.views.generic.edit import FormMixin
 from tempus_dominus.widgets import DateTimePicker
 
-from referendum.forms import VoteForm
+from referendum.forms import VoteForm, CommentForm
 from referendum.models import Referendum, Category, VoteToken, Choice
 
 
@@ -70,6 +70,15 @@ class ReferendumDetailView(DetailView):
             vote_token, created = VoteToken.objects.get_or_create(user=self.request.user, referendum=self.object)
             return redirect(reverse_lazy('vote', kwargs={'token': vote_token.token}))
         return response
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['comment_form'] = self.get_comment_form()
+        return context
+
+    def get_comment_form(self):
+        form = CommentForm(initial={'referendum': self.object.pk})
+        return form
 
 
 class ReferendumCreateView(CreateView):

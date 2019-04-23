@@ -4,6 +4,7 @@ Referendum's app:  Comment's models
 
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.urls import reverse
 
 
 class Comment(models.Model):
@@ -20,9 +21,20 @@ class Comment(models.Model):
     class Meta:
         verbose_name = "Commentaire"
         verbose_name_plural = "Commentaires"
+        ordering = ['-publication_date', ]
 
     def __str__(self):
         return f"{self.user} a commenté le référendum {self.referendum} le {self.publication_date} : {self.text}"
+
+    def get_absolute_url(self):
+        return "%s#comment_%s" % (reverse('referendum', kwargs={'slug': self.referendum.slug}), self.pk)
+
+    @property
+    def update_url(self):
+        """
+        Instance update url.
+        """
+        return reverse('comment_update', kwargs={'pk': self.pk})
 
 
 class Report(models.Model):

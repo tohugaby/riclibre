@@ -6,38 +6,14 @@
 {% endblock %}
 
 {% block content %}
-    {% if not can_vote and user.is_authenticated and referendum.is_in_progress %}
-        <div class="alert white-transp-bg redfr text-center">
-            Pour obtenir le droit de vote sur ce référendum rendez-vous sur la page de
-            <a href="{% url 'account' user.pk %}">votre compte</a> et ajoutez un pièce d'identité valide.
-        </div>
-    {% endif %}
-    {% if not user.is_authenticated %}
-        <div class="alert white-transp-bg redfr text-center">
-            Pour pouvoir voter il faut
-            <a href="{% url 'login' %}">vous connecter</a> ou en <a href="{% url 'signup' %}">créer un compte</a>
-            puis ajouter un pièce d'identité valide sur la page de votre compte.
-        </div>
-    {% endif %}
-    {% if already_voted %}
-        <div class="alert white-transp-bg redfr text-center">
-            Vous avez déjà voté pour ce référendum !
-        </div>
-    {% endif %}
-
-    {% if not valid_token and token %}
-        <div class="alert white-transp-bg redfr text-center">
-            Vous utilisez une adresse url de vote invalide !
-        </div>
-    {% endif %}
+    {% include 'referendum/snippets/referendum_vote_errors.html' %}
     <div class="jumbotron white-transp-bg">
         <div class="d-flex justify-content-end" style=" font-size: 2em;">
-            {% include 'referendum/snippets/like.html' %}
+            {% include 'referendum/snippets/referendum_like_button.html' %}
         </div>
         <h1 class="display-4 text-center">
             {{ object.question|capfirst }}
         </h1>
-
         <p class="lead">
             {% for categorie in referendum.categories.all %}
                 <a href="{% url 'category' categorie.slug %}"
@@ -46,26 +22,19 @@
                 </a>
             {% endfor %}
             <span class="float-right">
-            {% include 'referendum/snippets/publication.html' %}
-            {% include 'referendum/snippets/event_date.html' %}
-            {% include 'referendum/snippets/has_voted.html' %}
+            {% include 'referendum/snippets/referendum_publication_date.html' %}
+            {% include 'referendum/snippets/referendum_event_date.html' %}
+            {% include 'referendum/snippets/referendum_has_voted.html' %}
         </span>
         </p>
-
 
         {% if referendum.is_in_progress and can_vote and valid_token and not already_voted %}
             <hr class="my-4">
             <div>
-                {% include 'referendum/snippets/referendum_form.html' %}
+                {% include 'referendum/snippets/referendum_generic_form.html' %}
             </div>
         {% endif %}
-        <hr class="my-4">
-        <div class="row">
-            <p class="col-lg-4 lead redfr font-weight-bold">
-                Résultats {% if referendum.is_in_progress %}temporaires{% endif %}:
-            </p>
-            <p class="col-lg-8 lead text-right">{% include 'referendum/snippets/results.html' %}</p>
-        </div>
+        {% include 'referendum/snippets/referendum_results_block.html' %}
         <hr class="my-4">
         <p>{{ object.description }}</p>
         <hr class="my-4">
@@ -75,7 +44,20 @@
                     jour</a>
             {% endif %}
         </div>
-
     </div>
+
+    {% include 'referendum/snippets/comment_form.html' %}
+    {% include 'referendum/snippets/comment_list.html' %}
+    {% include 'referendum/snippets/fake_comment.html' %}
+
+
+{% endblock %}
+
+{% block custom_js %}
+    <script src="{% static 'js/generic_request.js' %}"></script>
+    <script src="{% static 'js/toggle_hide.js' %}"></script>
     <script src="{% static 'js/like.js' %}"></script>
+    <script src="{% static 'js/comment_event_listeners.js' %}"></script>
+    <script src="{% static 'js/comment_card_add_event_listener.js' %}"></script>
+    <script src="{% static 'js/add_comment.js' %}"></script>
 {% endblock %}

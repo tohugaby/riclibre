@@ -1,0 +1,10 @@
+{% if user.is_authenticated %}
+    <div class="row">
+        <h2 class="col-12">Commentaires</h2>
+        <form id="comment-form" class="col-12" action="{% url 'comment_create' %}" method="post">
+            {% csrf_token %}
+            {{ comment_form }}
+            <button type="submit" class="btn bluefr-bg white-text">Valider</button>
+        </form>
+    </div>
+{% endif %}

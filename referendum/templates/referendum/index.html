@@ -16,7 +16,7 @@
                     <a href="{{ referendum.get_absolute_url }}"
                        class="list-group-item list-group-item-action white-transp-bg">
                         <span class="font-weight-bold {% cycle 'bluefr' 'redfr' 'greyfr' %}">
-                                        {% include 'referendum/snippets/like.html' %}
+                                        {% include 'referendum/snippets/referendum_like_button.html' %}
                             {{ referendum|capfirst }}
                         </span>
                         <br>
@@ -32,12 +32,12 @@
                     <a href="{{ referendum.get_absolute_url }}" class="list-group-item list-group-item-action
                     white-transp-bg">
                         <span class="font-weight-bold {% cycle 'bluefr' 'redfr' 'greyfr' %}">
-                                        {% include 'referendum/snippets/like.html' %}
+                                        {% include 'referendum/snippets/referendum_like_button.html' %}
                         {{ referendum|capfirst }}
                         </span>
                         <span class="float-right">
-                            {% include 'referendum/snippets/event_date.html' %}
-                            {% include 'referendum/snippets/has_voted.html' %}
+                            {% include 'referendum/snippets/referendum_event_date.html' %}
+                            {% include 'referendum/snippets/referendum_has_voted.html' %}
                         </span>
                     </a>
                 {% endfor %}
@@ -53,11 +53,11 @@
                     white-transp-bg">
                     <span class="row">
                         <span class="col-6 font-weight-bold {% cycle 'bluefr' 'redfr' 'greyfr' %}">
-                                        {% include 'referendum/snippets/like.html' %}
+                                        {% include 'referendum/snippets/referendum_like_button.html' %}
                             {{ referendum|capfirst }}
                         </span>
                         <span class="col-6 text-right">
-                        {% include 'referendum/snippets/results.html' %}
+                        {% include 'referendum/snippets/referendum_results.html' %}
                         </span>
                     </span>
                     </a>

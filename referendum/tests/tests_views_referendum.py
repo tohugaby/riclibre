@@ -117,7 +117,8 @@ class ReferendumDetailViewTestCase(TestCase):
         self.assertEqual(int(self.client.session['_auth_user_id']), self.user.pk)
         response = self.client.get(self.referendum.get_absolute_url())
         self.assertEqual(response.status_code, 200)
-        self.assertNotContains(response, '<form')
+        # TODO: check assertion
+        self.assertNotContains(response, "label='Vote'")
         self.referendum_not_started.event_start = timezone.now()
         self.referendum_not_started.save()
         response = self.client.get(self.referendum.get_absolute_url())

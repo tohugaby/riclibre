@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -31,14 +31,14 @@
 </head>
 <body>
 <div class="content">
-    {% block header %}{% include 'referendum/snippets/navbar.html' %}{% endblock %}
+    {% block header %}{% include 'referendum/snippets/base_navbar.html' %}{% endblock %}
     <div class="container">
         <h1 class="blue3 white-transp-bg text-center my-5">
             {% block main_title %}{% endblock %}
         </h1>
         <div class="row mb-5">
             {% block action_buttons %}
-                {% include 'referendum/snippets/action_buttons.html' %}
+                {% include 'referendum/snippets/base_action_buttons.html' %}
             {% endblock %}
         </div>
         {% block filter_buttons %}{% endblock %}
@@ -47,7 +47,10 @@
 </div>
 
 {% block footer %}
-    {% include 'referendum/snippets/footer.html' %}
+    {% include 'referendum/snippets/base_footer.html' %}
+{% endblock %}
+
+{% block custom_js %}
 {% endblock %}
 
 </body>
