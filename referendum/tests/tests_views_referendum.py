@@ -113,6 +113,7 @@ class ReferendumDetailViewTestCase(TestCase):
         """
         Test rediction on vote date.
         """
+        nb_vote_token = VoteToken.objects.count()
         self.client.force_login(self.citizen)
         self.assertEqual(int(self.client.session['_auth_user_id']), self.user.pk)
         response = self.client.get(self.referendum.get_absolute_url())
@@ -121,7 +122,14 @@ class ReferendumDetailViewTestCase(TestCase):
         self.assertNotContains(response, "label='Vote'")
         self.referendum_not_started.event_start = timezone.now()
         self.referendum_not_started.save()
-        response = self.client.get(self.referendum.get_absolute_url())
+        self.referendum_not_started.refresh_from_db()
+        self.assertGreaterEqual(timezone.now(), self.referendum_not_started.event_start)
+        self.assertTrue(self.referendum_not_started.is_in_progress)
+        response = self.client.get(self.referendum_not_started.get_absolute_url())
+        self.assertEqual(nb_vote_token + 1, VoteToken.objects.count())
+        last_token = VoteToken.objects.last()
+        self.assertEqual(last_token.user, self.citizen)
+        self.assertEqual(last_token.referendum, self.referendum_not_started)
         self.vote_token = VoteToken.objects.get(referendum=self.referendum_not_started, user=self.citizen)
         self.assertRedirects(response, reverse('vote', kwargs={'token': self.vote_token.token}))
 

@@ -1,3 +1,6 @@
+"""
+Test settings module.
+"""
 from . import *
 
 DATABASES = {

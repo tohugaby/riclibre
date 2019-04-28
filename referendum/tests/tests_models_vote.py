@@ -3,13 +3,14 @@ Referendum's app: Vote's model's tests
 """
 
 import logging
+
 from django.contrib.auth import get_user_model
 from django.db import IntegrityError
 from django.test import TestCase
 
 from referendum.exceptions import UserHasAlreadyVotedError
 from referendum.models import Referendum, VoteToken, Choice, Vote
-from referendum.tests import REFERENDUM_DATA, create_test_user
+from referendum.tests import get_referendum_test_data, create_test_user
 
 LOGGER = logging.getLogger(__name__)
 
@@ -20,12 +21,12 @@ class VoteTestCase(TestCase):
     """
 
     def setUp(self):
-        self.new_referendum = Referendum.objects.create(**REFERENDUM_DATA)
+        self.password = 'Azer123@'
+        self.user = create_test_user(self.password, is_active=False)
+        self.new_referendum = Referendum.objects.create(**get_referendum_test_data(self.user))
 
         self.choice1 = Choice.objects.create(referendum=self.new_referendum, title='oui')
         self.choice2 = Choice.objects.create(referendum=self.new_referendum, title='non')
-        self.password = 'Azer123@'
-        self.user = create_test_user(self.password, is_active=False)
 
     def test_vote_cannot_be_changed(self):
         """
@@ -56,11 +57,11 @@ class VoteTokenTestCase(TestCase):
     """
 
     def setUp(self):
-        self.new_referendum = Referendum.objects.create(**REFERENDUM_DATA)
-
-        self.choice = Choice.objects.create(referendum=self.new_referendum, title='oui')
         self.password = 'Azer123@'
         self.user = create_test_user(self.password, is_active=False)
+        self.new_referendum = Referendum.objects.create(**get_referendum_test_data(self.user))
+
+        self.choice = Choice.objects.create(referendum=self.new_referendum, title='oui')
 
     def test_create_token(self):
         """

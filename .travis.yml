@@ -1,0 +1,31 @@
+jobs:
+  include:
+    - stage: test
+      dist: xenial   # required for Python >= 3.7
+      language: python
+      python:
+        - "3.7"
+      env:
+        - DJANGO_SETTINGS_MODULE='riclibre.settings.travis' MOZ_HEADLESS=1
+      addons:
+        postgresql: "9.4"
+        firefox: latest
+      services:
+        - postgresql
+      before_install:
+        - wget https://github.com/mozilla/geckodriver/releases/download/v0.22.0/geckodriver-v0.22.0-linux64.tar.gz
+        - mkdir geckodriver
+        - tar -xzf geckodriver-v0.22.0-linux64.tar.gz -C geckodriver
+        - export PATH=$PATH:$PWD/geckodriver
+        - geckodriver --version
+        - export MOZ_HEADLESS=1
+      install:
+        - pip install -r requirements.txt
+      before_script:
+        - echo 'Europe/Paris' | sudo tee /etc/timezone
+        - sudo dpkg-reconfigure --frontend noninteractive tzdata
+        - sudo ntpdate ntp.ubuntu.com
+        - psql -c 'create database travis_ci_test;' -U postgres
+      script:
+        - python manage.py migrate
+        - python manage.py test

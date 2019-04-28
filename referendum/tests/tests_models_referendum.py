@@ -9,7 +9,7 @@ from django.test import TestCase
 from django.utils import timezone
 
 from referendum.models import Referendum, Vote, Choice
-from referendum.tests import REFERENDUM_DATA, create_test_user
+from referendum.tests import get_referendum_test_data, create_test_user
 
 LOGGER = logging.getLogger(__name__)
 
@@ -18,6 +18,7 @@ class ReferendumTestCase(TestCase):
     """
     Test Referendum model and its methods.
     """
+    fixtures = ['test_data.json']
 
     def setUp(self):
         """
@@ -26,7 +27,7 @@ class ReferendumTestCase(TestCase):
         """
         self.password = 'Azer123@'
         self.user = create_test_user(self.password)
-        self.referendum_data = REFERENDUM_DATA
+        self.referendum_data = get_referendum_test_data(self.user)
 
     def test_create(self):
         """
@@ -153,7 +154,7 @@ class ChoiceTestCase(TestCase):
         self.password = "test"
         self.user.set_password(self.password)
         self.user.save()
-        self.new_referendum = Referendum.objects.create(**REFERENDUM_DATA)
+        self.new_referendum = Referendum.objects.create(**get_referendum_test_data(self.user))
 
         self.choices_data = [
             {

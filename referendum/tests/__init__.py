@@ -14,9 +14,11 @@ def create_test_user(password, is_active=True):
     user.save()
     return user
 
-REFERENDUM_DATA = {
-    "title": "referendum de test",
-    "description": "ceci est un referendum de test",
-    "question": "êtes-vous d'accord ?",
-    "creator_id": 1
-}
+
+def get_referendum_test_data(user):
+    return {
+        "title": "referendum de test",
+        "description": "ceci est un referendum de test",
+        "question": "êtes-vous d'accord ?",
+        "creator_id": user.pk
+    }
