@@ -89,6 +89,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+!ric_libre_env_file_sample/.env
 
 # Spyder project settings
 .spyderproject
@@ -108,3 +109,10 @@ venv.bak/
 .idea/
 
 
+# SSH Keys
+deploy/riclibre_deploy_key.pub
+deploy/riclibre_deploy_key
+
+
+# New Relic config file
+newrelic.ini

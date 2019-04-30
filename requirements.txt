@@ -1,6 +1,9 @@
 django
 psycopg2-binary
 django-tempus-dominus
+django-sendgrid-v5
+sentry-sdk
+newrelic
 
 coverage
 flake8

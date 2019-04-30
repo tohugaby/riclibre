@@ -1,0 +1,39 @@
+version: '3'
+services:
+  riclibre:
+    restart: always
+    build: .
+    image: riclibre:latest
+    env_file:
+      - ./.env
+    volumes:
+      - /var/www/riclibre/static:/var/www/static
+
+    networks:
+      riclibre-ntk:
+        ipv4_address: 172.31.0.2
+
+    depends_on:
+      - db
+
+  db:
+    restart: always
+    image: postgres:latest
+    env_file:
+      - ./.env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      riclibre-ntk:
+        ipv4_address: 172.31.0.3
+
+networks:
+  riclibre-ntk:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.31.0.0/24
+
+
+volumes:
+  pgdata:
