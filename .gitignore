@@ -116,3 +116,6 @@ deploy/riclibre_deploy_key
 
 # New Relic config file
 newrelic.ini
+
+# media dir
+media/*

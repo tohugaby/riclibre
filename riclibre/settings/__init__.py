@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'tempus_dominus',
     'debug_toolbar',
     'account_manager.apps.AccountManagerConfig',
+    'id_card_checker.apps.IdCardCheckerConfig',
     'referendum.apps.ReferendumConfig',
 ]
 
@@ -143,6 +144,10 @@ LOGIN_REDIRECT_URL = LOGOUT_REDIRECT_URL = '/'
 
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_URL = '/media/'
 
 OBSERVATIONS_LINKS = [
     {
