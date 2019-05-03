@@ -1,10 +1,13 @@
 """
 Referendum's app:  Comment's models
 """
+import logging
 
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
+
+LOGGER = logging.getLogger(__name__)
 
 
 class Comment(models.Model):

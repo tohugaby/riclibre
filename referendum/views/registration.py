@@ -1,6 +1,8 @@
 """
 Referendum's app : Registration views
 """
+import logging
+
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.urls import reverse_lazy
@@ -10,6 +12,8 @@ from django.views.generic import CreateView, TemplateView, DetailView, FormView
 from referendum.forms import SignupForm, ActivationForm
 from referendum.utils import send_validation_email, AccountActivationTokenGenerator
 from referendum.views.utils import UserIsAnonymousMixin
+
+LOGGER = logging.getLogger(__name__)
 
 
 class SignupView(UserIsAnonymousMixin, CreateView):

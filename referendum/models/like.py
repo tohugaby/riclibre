@@ -1,8 +1,12 @@
 """
 Referendum's app :  Like's models
 """
+import logging
+
 from django.contrib.auth import get_user_model
 from django.db import models
+
+LOGGER = logging.getLogger(__name__)
 
 
 class Like(models.Model):

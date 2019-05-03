@@ -1,3 +1,5 @@
+import logging
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.template.defaultfilters import date as _date, time as _time
@@ -5,6 +7,8 @@ from django.views.generic import UpdateView, FormView
 
 from referendum.forms import CommentForm
 from referendum.models import Comment
+
+LOGGER = logging.getLogger(__name__)
 
 
 def get_serialized_comment(comment):

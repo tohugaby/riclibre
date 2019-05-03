@@ -1,6 +1,8 @@
 """
 Referendum's app: tests module for referendum view test
 """
+import logging
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.db.models import Q
@@ -9,6 +11,8 @@ from django.urls import reverse
 from django.utils import timezone
 
 from referendum.models import Referendum, Category, VoteToken
+
+LOGGER = logging.getLogger(__name__)
 
 
 class ReferendumListViewTestCase(TestCase):

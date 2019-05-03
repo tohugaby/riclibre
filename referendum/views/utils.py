@@ -1,9 +1,13 @@
 """
 Referendum's app: views utilities
 """
+import logging
+
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
+
+LOGGER = logging.getLogger(__name__)
 
 
 class UserIsAnonymousMixin(UserPassesTestMixin):

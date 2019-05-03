@@ -1,6 +1,8 @@
 """
 Referendum's app: tests module for like view
 """
+import logging
+
 from django.contrib.auth import get_user_model
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.test import TestCase, Client
@@ -9,6 +11,8 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.firefox.webdriver import WebDriver
 
 from referendum.models import Referendum, Like
+
+LOGGER = logging.getLogger(__name__)
 
 
 class LikeViewTestCase(TestCase):

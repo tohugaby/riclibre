@@ -1,10 +1,13 @@
 """
 Account manager app: User's models module
 """
+import logging
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+
+LOGGER = logging.getLogger(__name__)
 
 
 class CustomUser(AbstractUser):

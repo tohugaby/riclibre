@@ -1,6 +1,8 @@
 """
 Referendum's app: Test registration views
 """
+import logging
+
 from django.contrib.auth import get_user_model
 from django.core import mail
 from django.test import TestCase, Client, LiveServerTestCase
@@ -10,6 +12,8 @@ from referendum.tests import create_test_user
 from referendum.utils import get_account_validation_context
 from referendum.validators import RequiredCharactersValidator
 from referendum.views import SignupConfirmView, SignupView
+
+LOGGER = logging.getLogger(__name__)
 
 
 class SignupViewTestCase(TestCase):

@@ -1,6 +1,7 @@
 """
 Referendum's app: Test registration views
 """
+import logging
 
 from django.conf import settings
 from django.test import Client, LiveServerTestCase
@@ -8,6 +9,8 @@ from django.urls import reverse
 
 from referendum.tests import create_test_user
 from referendum.views.account import AccountView
+
+LOGGER = logging.getLogger(__name__)
 
 
 class AccountViewTestCase(LiveServerTestCase):

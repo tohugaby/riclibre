@@ -1,6 +1,8 @@
 """
 Referendum's app: Referendum's views
 """
+import logging
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
 from django.forms import DateTimeInput
@@ -14,6 +16,8 @@ from tempus_dominus.widgets import DateTimePicker
 
 from referendum.forms import VoteForm, CommentForm
 from referendum.models import Referendum, Category, VoteToken, Choice
+
+LOGGER = logging.getLogger(__name__)
 
 
 class ReferendumListView(ListView):

@@ -1,10 +1,13 @@
 """
 Id_card_checker's app:  IdCard's models
 """
+import logging
 from tkinter.constants import CASCADE
 
 from django.contrib.auth import get_user_model
 from django.db import models
+
+LOGGER = logging.getLogger(__name__)
 
 STATUS = [
     ("wait", "En attente de traitement"),

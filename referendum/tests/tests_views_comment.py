@@ -1,11 +1,15 @@
 """
 Referendum's app: tests module for comment view test
 """
+import logging
+
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
 from django.urls import reverse
 
 from referendum.models import Referendum, Comment
+
+LOGGER = logging.getLogger(__name__)
 
 
 class CommentCreateViewTestCase(TestCase):

@@ -1,8 +1,11 @@
+import logging
 
 from django.http import HttpResponseForbidden
 from django.views.generic import DetailView
 
 from referendum.models import Referendum, Like
+
+LOGGER = logging.getLogger(__name__)
 
 
 class LikeView(DetailView):

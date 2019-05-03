@@ -1,12 +1,16 @@
 """
 Referendum's app:  Identity's models
 """
+import logging
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.db import models
 from django.db.models import CASCADE
 from django.db.models.signals import post_save, post_delete
 from django.utils import timezone
+
+LOGGER = logging.getLogger(__name__)
 
 
 def manage_citizen_perm(sender, instance, **kwargs):

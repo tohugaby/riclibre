@@ -1,10 +1,14 @@
 """
 Referendum's app: Index view module
 """
+import logging
+
 from django.utils import timezone
 from django.views.generic import ListView
 
 from referendum.models import Referendum
+
+LOGGER = logging.getLogger(__name__)
 
 
 class IndexView(ListView):
