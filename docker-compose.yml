@@ -15,6 +15,19 @@ services:
 
     depends_on:
       - db
+      - redis
+
+  celery:
+    build: .
+    command: celery -A riclibre worker -l info
+    env_file:
+      - ./.env
+    depends_on:
+      - db
+      - redis
+    networks:
+      riclibre-ntk:
+        ipv4_address: 172.31.0.5
 
   db:
     restart: always
@@ -26,6 +39,14 @@ services:
     networks:
       riclibre-ntk:
         ipv4_address: 172.31.0.3
+
+  redis:
+    restart: always
+    image: redis:latest
+    networks:
+      riclibre-ntk:
+        ipv4_address: 172.31.0.4
+
 
 networks:
   riclibre-ntk:

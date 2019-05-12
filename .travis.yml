@@ -7,6 +7,9 @@ jobs:
         - "3.7"
       env:
         - DJANGO_SETTINGS_MODULE='riclibre.settings.travis' MOZ_HEADLESS=1
+        - DJANGO_SECRET_KEY=fake_test_key
+        - DEBUG=True
+        - BROKER_URL=redis://localhost
       addons:
         postgresql: "9.4"
         firefox: latest

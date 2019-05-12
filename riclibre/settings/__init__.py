@@ -15,18 +15,23 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 from django.urls import reverse
 
+# import sentry_sdk
+# from sentry_sdk.integrations.django import DjangoIntegration
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '4uc3j!91m)6&c1s@sob_@9w_^e!x58l*$y!+ji9@saa92w7u5@'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+if os.getenv('DEBUG') == 'True':
+    DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', os.getenv('DOMAIN_NAME')]
 
 INTERNAL_IPS = ['127.0.0.1', ]
 # Application definition
@@ -41,12 +46,13 @@ INSTALLED_APPS = [
     'tempus_dominus',
     'debug_toolbar',
     'account_manager.apps.AccountManagerConfig',
-    'id_card_checker.apps.IdCardCheckerConfig',
     'referendum.apps.ReferendumConfig',
+    'id_card_checker.apps.IdCardCheckerConfig',  # id checker apps should always be loaded after main app: referendum
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -79,21 +85,14 @@ WSGI_APPLICATION = 'riclibre.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('RICLIBRE_DATABASE_NAME'),
-        'USER': os.getenv('RICLIBRE_DATABASE_USER'),
-        'PASSWORD': os.getenv('RICLIBRE_DATABASE_PASSWORD'),
-        'HOST': os.getenv('RICLIBRE_DATABASE_HOST'),
-        'PORT': os.getenv('RICLIBRE_DATABASE_PORT')
+        'NAME': os.getenv('DATABASE_NAME'),
+        'USER': os.getenv('DATABASE_USER', os.getenv('DATABASE_NAME')),
+        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+        'HOST': os.getenv('DATABASE_HOST'),
+        'PORT': os.getenv('DATABASE_PORT', '5432')
     }
 }
 
@@ -135,20 +134,39 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # '/var/www/static/'
 STATIC_URL = '/static/'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+# Authentication
 AUTH_USER_MODEL = 'account_manager.CustomUser'
 
 LOGIN_URL = '/login'
 LOGIN_REDIRECT_URL = LOGOUT_REDIRECT_URL = '/'
 
+# Email config
 if DEBUG:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    EMAIL_BACKEND = 'sendgrid_backend.SendgridBackend'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 
 # Logs
+
+# sentry_sdk.init(
+#     dsn=os.getenv('SENTRY_DSN'),
+#     integrations=[DjangoIntegration()],
+#     send_default_pii=True,
+#     release=riclibre.__version__
+# )
+
+if os.environ.get('ADMINS'):
+    admin_list = os.environ.get('ADMINS').split(";")
+    ADMINS = [(admin.split("@")[0], admin) for admin in admin_list]
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -162,6 +180,10 @@ LOGGING = {
         #     'handlers': ['console'],
         #     'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG')
         # },
+        '': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG')
+        },
         'referendum': {
             'handlers': ['console'],
             'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG')
@@ -177,9 +199,17 @@ LOGGING = {
     }
 }
 
-OBSERVATIONS_LINKS = [
-    {
-        'OBSERVABLE': '',
-        'OBSERVERS': []
-    }
-]
+BROKER_URL = os.getenv('BROKER_URL', 'redis://localhost:6379')
+CELERY_RESULT_BACKEND = os.getenv('BROKER_URL', 'redis://localhost:6379')
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Paris'
+
+OBSERVATIONS_LINKS = {
+    'id_card_checker.models.IdCard': ['referendum.observers.id_checker_observer', ],
+}
+
+# id_card_checker config
+
+ID_CARD_VALIDITY_LENGTH = 3653

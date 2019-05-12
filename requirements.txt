@@ -1,6 +1,9 @@
 django
 psycopg2-binary
 django-tempus-dominus
+whitenoise
+redis
+celery
 gunicorn
 django-sendgrid-v5
 sentry-sdk
