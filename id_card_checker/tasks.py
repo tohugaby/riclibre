@@ -14,4 +14,4 @@ def add_check_job(self, pk):
     :return:
     """
     id_card = IdCard.objects.get(pk=pk)
-    return id_card.set_document_validity()
+    return id_card.check_document()

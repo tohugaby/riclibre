@@ -119,3 +119,6 @@ newrelic.ini
 
 # media dir
 media/*
+
+# local django settings
+riclibre/settings/docker_local.py

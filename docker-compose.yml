@@ -8,6 +8,7 @@ services:
       - ./.env
     volumes:
       - /var/www/riclibre/static:/var/www/static
+      - /var/www/riclibre/media:/var/www/src/media/
 
     networks:
       riclibre-ntk:
@@ -22,6 +23,8 @@ services:
     command: celery -A riclibre worker -l info
     env_file:
       - ./.env
+    volumes:
+      - /var/www/riclibre/media:/var/www/src/media/
     depends_on:
       - db
       - redis

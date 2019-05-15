@@ -2,6 +2,7 @@ django
 psycopg2-binary
 django-tempus-dominus
 whitenoise
+passporteye
 redis
 celery
 gunicorn
