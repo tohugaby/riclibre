@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block main_title %}
+    Ajout d'une pièce d'identité à votre compte
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col">
+            <form class="card" action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="card-body">
+                    {% for error in form.document.errors %}
+                    <div class="alert white-bg redfr alert-dismissible fade show" role="alert">
+                        <strong>{{ error }}</strong>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    {% endfor %}
+
+                    <div class="form-group">
+                        {{ form.document }}
+                    </div>
+                </div>
+                <div class="card-body">
+                    <button type="submit" class="btn bluefr-bg white-text">Soumettre la pièce d'identité</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <table class="table white-transp-bg">
+                <thead>
+                <tr>
+                    <th scope="col">Création</th>
+                    <th scope="col">Traitement</th>
+                    <th scope="col" class="d-md-table-cell d-none">Détail</th>
+                    <th scope="col">Expiration</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for idcard in object_list %}
+                    <tr>
+                        <td>
+                            <small class="badge badge-pill greyfr white-bg">
+                                {{ idcard.creation|date:"d/m/Y H:i" }}
+                            </small>
+                        </td>
+                        <td>
+                            {% if idcard.status == 'failed' %}
+                                <small class="badge badge-pill redfr-bg white-text">
+                                    {{ idcard.get_status_display }}
+                                </small>
+                            {% elif idcard.status == 'success' %}
+                                <small class="badge badge-pill bluefr-bg white-text">
+                                    {{ idcard.get_status_display }}
+                                </small>
+                            {% else %}
+                                <small class="badge badge-pill greyfr-bg white-text">
+                                    {{ idcard.get_status_display }}
+                                </small>
+                            {% endif %}
+                        </td>
+                        <td class="d-md-table-cell d-none text-muted">
+                            <small>{{ idcard.comment }}</small>
+                        </td>
+                        <td>
+                            {% if idcard.is_valid_card %}
+                                <small class="badge badge-pill bluefr white-bg">
+                                    {{ idcard.valid_until|date:"d/m/Y" }}
+                                </small>
+                            {% elif idcard.valid_until %}
+                                <small class="badge badge-pill greyfr white-bg">
+                                    <s>{{ idcard.valid_until|date:"d/m/Y" }}</s>
+                                </small>
+                            {% else %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

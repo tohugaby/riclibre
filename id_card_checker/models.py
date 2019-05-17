@@ -9,6 +9,7 @@ from django.core.mail import send_mail
 from django.db import models
 from django.db.models import CASCADE
 from django.db.models.signals import post_save
+from django.template.defaultfilters import date
 from django.utils import timezone
 from passporteye import read_mrz
 
@@ -22,6 +23,10 @@ def notify_observers(sender, instance, created, **kwargs):
     """A notifying signal function"""
     if created and instance.document:
         instance.process_id_card()
+    if created and not instance.document:
+        instance.comment = "Aucun fichier soumis"
+        instance.status = IdCard.FAILED
+        instance.save()
 
 
 class IdCard(Observable, models.Model):
@@ -37,14 +42,29 @@ class IdCard(Observable, models.Model):
         (SUCCESS, "Réussite du traitement")
     ]
 
-    document = models.FileField(verbose_name="copie de la pièce d'identité", upload_to='temp_docs')
+    document = models.ImageField(verbose_name="copie de la pièce d'identité", upload_to='temp_docs', blank=True)
     user = models.ForeignKey(get_user_model(), verbose_name="Utilisateur associé", on_delete=CASCADE)
     status = models.CharField(verbose_name="statut du traitement", choices=STATUS, max_length=300, default=WAIT)
     creation = models.DateTimeField(verbose_name="Date de création", auto_now_add=True)
     update = models.DateTimeField(verbose_name="Date de mise à jour", auto_now=True)
+    comment = models.CharField(verbose_name="Résultat détaillé de l'analyse", blank=True, max_length=2000)
+    valid_until = models.DateTimeField(verbose_name='Date limite de validité', blank=True, null=True)
+
+    class Meta:
+        ordering = ['-creation', '-update']
 
     def __str__(self):
         return f"{self.user} : {self.document} : {self.status}"
+
+    @property
+    def is_valid_card(self):
+        """
+        Check if id card is valid.
+        :return: A boolean that say if id card is valid
+        """
+        if self.valid_until:
+            return self.valid_until > timezone.now()
+        return False
 
     @staticmethod
     def get_expiration_date(creation_date: timezone.datetime):
@@ -57,7 +77,6 @@ class IdCard(Observable, models.Model):
             if settings.ID_CARD_VALIDITY_LENGTH:
                 return creation_date + timezone.timedelta(days=settings.ID_CARD_VALIDITY_LENGTH)
         except AttributeError as no_id_card_validity_setting:
-            print(no_id_card_validity_setting)
             LOGGER.warning(
                 "No ID_CARD_VALIDITY_LENGTH defined in project's settings %s " % no_id_card_validity_setting)
         return creation_date + timezone.timedelta(minutes=1)
@@ -100,6 +119,9 @@ class IdCard(Observable, models.Model):
         except AttributeError as attr_error:
             comment = """ Erreur durant l'analyse de votre pièce d'identité. La cause du problème peut varier: 
             qualité du document transmis, cadrage, format du fichier... Essayer de soumettre un nouveau document."""
+        except ValueError as val_error:
+            comment = """ Erreur durant l'analyse de votre pièce d'identité. La cause du problème semble venir de 
+            la band mrz de votre pièce d'identité... Essayer de soumettre un nouveau document."""
 
         return False, None, comment
 
@@ -108,8 +130,8 @@ class IdCard(Observable, models.Model):
         Check document validity and update instance status according to check results.
         :return: a boolean results
         """
+        expiration_date = None
         if self.document and self.status == self.WAIT:
-            self.change_status(self.FAILED)
             mrz_validity, delivery_date, comment = self.parse_mrz()
             if mrz_validity:
                 self.change_status(self.SUCCESS)
@@ -117,9 +139,16 @@ class IdCard(Observable, models.Model):
                 self.notify(valid_until=expiration_date)
 
                 if timezone.make_aware(expiration_date) > timezone.now():
-                    comment += f"Elle est valide jusqu'au {expiration_date}"
+                    formated_expiration_date = date(expiration_date, 'd/m/Y')
+                    comment += f"Elle est valide jusqu'au {formated_expiration_date}"
                 else:
                     comment += "Mais elle n'est plus valide"
+            else:
+                self.change_status(self.FAILED)
+            self.comment = comment
+            self.valid_until = expiration_date
+            self.document.delete(save=True)
+            self.save()
             send_mail(
                 subject='R.I.C Libre : %s : Analyse de votre pièce d\'identité' % self.status,
                 message=comment,

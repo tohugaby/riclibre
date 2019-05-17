@@ -20,6 +20,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('', include('referendum.urls')),
+    path('', include('id_card_checker.urls')),
     path('admin/', admin.site.urls),
 ]
 
