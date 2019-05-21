@@ -8,8 +8,8 @@
 
 {% block content %}
 
-    <div class="row my-5">
-        <div class="col-lg-6 col-md-12">
+    <div class="row">
+        <div class="col-lg-6 col-md-12 my-2">
             <h2 class="white-transp-bg text-center bluefr">Derniers Référendums</h2>
             <div class="list-group">
                 {% for referendum in referendum_list %}
@@ -17,7 +17,7 @@
                        class="list-group-item list-group-item-action white-transp-bg">
                         <span class="font-weight-bold {% cycle 'bluefr' 'redfr' 'greyfr' %}">
                                         {% include 'referendum/snippets/referendum_like_button.html' %}
-                            {{ referendum|capfirst }}
+                            <span class="description-break">{{ referendum|capfirst }}</span>
                         </span>
                         <br>
                         <small class="font-weight-light">créé par {{ referendum.creator.username }}</small>
@@ -25,7 +25,7 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="col-lg-6 col-md-12">
+        <div class="col-lg-6 col-md-12 my-2">
             <h2 class=" white-transp-bg text-center greyfr">Journées de votes à venir</h2>
             <div class="list-group">
                 {% for referendum in voted_soon %}
@@ -44,8 +44,8 @@
             </div>
         </div>
     </div>
-    <div class="row my-5">
-        <div class="col-lg-12">
+    <div class="row">
+        <div class="col-lg-12 my-2">
             <h2 class="white-transp-bg text-center redfr">Derniers résultats</h2>
             <div class="list-group">
                 {% for referendum in results_available %}

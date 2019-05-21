@@ -1,102 +1,149 @@
-body {
+body
+{
     background-image: url('../images/ballons.jpg');
     background-size: cover;
     /*font-family: 'Montserrat', sans-serif;*/
 }
 
-.content {
+.content
+{
     min-height: calc(100vh - 98px);
 }
 
-.footer {
+.footer
+{
     height: 50px;
     margin: 0;
 }
 
-h1 {
+h1
+{
     font-size: 2rem;
 }
 
-h2 {
+h2
+{
     font-size: 1.6rem;
+}
+
+@media screen and (max-width: 1024px)
+{
+    h1
+    {
+        font-size: 1.3rem;
+    }
+
+    h2
+    {
+        font-size: 1.1rem;
+    }
+    .description
+    {
+        font-size: .8rem;
+    }
+}
+
+
+.description-break
+{
+    word-wrap: break-word;
 }
 
 a,
 a:hover,
 a:focus,
-a:active {
+a:active
+{
     color: #4c86c5;
 }
 
 
 a.white-text:hover,
 a.white-text:focus,
-a.white-text:active {
+a.white-text:active
+{
     color: white;
 }
 
-input {
-    border-width: 0;
+input
+{
     padding: 0 2px;
-    background-color:  rgba(145,163,173,0.5);
+
+    border-width: 0;
+    background-color: rgba(145, 163, 173, .5);
 }
 
-.redfr {
+.redfr
+{
     color: #ae1a2c;
 }
 
-.redfr-bg {
+.redfr-bg
+{
     background-color: #ae1a2c;
 }
 
-.bluefr {
+.bluefr
+{
     color: #133086;
 }
 
-.bluefr-bg {
+.bluefr-bg
+{
     background-color: #133086;
 }
 
-.blue2 {
+.blue2
+{
     color: #4c86c5;
 }
 
-.blue2-bg {
+.blue2-bg
+{
     background-color: #4c86c5;
 }
 
-.blue3 {
+.blue3
+{
     color: #486f91;
 }
 
-.blue3-bg {
+.blue3-bg
+{
     background-color: #486f91;
 }
 
-.white-bg {
+.white-bg
+{
     background-color: white;
 }
 
-.white-transp-bg {
+.white-transp-bg
+{
     background-color: rgba(255, 255, 255, .8);
 }
 
-.white-very-transp-bg {
+.white-very-transp-bg
+{
     background-color: rgba(255, 255, 255, .4);
 }
 
-.greyfr {
+.greyfr
+{
     color: #91a3ad;
 }
 
-.greyfr-bg {
+.greyfr-bg
+{
     background-color: #91a3ad;
 }
 
-.white-text {
+.white-text
+{
     color: white;
 }
 
-.badge-med {
+.badge-med
+{
     font-size: 1.2rem;
 }

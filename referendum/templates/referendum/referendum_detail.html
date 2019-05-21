@@ -11,7 +11,7 @@
         <div class="d-flex justify-content-end" style=" font-size: 2em;">
             {% include 'referendum/snippets/referendum_like_button.html' %}
         </div>
-        <h1 class="display-4 text-center">
+        <h1 class="text-center text-truncate">
             {{ object.question|capfirst }}
         </h1>
         <p class="lead">
@@ -21,7 +21,7 @@
                     {{ categorie }}
                 </a>
             {% endfor %}
-            <span class="float-right">
+            <span class="float-md-right">
             {% include 'referendum/snippets/referendum_publication_date.html' %}
             {% include 'referendum/snippets/referendum_event_date.html' %}
             {% include 'referendum/snippets/referendum_has_voted.html' %}
@@ -36,7 +36,7 @@
         {% endif %}
         {% include 'referendum/snippets/referendum_results_block.html' %}
         <hr class="my-4">
-        <p>{{ object.description }}</p>
+        <p class="description-break text-justify">{{ object.description }}</p>
         <hr class="my-4">
         <div class="lead">
             {% if referendum.get_updatable_fields and referendum.creator == user %}

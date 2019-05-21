@@ -227,7 +227,7 @@ CELERY_BEAT_SCHEDULE = {
     },
     'check-cards': {
         'task': 'id_card_checker.tasks.launch_waiting_id_cards_checks',
-        'schedule': crontab(minute=0, hour='*/1'),
+        'schedule': crontab(minute='*/5'),
     },
 
 }
