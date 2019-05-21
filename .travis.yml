@@ -13,6 +13,10 @@ jobs:
       addons:
         postgresql: "9.4"
         firefox: latest
+        apt:
+          packages:
+            - tesseract-ocr
+            - libtesseract-dev
       services:
         - postgresql
       before_install:
