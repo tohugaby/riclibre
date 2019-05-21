@@ -17,6 +17,8 @@ services:
     depends_on:
       - db
       - redis
+      - celery
+      -  celery_beat
 
   celery:
     build: .
