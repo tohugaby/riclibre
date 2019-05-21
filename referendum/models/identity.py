@@ -16,15 +16,19 @@ LOGGER = logging.getLogger(__name__)
 def manage_citizen_perm(sender, instance, **kwargs):
     """
     Add citizen perm if sender is a valid identity
-    :param sender: an Identity instance
+    :param sender: Identity
+    :param instance: an Identity instance
     """
     permission = Permission.objects.get(codename='is_citizen')
     user = get_user_model().objects.get(pk=instance.user.pk)
     user.user_permissions.remove(permission)
-    highest_validity = sender.objects.filter(user=user).order_by('-valid_until').first()
+    LOGGER.info(f"{user}: '{permission.codename}' permission removed")
+    identities = sender.objects.filter(user=user).order_by('-valid_until')
+    highest_validity = identities.first()
     if highest_validity and highest_validity.is_valid_identity:
         user.user_permissions.add(permission)
         user.save()
+        LOGGER.info(f"{user}: '{permission.codename}' permission added")
 
 
 class Identity(models.Model):
@@ -49,6 +53,16 @@ class Identity(models.Model):
         :return: A boolean that say if identity is valid
         """
         return self.valid_until > timezone.now()
+
+    @classmethod
+    def clean_identities(cls):
+        """
+        Remove non valid identities
+        """
+        for identity in cls.objects.filter(valid_until__lte=timezone.now()):
+            if not identity.is_valid_identity:
+                identity.delete()
+                LOGGER.info(f"{identity}: removed")
 
 
 post_save.connect(manage_citizen_perm, sender=Identity)

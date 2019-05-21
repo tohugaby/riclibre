@@ -12,8 +12,6 @@ app = Celery('riclibre', broker=os.getenv('BROKER_URL', 'redis://localhost:6379'
 # app.config_from_object('django.conf:settings', namespace='CELERY')
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
-
-
 app.autodiscover_tasks()
 
 

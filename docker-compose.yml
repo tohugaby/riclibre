@@ -32,6 +32,20 @@ services:
       riclibre-ntk:
         ipv4_address: 172.31.0.5
 
+  celery_beat:
+    build: .
+    command: celery -A riclibre beat -l info
+    env_file:
+      - ./.env
+    volumes:
+      - /var/www/riclibre/media:/var/www/src/media/
+    depends_on:
+      - db
+      - redis
+    networks:
+      riclibre-ntk:
+        ipv4_address: 172.31.0.6
+
   db:
     restart: always
     image: postgres:latest

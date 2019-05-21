@@ -145,6 +145,7 @@ class IdCard(Observable, models.Model):
                     comment += "Mais elle n'est plus valide"
             else:
                 self.change_status(self.FAILED)
+            LOGGER.info(f'Document {self.document} soumis par {self.user}:{comment}')
             self.comment = comment
             self.valid_until = expiration_date
             self.document.delete(save=True)

@@ -1,4 +1,6 @@
 # Create your views here.
+import logging
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -8,8 +10,13 @@ from django.views.generic.list import MultipleObjectMixin, MultipleObjectTemplat
 from id_card_checker.forms import IdCardForm
 from id_card_checker.models import IdCard
 
+LOGGER = logging.getLogger(__name__)
+
 
 class IdCardUploadView(LoginRequiredMixin, MultipleObjectMixin, MultipleObjectTemplateResponseMixin, CreateView):
+    """
+    IdCard upload view
+    """
     model = IdCard
     form_class = IdCardForm
     template_name = "id_card_checker/id_card_upload.html"

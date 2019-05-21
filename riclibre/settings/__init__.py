@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+from celery.schedules import crontab
 from django.urls import reverse
 
 # import sentry_sdk
@@ -169,9 +170,20 @@ if os.environ.get('ADMINS'):
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
         },
     },
     'loggers': {
@@ -204,6 +216,21 @@ CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Europe/Paris'
+CELERY_BEAT_SCHEDULE = {
+    'clean-identities': {
+        'task': 'referendum.tasks.clean_identities_job',
+        'schedule': crontab(minute=40, hour='*/1'),
+    },
+    'check-perms': {
+        'task': 'referendum.tasks.remove_citizen_perm_job',
+        'schedule': crontab(minute=50, hour='*/1'),
+    },
+    'check-cards': {
+        'task': 'id_card_checker.tasks.launch_waiting_id_cards_checks',
+        'schedule': crontab(minute=0, hour='*/1'),
+    },
+
+}
 
 OBSERVATIONS_LINKS = {
     'id_card_checker.models.IdCard': ['referendum.observers.id_checker_observer', ],

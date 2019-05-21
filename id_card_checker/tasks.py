@@ -15,3 +15,13 @@ def add_check_job(self, pk):
     """
     id_card = IdCard.objects.get(pk=pk)
     return id_card.check_document()
+
+
+@shared_task()
+def launch_waiting_id_cards_checks():
+    """
+    Launch check job on all IdCard instances with wait status
+    """
+    id_cards = IdCard.objects.filter(status=IdCard.WAIT)
+    for id_card in id_cards:
+        return id_card.check_document()
