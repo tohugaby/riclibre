@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 
-echo "Remove previous containers"
-docker-compose down
-echo "Remove riclibre image"
-docker rmi riclibre:latest
-echo "Build and launch containers"
+echo "RICLIBRE_DEPLOY_INFO: Removing previous containers"
+docker-compose rm -sf
+echo "RICLIBRE_DEPLOY_INFO: Remove riclibre images"
+docker-compose down --rmi local
+#docker rmi riclibre:latest
+echo "RICLIBRE_DEPLOY_INFO: Build and launch containers"
 docker-compose up --build -d riclibre

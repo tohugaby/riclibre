@@ -42,6 +42,28 @@ class IdCard(Observable, models.Model):
         (SUCCESS, "Réussite du traitement")
     ]
 
+    MRZ_ANALYSIS_MESSAGES = {
+        "success_mrz_analysis": """Votre pièce d'identité a été analysée avec succès.""",
+        "success_doc_valid": """Elle est valide jusqu'au {0}.""",
+        "success_doc_expired": """Mais elle n'est plus valide""",
+        "error_doc_quality": """ 
+            Erreur d'analyse de votre pièce d'identité. Les causes possibles sont liées à la qualité du document, 
+            son cadrage, son format... 
+            Essayer de soumettre un nouveau document.
+            """,
+        "error_mrz_value": """
+            Erreur d'analyse de votre pièce d'identité. Une valeur de la bande mrz est erronée... 
+            Essayer de soumettre un nouveau document.
+            """,
+        "error_mrz_structure": """
+            Erreur d'analyse de votre pièce d'identité. La bande mrz est illisible ou sa structure n'est pas bonne.
+            Essayer de soumettre un nouveau document.
+            """,
+        "error_unknown": """
+            Erreur d'analyse de votre pièce d'identité. La cause de l'erreur n'est pas identifiée. 
+            Essayer de soumettre un nouveau document."""
+    }
+
     document = models.ImageField(verbose_name="copie de la pièce d'identité", upload_to='temp_docs', blank=True)
     user = models.ForeignKey(get_user_model(), verbose_name="Utilisateur associé", on_delete=CASCADE)
     status = models.CharField(verbose_name="statut du traitement", choices=STATUS, max_length=300, default=WAIT)
@@ -107,6 +129,8 @@ class IdCard(Observable, models.Model):
         results.
         :return: a boolean for mrz validity, a delivery date and a comment that explains process results.
         """
+        mrz_is_parsed = False
+        delivery_date = None
         comment = ''
         try:
             mrz_text = self.extract_mrz()
@@ -114,16 +138,20 @@ class IdCard(Observable, models.Model):
                 mrz_data = split_mrz(french_structure, mrz_text)
                 delivery_date = timezone.datetime(year=int(mrz_data['delivery_year']),
                                                   month=int(mrz_data['delivery_month']), day=1)
-                comment = """Votre pièce d'identité a été analysée avec succès.""".format()
-                return True, delivery_date, comment
+                mrz_is_parsed = True
+                comment = self.MRZ_ANALYSIS_MESSAGES['success_mrz_analysis']
+            else:
+                comment = self.MRZ_ANALYSIS_MESSAGES['error_mrz_value']
         except AttributeError as attr_error:
-            comment = """ Erreur durant l'analyse de votre pièce d'identité. La cause du problème peut varier: 
-            qualité du document transmis, cadrage, format du fichier... Essayer de soumettre un nouveau document."""
+            comment = self.MRZ_ANALYSIS_MESSAGES['error_doc_quality']
         except ValueError as val_error:
-            comment = """ Erreur durant l'analyse de votre pièce d'identité. La cause du problème semble venir de 
-            la band mrz de votre pièce d'identité... Essayer de soumettre un nouveau document."""
+            comment = self.MRZ_ANALYSIS_MESSAGES['error_mrz_value']
+        except IndexError as index_error:
+            comment = self.MRZ_ANALYSIS_MESSAGES['error_mrz_structure']
+        except Exception as unknown_exception:
+            comment = self.MRZ_ANALYSIS_MESSAGES['error_unknown']
 
-        return False, None, comment
+        return mrz_is_parsed, delivery_date, comment
 
     def check_document(self):
         """
@@ -140,9 +168,9 @@ class IdCard(Observable, models.Model):
 
                 if timezone.make_aware(expiration_date) > timezone.now():
                     formated_expiration_date = date(expiration_date, 'd/m/Y')
-                    comment += f"Elle est valide jusqu'au {formated_expiration_date}"
+                    comment += self.MRZ_ANALYSIS_MESSAGES['success_doc_valid'].format(formated_expiration_date)
                 else:
-                    comment += "Mais elle n'est plus valide"
+                    comment += self.MRZ_ANALYSIS_MESSAGES['success_doc_expired']
             else:
                 self.change_status(self.FAILED)
             LOGGER.info(f'Document {self.document} soumis par {self.user}:{comment}')

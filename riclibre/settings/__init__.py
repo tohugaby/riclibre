@@ -9,15 +9,19 @@ https://docs.djangoproject.com/en/2.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
-
+import logging
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import sentry_sdk
 from celery.schedules import crontab
 from django.urls import reverse
-
 # import sentry_sdk
 # from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.logging import LoggingIntegration
+
+import riclibre
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -32,7 +36,15 @@ DEBUG = False
 if os.getenv('DEBUG') == 'True':
     DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', os.getenv('DOMAIN_NAME')]
+    FROM_ENV_VAR_DOMAINS = [os.getenv('DOMAIN_NAME')]
+try:
+    FROM_ENV_VAR_DOMAINS = os.getenv('DOMAIN_NAME').split(',')
+except AttributeError as attr_err:
+    pass
+except Exception as exc:
+    pass
+
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost'] + FROM_ENV_VAR_DOMAINS
 
 INTERNAL_IPS = ['127.0.0.1', ]
 # Application definition
@@ -156,12 +168,18 @@ SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 
 # Logs
 
-# sentry_sdk.init(
-#     dsn=os.getenv('SENTRY_DSN'),
-#     integrations=[DjangoIntegration()],
-#     send_default_pii=True,
-#     release=riclibre.__version__
-# )
+# All of this is already happening by default!
+sentry_logging = LoggingIntegration(
+    level=logging.DEBUG,  # Capture info and above as breadcrumbs
+    event_level=logging.DEBUG  # Send errors as events
+)
+
+sentry_sdk.init(
+    dsn=os.getenv('SENTRY_DSN'),
+    integrations=[DjangoIntegration()],
+    send_default_pii=True,
+    release=riclibre.__version__
+)
 
 if os.environ.get('ADMINS'):
     admin_list = os.environ.get('ADMINS').split(";")
@@ -185,6 +203,7 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },
+
     },
     'loggers': {
         # 'django': {
