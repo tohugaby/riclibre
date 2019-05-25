@@ -1,19 +1,37 @@
+
+html,
 body
 {
-    background-image: url('../images/ballons.jpg');
-    background-size: cover;
-    /*font-family: 'Montserrat', sans-serif;*/
+    height: 100%;
 }
+
+body
+{
+    display: flex;
+    flex-direction: column;
+
+    background-image: url('../../images/ballons.jpg');
+    background-size: cover;
+}
+
+
+
 
 .content
 {
-    min-height: calc(100vh - 98px);
+    flex: 1 0 auto;
 }
+
 
 .footer
 {
+    display: flex;
+    flex-direction: row;
+    flex-shrink: 0;
+    justify-content: space-around;
+
+    box-sizing: border-box;
     height: 50px;
-    margin: 0;
 }
 
 h1
@@ -37,9 +55,27 @@ h2
     {
         font-size: 1.1rem;
     }
+
     .description
     {
         font-size: .8rem;
+    }
+
+    .footer
+    {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: space-around;
+
+        box-sizing: border-box;
+        height: 150px;
+    }
+
+
+    table th
+    {
+        font-size: .7em;
     }
 }
 

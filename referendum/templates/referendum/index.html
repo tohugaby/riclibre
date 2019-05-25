@@ -13,15 +13,7 @@
             <h2 class="white-transp-bg text-center bluefr">Derniers Référendums</h2>
             <div class="list-group">
                 {% for referendum in referendum_list %}
-                    <a href="{{ referendum.get_absolute_url }}"
-                       class="list-group-item list-group-item-action white-transp-bg">
-                        <span class="font-weight-bold {% cycle 'bluefr' 'redfr' 'greyfr' %}">
-                                        {% include 'referendum/snippets/referendum_like_button.html' %}
-                            <span class="description-break">{{ referendum|capfirst }}</span>
-                        </span>
-                        <br>
-                        <small class="font-weight-light">créé par {{ referendum.creator.username }}</small>
-                    </a>
+                    {% include 'referendum/snippets/referendum_list_group_last.html' %}
                 {% endfor %}
             </div>
         </div>
@@ -29,17 +21,7 @@
             <h2 class=" white-transp-bg text-center greyfr">Journées de votes à venir</h2>
             <div class="list-group">
                 {% for referendum in voted_soon %}
-                    <a href="{{ referendum.get_absolute_url }}" class="list-group-item list-group-item-action
-                    white-transp-bg">
-                        <span class="font-weight-bold {% cycle 'bluefr' 'redfr' 'greyfr' %}">
-                                        {% include 'referendum/snippets/referendum_like_button.html' %}
-                        {{ referendum|capfirst }}
-                        </span>
-                        <span class="float-right">
-                            {% include 'referendum/snippets/referendum_event_date.html' %}
-                            {% include 'referendum/snippets/referendum_has_voted.html' %}
-                        </span>
-                    </a>
+                    {% include 'referendum/snippets/referendum_list_group_next_votes.html' %}
                 {% endfor %}
             </div>
         </div>
@@ -49,18 +31,7 @@
             <h2 class="white-transp-bg text-center redfr">Derniers résultats</h2>
             <div class="list-group">
                 {% for referendum in results_available %}
-                    <a href="{{ referendum.get_absolute_url }}" class="list-group-item list-group-item-action
-                    white-transp-bg">
-                    <span class="row">
-                        <span class="col-6 font-weight-bold {% cycle 'bluefr' 'redfr' 'greyfr' %}">
-                                        {% include 'referendum/snippets/referendum_like_button.html' %}
-                            {{ referendum|capfirst }}
-                        </span>
-                        <span class="col-6 text-right">
-                        {% include 'referendum/snippets/referendum_results.html' %}
-                        </span>
-                    </span>
-                    </a>
+                    {% include 'referendum/snippets/referendum_list_group_last_results.html' %}
                 {% endfor %}
             </div>
         </div>

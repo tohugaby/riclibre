@@ -11,12 +11,12 @@
                 {% csrf_token %}
                 <div class="card-body">
                     {% for error in form.document.errors %}
-                    <div class="alert white-bg redfr alert-dismissible fade show" role="alert">
-                        <strong>{{ error }}</strong>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
+                        <div class="alert white-bg redfr alert-dismissible fade show" role="alert">
+                            <strong>{{ error }}</strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                     {% endfor %}
 
                     <div class="form-group">
@@ -32,8 +32,8 @@
     </div>
 
     <div class="row">
-        <div class="col">
-            <table class="table white-transp-bg">
+        <div class="col table-responsive">
+            <table class="table white-transp-bg res">
                 <thead>
                 <tr>
                     <th scope="col">Création</th>
@@ -53,15 +53,30 @@
                         <td>
                             {% if idcard.status == 'failed' %}
                                 <small class="badge badge-pill redfr-bg white-text">
-                                    {{ idcard.get_status_display }}
+                                    <span class="d-inline d-sm-none">
+                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                    </span>
+                                    <span class="d-none d-sm-inline">
+                                        {{ idcard.get_status_display }}
+                                    </span>
                                 </small>
                             {% elif idcard.status == 'success' %}
                                 <small class="badge badge-pill bluefr-bg white-text">
-                                    {{ idcard.get_status_display }}
+                                    <span class="d-inline d-sm-none">
+                                        <i class="fa fa-check" aria-hidden="true"></i>
+                                    </span>
+                                    <span class="d-none d-sm-inline">
+                                        {{ idcard.get_status_display }}
+                                    </span>
                                 </small>
                             {% else %}
                                 <small class="badge badge-pill greyfr-bg white-text">
-                                    {{ idcard.get_status_display }}
+                                   <span class="d-inline d-sm-none">
+                                        <i class="fa fa-cog fa-spin" aria-hidden="true"></i>
+                                    </span>
+                                    <span class="d-none d-sm-inline">
+                                        {{ idcard.get_status_display }}
+                                    </span>
                                 </small>
                             {% endif %}
                         </td>

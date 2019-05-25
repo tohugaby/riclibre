@@ -1,0 +1,9 @@
+<a href="{{ referendum.get_absolute_url }}"
+   class="list-group-item list-group-item-action white-transp-bg">
+                        <span class="font-weight-bold {% cycle 'bluefr' 'redfr' 'greyfr' %}">
+                                        {% include 'referendum/snippets/referendum_like_button.html' %}
+                            <span class="description-break">{{ referendum|capfirst }}</span>
+                        </span>
+    <br>
+    <small class="font-weight-light">créé par {{ referendum.creator.username }}</small>
+</a>
