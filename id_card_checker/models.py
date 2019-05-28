@@ -14,6 +14,7 @@ from django.utils import timezone
 from passporteye import read_mrz
 
 from id_card_checker.helpers.mrz_check import check_french_mrz, split_mrz, french_structure
+from id_card_checker.validators import validate_file_size
 from riclibre.helpers.observation_helpers import Observable
 
 LOGGER = logging.getLogger(__name__)
@@ -64,7 +65,8 @@ class IdCard(Observable, models.Model):
             Essayer de soumettre un nouveau document."""
     }
 
-    document = models.ImageField(verbose_name="copie de la pièce d'identité", upload_to='temp_docs', blank=True)
+    document = models.ImageField(verbose_name="copie de la pièce d'identité", upload_to='temp_docs', blank=True,
+                                 validators=[validate_file_size])
     user = models.ForeignKey(get_user_model(), verbose_name="Utilisateur associé", on_delete=CASCADE)
     status = models.CharField(verbose_name="statut du traitement", choices=STATUS, max_length=300, default=WAIT)
     creation = models.DateTimeField(verbose_name="Date de création", auto_now_add=True)

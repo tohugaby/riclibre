@@ -21,6 +21,11 @@
 
                     <div class="form-group">
                         {{ form.document }}
+                        {% if form.document.help_text %}
+                            <small class="form-text text-muted">
+                                {{ form.document.help_text|safe }}
+                            </small>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="card-body">

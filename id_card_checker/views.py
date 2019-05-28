@@ -1,6 +1,7 @@
 # Create your views here.
 import logging
 
+from django.conf import settings
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -9,6 +10,7 @@ from django.views.generic.list import MultipleObjectMixin, MultipleObjectTemplat
 
 from id_card_checker.forms import IdCardForm
 from id_card_checker.models import IdCard
+from id_card_checker.validators import get_human_readable_file_size, SIZE_LIMITATION_TEXT
 
 LOGGER = logging.getLogger(__name__)
 
@@ -30,9 +32,15 @@ class IdCardUploadView(LoginRequiredMixin, MultipleObjectMixin, MultipleObjectTe
 
     def get_form_class(self):
         form_class = super().get_form_class()
+        max_size_in_mb = None
+        if hasattr(settings, 'MAX_ID_CARD_FILE_SIZE'):
+            max_size_in_mb = get_human_readable_file_size(settings.MAX_ID_CARD_FILE_SIZE)
         for field_name, field in form_class.base_fields.items():
             field.widget.attrs['class'] = 'form-control'
             field.required = True
+            if field_name == 'document' and max_size_in_mb:
+                field.help_text = SIZE_LIMITATION_TEXT % max_size_in_mb
+
         return form_class
 
     def form_valid(self, form):
