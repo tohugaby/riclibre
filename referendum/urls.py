@@ -10,9 +10,11 @@ from referendum.views import IndexView, SignupView, SignupConfirmView, AccountAc
 from referendum.views.account import AccountView
 from referendum.views.comment import CommentCreateView, CommentUpdateView
 from referendum.views.like import LikeView
+from referendum.views.legal import LegalView
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
+    path('legal', LegalView.as_view(), name='legal'),
     path('account/<pk>', AccountView.as_view(), name='account'),
     path('signup', SignupView.as_view(), name='signup'),
     path('signup-confirm', SignupConfirmView.as_view(), name='signup_confirm'),
