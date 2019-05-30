@@ -5,7 +5,9 @@ Referendum's app: Referendum's models
 import logging
 from functools import reduce
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.db import models, IntegrityError, transaction
 from django.db.models import CASCADE
 from django.db.models.signals import post_save
@@ -28,6 +30,12 @@ class Referendum(FieldUpdateControlMixin, models.Model):
         (86399, '24h'),
     )
 
+    VALIDATION_MESSAGES = {
+        "pub_gte_start": """La date de vote doit être fixée au minimum %s jours après la date de publication du 
+        référendum ou après la date du jour si le référendum est déjà publié.""",
+        "pub_undefined": """La date de vote ne peut être définie si le référendum n'a pas de date de publication."""
+    }
+
     title = models.CharField(verbose_name="Titre du référendum", max_length=300, unique=True, blank=False, null=False)
     description = models.TextField(verbose_name="Description du référendum", max_length=10000)
     question = models.CharField(verbose_name="Question posée aux citoyens", max_length=300)
@@ -35,7 +43,6 @@ class Referendum(FieldUpdateControlMixin, models.Model):
     creation_date = models.DateTimeField(verbose_name="Date de création", auto_now_add=True)
     last_update = models.DateTimeField(verbose_name="Date de la dernière modification", auto_now=True)
     publication_date = models.DateTimeField(verbose_name="Date de publication", blank=True, null=True)
-    # TODO: add validator to check that event_start new value is not today
     event_start = models.DateTimeField(verbose_name="Début des votes", blank=True, null=True)
     duration = models.IntegerField(verbose_name="Durée des votes", choices=DURATION_CHOICES,
                                    default=DURATION_CHOICES[0][0])
@@ -64,7 +71,7 @@ class Referendum(FieldUpdateControlMixin, models.Model):
         Define a list that can be updated on referendum according to its status.
         :return:
         """
-        fields = ["title", "description", "question", "categories", "publication_date", "event_start"]
+        fields = ["title", "description", "question", "categories", "publication_date"]
         if self.is_published:
             fields = ["event_start", ]
         if self.is_in_progress or self.is_over:
@@ -99,6 +106,49 @@ class Referendum(FieldUpdateControlMixin, models.Model):
         super(Referendum, self).save(force_insert=force_insert, force_update=force_update, using=using,
                                      update_fields=update_fields)
         self.update_control_fields(*control_fields)
+
+    def clean(self):
+        """Override clean method"""
+        if not self.publication_date and self.event_start:
+            raise ValidationError({"event_start": self.VALIDATION_MESSAGES['pub_undefined']})
+
+        if not self.respect_event_start_delay():
+            raise ValidationError(
+                {"event_start": self.VALIDATION_MESSAGES['pub_gte_start'] % self.get_min_delay_before_event_start()})
+
+
+
+    @staticmethod
+    def get_min_delay_before_event_start():
+        """
+        Get minimum number of days between referendum publication and event start.
+        :return: a nb of days.
+        """
+        nb_days = 15
+        if hasattr(settings, 'NB_DAYS_BEFORE_EVENT_START'):
+            nb_days = settings.NB_DAYS_BEFORE_EVENT_START
+        return nb_days
+
+    @property
+    def minimum_event_start_date(self):
+        """
+        Compute minimum event start date.
+        :return: minimum event start date.
+        """
+        origin_date = timezone.now()
+        if self.publication_date and not self.is_published:
+            origin_date = self.publication_date
+        return origin_date + timezone.timedelta(days=self.get_min_delay_before_event_start())
+
+    def respect_event_start_delay(self):
+        """
+        Check if number of days between publication and event start respect the minimum number of days defined in
+        settings
+        :return: a boolean
+        """
+        if self.publication_date and self.event_start:
+            return self.event_start >= self.minimum_event_start_date
+        return True
 
     @staticmethod
     def date_passed(timezone_instance):

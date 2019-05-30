@@ -132,13 +132,29 @@ class ReferendumUpdateView(UpdateView):
         form_class = super().get_form_class()
         for field_name, field in form_class.base_fields.items():
             if isinstance(field.widget, DateTimeInput):
-                field.widget = DateTimePicker(options={
-                    'format': 'DD/MM/YYYY',
-                    'locale': 'fr'
-                })
+                options = dict(format='DD/MM/YYYY', locale='fr')
+                min_date = timezone.now().strftime('%Y-%m-%d')
+                options['minDate'] = min_date
+                field.help_text = "La date de minimum de publication est le %s." % timezone.now().strftime('%d/%m/%Y')
+                if field_name == 'event_start':
+                    min_date = self.object.minimum_event_start_date.strftime('%Y-%m-%d')
+                    options['minDate'] = min_date
+                    field.help_text = self.object.VALIDATION_MESSAGES[
+                                          'pub_gte_start'] % self.object.get_min_delay_before_event_start()
+                field.widget = DateTimePicker(
+                    options=options,
+                    attrs={
+                        'append': 'fa fa-calendar',
+                        'icon_toggle': True,
+                    })
+
             else:
                 field.widget.attrs['class'] = 'form-control'
         return form_class
+
+    def form_invalid(self, form):
+        """If the form is invalid, render the invalid form."""
+        return self.render_to_response(self.get_context_data(form=form))
 
 
 class ReferendumVoteView(FormMixin, DetailView):

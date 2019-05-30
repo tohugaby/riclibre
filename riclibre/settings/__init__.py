@@ -259,8 +259,12 @@ OBSERVATIONS_LINKS = {
     'id_card_checker.models.IdCard': ['referendum.observers.id_checker_observer', ],
 }
 
+# Referendum config
+
+# Number of days between referendum publication and vote start.
+NB_DAYS_BEFORE_EVENT_START = 15
+
 # id_card_checker config
 
 ID_CARD_VALIDITY_LENGTH = 3653
 MAX_ID_CARD_FILE_SIZE = 2097152
-

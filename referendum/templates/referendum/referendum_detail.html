@@ -40,8 +40,25 @@
         <hr class="my-4">
         <div class="lead">
             {% if referendum.get_updatable_fields and referendum.creator == user %}
-                <a href="{% url 'referendum_update' referendum.slug %}" class="btn bluefr-bg white-text">Mettre à
-                    jour</a>
+                <a href="{% url 'referendum_update' referendum.slug %}" class="btn bluefr-bg white-text">
+                    {% if referendum.is_published %}
+                        Planifier le vote
+                    {% else %}
+                        Mettre à jour
+                    {% endif %}
+                </a>
+                {% if not referendum.is_published %}
+                    <br>
+                    <small class="text-muted">
+                        Note: Le vote ne pourra être planifié que lorsque le référendum aura été publié.
+                    </small>
+                {% endif %}
+                {% if referendum.is_published and not referendum.is_in_progress and not referendum.is_over %}
+                    <br>
+                    <small class="text-muted">
+                        Note: Le date de vote reste modifiable jusqu'à la veille de la date de vote actuellement fixée.
+                    </small>
+                {% endif %}
             {% endif %}
         </div>
     </div>

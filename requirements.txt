@@ -6,6 +6,9 @@ pillow
 passporteye
 redis
 celery
+
+freezegun
+
 gunicorn
 django-sendgrid-v5
 sentry-sdk

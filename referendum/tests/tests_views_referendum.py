@@ -9,6 +9,7 @@ from django.db.models import Q
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.utils import timezone
+from freezegun import freeze_time
 
 from referendum.models import Referendum, Category, VoteToken
 
@@ -278,19 +279,37 @@ class ReferendumUpdateViewTestCase(TestCase):
         """
         Test referendum update when referendum is published.
         """
+        fake_now = self.published_referendum.minimum_event_start_date.date() + timezone.timedelta(days=2)
 
         self.client.force_login(self.published_referendum.creator)
-        new_data = {'event_start': timezone.now().strftime("%d/%m/%Y")}
+        new_data = {'event_start': fake_now.strftime("%d/%m/%Y")}
         response = self.client.post(
             reverse('referendum_update', kwargs={'slug': self.published_referendum.slug}),
             data=new_data
         )
         self.published_referendum.refresh_from_db()
         self.assertEqual(response.status_code, 302)
-        response = self.client.get(reverse('referendum_update', kwargs={'slug': self.published_referendum.slug}))
-        self.assertEqual(response.status_code, 200)
-        self.assertNotIn('title', response.context_data['form'].fields)
-        self.assertNotIn('event_start', response.context_data['form'].fields)
+        with freeze_time(fake_now.strftime("%Y-%m-%d")):
+            self.client.force_login(self.published_referendum.creator)
+            response = self.client.get(reverse('referendum_update', kwargs={'slug': self.published_referendum.slug}))
+            self.assertEqual(response.status_code, 200)
+            self.assertNotIn('title', response.context_data['form'].fields)
+            self.assertNotIn('event_start', response.context_data['form'].fields)
+
+    def test_set_event_start_with_no_valid_date(self):
+        """
+        Test referendum event start set with a date that doesn't fit minimum event start date.
+        """
+        fake_now = timezone.now() + timezone.timedelta(days=1)
+        self.client.force_login(self.published_referendum.creator)
+        new_data = {'event_start': timezone.now().strftime("%d/%m/%Y")}
+        with freeze_time(fake_now.strftime("%Y-%m-%d")):
+            response = self.client.post(
+                reverse('referendum_update', kwargs={'slug': self.published_referendum.slug}),
+                data=new_data
+            )
+            self.assertEqual(response.status_code, 200)
+            self.assertIn('event_start', response.context_data['form']._errors)
 
     def test_update_started_referendum(self):
         """
@@ -300,12 +319,13 @@ class ReferendumUpdateViewTestCase(TestCase):
         self.client.force_login(self.started_referendum.creator)
         old_event_start = self.started_referendum.event_start
         new_data = {'event_start': '31/12/2500'}
-        response = self.client.post(
-            reverse('referendum_update', kwargs={'slug': self.started_referendum.slug}),
-            data=new_data
-        )
+        with self.assertRaises(ValueError):
+            response = self.client.post(
+                reverse('referendum_update', kwargs={'slug': self.started_referendum.slug}),
+                data=new_data
+            )
+            self.assertEqual(response.status_code, 200)
         self.started_referendum.refresh_from_db()
-        self.assertEqual(response.status_code, 302)
         self.assertEqual(self.started_referendum.event_start, old_event_start)
 
     def test_raise_permission_denied_when_unauthorized_user_try_update(self):
