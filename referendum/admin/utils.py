@@ -21,4 +21,4 @@ class ReadOnlyModelAdmin(admin.ModelAdmin):
         return request.method in ['GET', 'HEAD'] and super().has_change_permission(request, obj)
 
     def has_delete_permission(self, request, obj=None):
-        return False
+        return request.user.is_superuser
