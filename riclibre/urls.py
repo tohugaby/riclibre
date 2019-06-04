@@ -16,11 +16,29 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.sitemaps import GenericSitemap
+from django.contrib.sitemaps.views import sitemap
 from django.urls import path, include
+
+from id_card_checker.sitemaps import IdCardclassStaticViewSitemap
+from referendum.models import Referendum
+from referendum.sitemaps import ReferendumStaticViewSitemap, IndexAndReferendumSitemap
+
+sitemaps = {
+    'index_and_referendum': IndexAndReferendumSitemap,
+    'static': ReferendumStaticViewSitemap,
+    'id_cards': IdCardclassStaticViewSitemap,
+    'referendum': GenericSitemap({
+        'queryset': Referendum.objects.filter(publication_date__isnull=False),
+        'date_field': 'last_update'
+    })
+
+}
 
 urlpatterns = [
     path('', include('referendum.urls')),
     path('', include('id_card_checker.urls')),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('admin/', admin.site.urls),
 ]
 
