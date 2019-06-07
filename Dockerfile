@@ -8,6 +8,7 @@ COPY riclibre ./riclibre
 COPY account_manager ./account_manager
 COPY id_card_checker ./id_card_checker
 COPY referendum ./referendum
+COPY achievements ./achievements
 
 COPY manage.py requirements.txt ./
 RUN apt-get update -y && apt-get -y install tesseract-ocr libtesseract-dev
