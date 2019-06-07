@@ -51,7 +51,7 @@ class Observer:
     An abstract class to inherit from that transform an object to an observer.
     """
 
-    def update(self, observable: 'Observable') -> None:
+    def update(self, observable: 'Observable', *args, **kwargs) -> None:
         """
         Get update information from observable.
         """
@@ -62,7 +62,8 @@ class Observable:
     """
     An abstract class to inherit from that transform an object to an observable.
     """
-    _observers = []
+
+    # _observers = []
 
     @classmethod
     def register_observer(cls, observer: Observer) -> None:
@@ -84,3 +85,9 @@ class Observable:
         """
         for observer in self._observers:
             observer.update(self, *args, **kwargs)
+
+
+# default notifiying signal
+def default_notify_observers(sender, instance, created, **kwargs):
+    """A notifying signal function"""
+    instance.notify()

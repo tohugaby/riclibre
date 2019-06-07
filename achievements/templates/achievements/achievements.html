@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+
+
+
+
+{% block main_title %}
+    Succès associés à  <a href="{% url 'account' user.pk %}">votre compte {{ user.email }}</a>
+{% endblock %}
+
+{% block content %}
+    <div class="card-columns">
+        {% for badge in object_list %}
+            {% if badge.success %}
+                <div class="card text-center {% cycle 'bluefr' 'redfr' 'blue2' 'blue3' %}">
+                    <div class="card-body">
+                        <h2 class="card-title">{{ badge.title|capfirst }}</h2>
+                        <p class="card-text">{{ badge.description }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <small>Obtenu le {{ badge.creation_date|date }} à {{ badge.creation_date|time }}</small>
+                    </div>
+                </div>
+            {% else %}
+                <div class="card text-center white-very-transp-bg">
+                    <div class="card-body">
+                        <h2 class="card-titletext-muted">{{ badge.title|capfirst }}</h2>
+                        <p class="card-text text-muted">{{ badge.description }}</p>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <small>Pas encore obtenu</small>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endblock %}
+
+
+

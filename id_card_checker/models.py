@@ -15,6 +15,7 @@ from passporteye import read_mrz
 
 from id_card_checker.helpers.mrz_check import check_french_mrz, split_mrz, french_structure
 from id_card_checker.validators import validate_file_size
+from riclibre.helpers.model_watcher import WatchedModel
 from riclibre.helpers.observation_helpers import Observable
 
 LOGGER = logging.getLogger(__name__)
@@ -28,12 +29,19 @@ def notify_observers(sender, instance, created, **kwargs):
         instance.comment = "Aucun fichier soumis"
         instance.status = IdCard.FAILED
         instance.save()
+    instance.notify()
 
 
-class IdCard(Observable, models.Model):
+class IdCard(Observable, models.Model, metaclass=WatchedModel):
     """
     Represents an uploaded IDCard.
     """
+    _observers = []
+    ACHIEVEMENTS = {
+        "citoyen": ("citoyen", "Vous avez enregistré une carte d'identité valide et obtenu le droit de vote.",
+                    "is_citizen")
+    }
+
     WAIT = "wait"
     FAILED = "failed"
     SUCCESS = "success"
@@ -197,5 +205,13 @@ class IdCard(Observable, models.Model):
         self.status = status
         self.save()
 
+    def is_citizen(self):
+        """
+        Check if user has citizen achievements
+        :return: A boolean
+        """
+        return True if self.status == self.SUCCESS else False, self.user
+
 
 post_save.connect(notify_observers, sender=IdCard)
+# post_save.connect(default_notify_observers, sender=IdCard)

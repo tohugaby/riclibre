@@ -4,4 +4,5 @@ omit =
     ./manage.py
     ./*/migrations/*
     ./*/wsgi.py
-    ./riclibre/*
+    ./riclibre/settings/*
+    ./riclibre/urls.py

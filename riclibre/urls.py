@@ -38,6 +38,7 @@ sitemaps = {
 urlpatterns = [
     path('', include('referendum.urls')),
     path('', include('id_card_checker.urls')),
+    path('', include('achievements.urls')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('admin/', admin.site.urls),
 ]

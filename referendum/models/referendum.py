@@ -16,16 +16,23 @@ from django.utils import timezone
 from django.utils.text import slugify
 
 from referendum.models.utils import FieldUpdateControlMixin
+from riclibre.helpers.model_watcher import WatchedModel
+from riclibre.helpers.observation_helpers import Observable, default_notify_observers
 
 LOGGER = logging.getLogger(__name__)
 
 DEFAULT_VOTE_CHOICES = ['Oui', 'Non', 'Vote blanc']
 
 
-class Referendum(FieldUpdateControlMixin, models.Model):
+class Referendum(Observable, FieldUpdateControlMixin, models.Model, metaclass=WatchedModel):
     """
     Referendum.
     """
+    _observers = []
+    ACHIEVEMENTS = {
+        "orateur": ("orateur", "Vous avez créé puis publié un référendum.", "has_published"),
+        "politicien": ("politicien", "Vous avez planifié un référendum.", "has_planned")
+    }
     DURATION_CHOICES = (
         (86399, '24h'),
     )
@@ -115,8 +122,6 @@ class Referendum(FieldUpdateControlMixin, models.Model):
         if not self.respect_event_start_delay():
             raise ValidationError(
                 {"event_start": self.VALIDATION_MESSAGES['pub_gte_start'] % self.get_min_delay_before_event_start()})
-
-
 
     @staticmethod
     def get_min_delay_before_event_start():
@@ -254,6 +259,20 @@ class Referendum(FieldUpdateControlMixin, models.Model):
         """
         return self.choice_set.all()
 
+    def has_published(self):
+        """
+        Grant "orateur" achievement
+        :return: A boolean
+        """
+        return True if self.publication_date else False, self.creator
+
+    def has_planned(self):
+        """
+        Grant "politicien" achievement
+        :return: A boolean
+        """
+        return True if self.event_start else False, self.creator
+
 
 class Category(models.Model):
     """
@@ -345,3 +364,4 @@ def referendum_post_save(sender, instance, **kwargs):
 
 
 post_save.connect(referendum_post_save, sender=Referendum)
+post_save.connect(default_notify_observers, sender=Referendum)

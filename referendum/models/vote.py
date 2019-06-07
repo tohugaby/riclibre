@@ -2,12 +2,16 @@
 Referendum's app : Vote's models
 """
 import logging
+from secrets import token_urlsafe
+
 from django.contrib.auth import get_user_model
 from django.db import models
-from secrets import token_urlsafe
+from django.db.models.signals import post_save
 
 from referendum.exceptions import UserHasAlreadyVotedError
 from referendum.models.utils import FieldUpdateControlMixin
+from riclibre.helpers.model_watcher import WatchedModel
+from riclibre.helpers.observation_helpers import Observable, default_notify_observers
 
 LOGGER = logging.getLogger(__name__)
 
@@ -52,10 +56,15 @@ class Vote(FieldUpdateControlMixin, models.Model):
         return self.choice.referendum
 
 
-class VoteToken(FieldUpdateControlMixin, models.Model):
+class VoteToken(Observable, FieldUpdateControlMixin, models.Model, metaclass=WatchedModel):
     """
     One instance of VoteToken is a single-use voter card.
     """
+    _observers = []
+    ACHIEVEMENTS = {
+        "votant": ("votant", "Vous avez voté au moins une fois.", "has_voted")
+    }
+
     referendum = models.ForeignKey("referendum.Referendum", verbose_name="Référendum", on_delete=models.CASCADE)
     user = models.ForeignKey(get_user_model(), verbose_name="Citoyen", on_delete=models.CASCADE)
     token = models.CharField(verbose_name="Token", max_length=50, unique=True)
@@ -126,3 +135,13 @@ class VoteToken(FieldUpdateControlMixin, models.Model):
             # return new_vote
         else:
             raise UserHasAlreadyVotedError
+
+    def has_voted(self):
+        """
+        Grant "Votant" success
+        :return: A boolean
+        """
+        return True if self.voted else False, self.user
+
+
+post_save.connect(default_notify_observers, sender=VoteToken)

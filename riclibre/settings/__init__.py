@@ -36,15 +36,15 @@ DEBUG = False
 if os.getenv('DEBUG') == 'True':
     DEBUG = True
 
-    FROM_ENV_VAR_DOMAINS = [os.getenv('DOMAIN_NAME')]
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+FROM_ENV_VAR_DOMAINS = [os.getenv('DOMAIN_NAME')]
 try:
     FROM_ENV_VAR_DOMAINS = os.getenv('DOMAIN_NAME').split(',')
+    ALLOWED_HOSTS += FROM_ENV_VAR_DOMAINS
 except AttributeError as attr_err:
     pass
 except Exception as exc:
     pass
-
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost'] + FROM_ENV_VAR_DOMAINS
 
 INTERNAL_IPS = ['127.0.0.1', ]
 # Application definition
@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'account_manager.apps.AccountManagerConfig',
     'referendum.apps.ReferendumConfig',
     'id_card_checker.apps.IdCardCheckerConfig',  # id checker apps should always be loaded after main app: referendum
+    'achievements.apps.AchievementsConfig'
 ]
 
 MIDDLEWARE = [
@@ -172,11 +173,9 @@ else:
 
 SENDGRID_API_KEY = os.environ.get("SENDGRID_API_KEY")
 
-
 # Site management
 
 SITE_ID = 1
-
 
 # Logs
 
@@ -264,7 +263,13 @@ CELERY_BEAT_SCHEDULE = {
 }
 
 OBSERVATIONS_LINKS = {
-    'id_card_checker.models.IdCard': ['referendum.observers.id_checker_observer', ],
+    'id_card_checker.models.IdCard': ['referendum.observers.id_checker_observer',
+                                      'achievements.observers.achievements_observer'],
+    'account_manager.models.CustomUser': ['achievements.observers.achievements_observer', ],
+    'referendum.models.referendum.Referendum': ['achievements.observers.achievements_observer', ],
+    'referendum.models.comment.Comment': ['achievements.observers.achievements_observer', ],
+    'referendum.models.like.Like': ['achievements.observers.achievements_observer', ],
+    'referendum.models.vote.VoteToken': ['achievements.observers.achievements_observer', ],
 }
 
 # Referendum config

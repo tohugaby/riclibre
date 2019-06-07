@@ -13,7 +13,8 @@ class IdCheckerObserver(Observer):
         :param observable:
         :return:
         """
-        Identity.objects.create(user=observable.user, valid_until=kwargs['valid_until'])
+        if 'valid_until' in kwargs.keys():
+            Identity.objects.create(user=observable.user, valid_until=kwargs['valid_until'])
 
 
 id_checker_observer = IdCheckerObserver()

@@ -35,6 +35,7 @@ class Identity(models.Model):
     """
     A user identity.
     """
+
     user = models.ForeignKey(get_user_model(), verbose_name='citoyen', on_delete=CASCADE)
     valid_until = models.DateTimeField(verbose_name='Date limite de validité')
     creation = models.DateTimeField(verbose_name='Date de création', auto_now_add=True)

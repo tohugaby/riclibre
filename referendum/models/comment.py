@@ -5,15 +5,26 @@ import logging
 
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models.signals import post_save
 from django.urls import reverse
+
+from riclibre.helpers.model_watcher import WatchedModel
+from riclibre.helpers.observation_helpers import Observable, default_notify_observers
 
 LOGGER = logging.getLogger(__name__)
 
 
-class Comment(models.Model):
+class Comment(Observable, models.Model, metaclass=WatchedModel):
     """
     A comment from a citizen about a referendum.
     """
+    _observers = []
+    ACHIEVEMENTS = {
+        "participant": ("participe au débat",
+                        "Vous vous êtes exprimé en postant un commentaire sur la page d'un référendum.",
+                        "is_participant")
+    }
+
     referendum = models.ForeignKey("referendum.Referendum", verbose_name="Référendum", on_delete=models.CASCADE)
     user = models.ForeignKey(get_user_model(), verbose_name="Citoyen", on_delete=models.CASCADE)
     text = models.TextField(verbose_name="Texte du commentaire", max_length=10000)
@@ -39,6 +50,13 @@ class Comment(models.Model):
         """
         return reverse('comment_update', kwargs={'pk': self.pk})
 
+    def is_participant(self):
+        """
+        Grant success to attached user
+        :return: A boolean
+        """
+        return True if self.pk else False, self.user
+
 
 class Report(models.Model):
     """
@@ -55,3 +73,6 @@ class Report(models.Model):
 
     def __str__(self):
         return f"Commentaire {self.comment_id} signalé le {self.creation_date}"
+
+
+post_save.connect(default_notify_observers, sender=Comment)
