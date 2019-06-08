@@ -63,5 +63,5 @@ def send_validation_email(email, request):
     send_mail(
         'R.I.C Libre : Activation de votre compte',
         loader.render_to_string(email_template_name, context),
-        'activation@riclibre.fr',
+        'activation@%s' % settings.MAIL_DOMAIN,
         [email])

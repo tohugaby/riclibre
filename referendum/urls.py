@@ -6,7 +6,7 @@ from django.urls import path
 from referendum.forms import CustomLoginForm, CustomPasswordResetForm, CustomSetPasswordForm, CustomPasswordChangeForm
 from referendum.views import IndexView, SignupView, SignupConfirmView, AccountActivationView, AskAccountActivationView, \
     ReferendumDetailView, ReferendumVoteView, ReferendumListView, CategoryView, ReferendumCreateView, \
-    MyReferendumsView, ReferendumUpdateView
+    MyReferendumsView, ReferendumUpdateView, CustomPasswordResetView
 from referendum.views.account import AccountView
 from referendum.views.comment import CommentCreateView, CommentUpdateView
 from referendum.views.like import LikeView
@@ -29,7 +29,7 @@ urlpatterns = [
     path('password_change/done',
          PasswordChangeDoneView.as_view(template_name='registration/custom_password_change_done.html'),
          name='password_change_done'),
-    path('password_reset', PasswordResetView.as_view(template_name='registration/custom_password_reset_form.html',
+    path('password_reset', CustomPasswordResetView.as_view(template_name='registration/custom_password_reset_form.html',
                                                      form_class=CustomPasswordResetForm),
          name='password_reset'),
     path('password_reset/done',

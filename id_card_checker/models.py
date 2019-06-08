@@ -191,7 +191,7 @@ class IdCard(Observable, models.Model, metaclass=WatchedModel):
             send_mail(
                 subject='R.I.C Libre : %s : Analyse de votre pièce d\'identité' % self.status,
                 message=comment,
-                from_email='identity.validation@riclibre.fr',
+                from_email='identity.validation@%s' % settings.MAIL_DOMAIN,
                 recipient_list=[self.user.email, ])
         if self.status == self.SUCCESS:
             return True

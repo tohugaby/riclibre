@@ -46,6 +46,8 @@ except AttributeError as attr_err:
 except Exception as exc:
     pass
 
+MAIL_DOMAIN = os.getenv('MAIL_DOMAIN', 'riclibre.fr.nf')
+
 INTERNAL_IPS = ['127.0.0.1', ]
 # Application definition
 

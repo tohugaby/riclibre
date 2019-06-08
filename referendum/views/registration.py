@@ -3,7 +3,9 @@ Referendum's app : Registration views
 """
 import logging
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.contrib.auth.views import PasswordResetView
 from django.core.exceptions import ValidationError
 from django.urls import reverse_lazy
 from django.utils.http import urlsafe_base64_decode
@@ -116,3 +118,10 @@ class AccountActivationView(UserIsAnonymousMixin, DetailView):
         except (TypeError, ValueError, OverflowError, get_user_model().DoesNotExist, ValidationError):
             user = None
         return user
+
+
+class CustomPasswordResetView(PasswordResetView):
+    """
+    A custom PasswordResetView
+    """
+    from_email = 'passwordreset@%s' % settings.MAIL_DOMAIN
