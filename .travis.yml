@@ -10,6 +10,7 @@ jobs:
         - DJANGO_SECRET_KEY=fake_test_key
         - DEBUG=True
         - BROKER_URL=redis://localhost
+        - DESACTIVATE_RECAPTCHA=True
       addons:
         postgresql: "9.4"
         firefox: latest
