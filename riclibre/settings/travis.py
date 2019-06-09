@@ -14,3 +14,6 @@ DATABASES = {
         'PORT': '5432'
     }
 }
+
+
+DESACTIVATE_RECAPTCHA = True
