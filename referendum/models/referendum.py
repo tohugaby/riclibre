@@ -293,6 +293,13 @@ class Category(models.Model):
         self.slug = slugify(self.title)
         return super().save(force_insert=force_insert, force_update=force_update, using=using,
                             update_fields=update_fields)
+    @property
+    def nb_published_referendums(self):
+        """
+        Get the number of published referendums in category.
+        :return: a number of referendums.
+        """
+        return self.referendum_set.filter(publication_date__lte=timezone.now()).count()
 
 
 class Choice(models.Model):

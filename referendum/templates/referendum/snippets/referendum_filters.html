@@ -1,0 +1,26 @@
+<div class="white-transp-bg mb-1 justify-content-md-around">
+    <p class="text-center">Filtrer par catégorie : </p>
+    <div class="d-flex flex-wrap white-transp-bg mb-1 p-1">
+        <a href="{% url 'referendum_list' %}" class="badge badge-med white-text blue3-bg m-1"
+           data-toggle="tooltip" data-placement="top"
+           title="Voir tous les référendums">
+            Tous
+        </a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'my_referendums' %}" class="badge badge-med white-text greyfr-bg m-1"
+               data-toggle="tooltip" data-placement="top"
+               title="Voir vos {{ user.referendum_set.count }} référendums">
+                Mes référendums <small>({{ user.referendum_set.count }})</small>
+            </a>
+        {% endif %}
+        {% for categorie in categories %}
+            <a href="{% url 'category' categorie.slug %}"
+               class="badge badge-med white-text m-1
+{% cycle 'bluefr-bg' 'redfr-bg' 'greyfr-bg' 'blue2-bg' 'blue3-bg' %}"
+               data-toggle="tooltip" data-placement="top"
+               title="Voir les {{ categorie.nb_published_referendums }} référendum(s) de la catégorie {{ categorie }}">
+                {{ categorie }} <small>({{ categorie.nb_published_referendums }})</small>
+            </a>
+        {% endfor %}
+    </div>
+</div>

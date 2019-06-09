@@ -7,31 +7,7 @@
 
 
 {% block filter_buttons %}
-    <nav class="navbar  navbar-expand-lg white-transp-bg mb-2">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item mr-2">
-                <a href="{% url 'referendum_list' %}" class="badge nav-link badge-med white-text blue3-bg display-4">
-                    Tous
-                </a>
-            </li>
-            {% if user.is_authenticated %}
-                <li class="nav-item mr-2">
-                    <a href="{% url 'my_referendums' %}"
-                       class="badge nav-link badge-med white-text greyfr-bg display-4">
-                        Mes référendums
-                    </a>
-                </li>
-            {% endif %}
-            {% for categorie in categories %}
-                <li class="nav-item mr-2">
-                    <a href="{% url 'category' categorie.slug %}"
-                       class="badge nav-link badge-med white-text {% cycle 'bluefr-bg' 'redfr-bg' 'greyfr-bg' 'blue2-bg' 'blue3-bg' %}">
-                        {{ categorie }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    </nav>
+    {% include 'referendum/snippets/referendum_filters.html' %}
 {% endblock %}
 
 {% block content %}

@@ -26,7 +26,7 @@
 <div class="col-lg-3  col-md-6 mb-1">
     {% if user.is_authenticated %}
         {% if not request.path == '/my-referendums' %}
-            <a href="{% url 'my_referendums' %}" class="btn blue3-bg col-12 white-text">Vos référendums</a>
+            <a href="{% url 'my_referendums' %}" class="btn blue3-bg col-12 white-text">Mes référendums</a>
         {% else %}
             <button class="btn blue3-bg col-12 greyfr" disabled>Mes référendums</button>
         {% endif %}
