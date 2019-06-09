@@ -38,7 +38,7 @@ class Referendum(Observable, FieldUpdateControlMixin, models.Model, metaclass=Wa
     )
 
     VALIDATION_MESSAGES = {
-        "pub_gte_start": """La date de vote doit être fixée au minimum %s jours après la date de publication du 
+        "pub_gte_start": """La date de vote doit être fixée au minimum %s jours après la date de publication du
         référendum ou après la date du jour si le référendum est déjà publié.""",
         "pub_undefined": """La date de vote ne peut être définie si le référendum n'a pas de date de publication."""
     }
@@ -264,14 +264,14 @@ class Referendum(Observable, FieldUpdateControlMixin, models.Model, metaclass=Wa
         Grant "orateur" achievement
         :return: A boolean
         """
-        return True if self.publication_date else False, self.creator
+        return bool(self.publication_date), self.creator
 
     def has_planned(self):
         """
         Grant "politicien" achievement
         :return: A boolean
         """
-        return True if self.event_start else False, self.creator
+        return bool(self.event_start), self.creator
 
 
 class Category(models.Model):
@@ -293,6 +293,7 @@ class Category(models.Model):
         self.slug = slugify(self.title)
         return super().save(force_insert=force_insert, force_update=force_update, using=using,
                             update_fields=update_fields)
+
     @property
     def nb_published_referendums(self):
         """

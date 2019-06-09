@@ -141,7 +141,7 @@ class VoteToken(Observable, FieldUpdateControlMixin, models.Model, metaclass=Wat
         Grant "Votant" success
         :return: A boolean
         """
-        return True if self.voted else False, self.user
+        return self.voted, self.user
 
 
 post_save.connect(default_notify_observers, sender=VoteToken)

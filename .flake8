@@ -1,4 +1,5 @@
 [flake8]
 ;ignore = D203
-exclude = .git,__pycache__,docs,*/migrations/, */settings/
+exclude = .git,__pycache__,docs,*/migrations/, */settings/,env,htmlcov
 max-complexity = 10
+max-line-length = 120

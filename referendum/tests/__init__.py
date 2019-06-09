@@ -16,6 +16,11 @@ def create_test_user(password, is_active=True):
 
 
 def get_referendum_test_data(user):
+    """
+    provide referendum test data
+    :param user: a user instance
+    :return: test data
+    """
     return {
         "title": "referendum de test",
         "description": "ceci est un referendum de test",

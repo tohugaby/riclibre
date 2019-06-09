@@ -1,6 +1,7 @@
 django
 psycopg2-binary
 django-tempus-dominus
+django-recaptcha
 whitenoise
 pillow
 passporteye

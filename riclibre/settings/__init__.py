@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'tempus_dominus',
     'debug_toolbar',
+    'captcha',
     'account_manager.apps.AccountManagerConfig',
     'referendum.apps.ReferendumConfig',
     'id_card_checker.apps.IdCardCheckerConfig',  # id checker apps should always be loaded after main app: referendum
@@ -241,6 +242,18 @@ LOGGING = {
         }
     }
 }
+
+# Google reCaptcha
+RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY', '')
+RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY', '')
+SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
+
+# a custom variable to desactivate recaptcha
+DESACTIVATE_RECAPTCHA = False
+if os.getenv('DESACTIVATE_RECAPTCHA') == 'True':
+    DESACTIVATE_RECAPTCHA = True
+
+# Task management
 
 BROKER_URL = os.getenv('BROKER_URL', 'redis://localhost:6379')
 CELERY_RESULT_BACKEND = os.getenv('BROKER_URL', 'redis://localhost:6379')

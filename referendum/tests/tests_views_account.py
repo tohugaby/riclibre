@@ -41,6 +41,9 @@ class AccountViewTestCase(LiveServerTestCase):
                          "%s?next=%s" % (settings.LOGIN_URL, reverse('account', kwargs={'pk': self.user.pk})))
 
     def test_update_account(self):
+        """
+        Test account update
+        """
         self.client.login(username=self.user.email, password=self.password)
         user_initial_first_name = self.user.first_name
         self.assertEqual(user_initial_first_name, '')

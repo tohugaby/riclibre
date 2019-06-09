@@ -2,6 +2,7 @@
 Custom validators
 """
 import string
+
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext
 
@@ -25,7 +26,7 @@ class RequiredCharactersValidator:
         # {}) et un caractère spécial ({}).
         # """.format(*escaped_required_chars)
         self.message = """
-        Le mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule, un chiffre et un caractère 
+        Le mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule, un chiffre et un caractère
         spécial.
         """
 

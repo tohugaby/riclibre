@@ -76,7 +76,7 @@ class BadgeMethodTestCase(TestCase):
         Comment.objects.create(referendum=referendum, user=self.user, text='commentaire de test')
         self.assertTrue(self.user.achievement_set.filter(badge='participant').exists())
 
-    def test_Vote_achievements(self):
+    def test_vote_achievements(self):
         """
         Test comment related achievement.
         """

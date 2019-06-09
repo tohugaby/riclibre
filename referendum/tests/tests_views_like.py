@@ -84,6 +84,10 @@ class LikeViewLiveTestCase(StaticLiveServerTestCase):
         super().tearDownClass()
 
     def force_login_user(self):
+        """
+        helper to force user login
+        :return:
+        """
         self.client.force_login(self.user)
         cookie = self.client.cookies['sessionid']
         self.selenium.get(self.live_server_url)

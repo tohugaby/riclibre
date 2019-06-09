@@ -10,3 +10,7 @@ docker-deploy:
 	@chmod +x docker_deploy.sh
 	@./docker_deploy.sh
 	@echo "Deployment made !"
+
+
+pylint:
+	pylint account_manager achievements id_card_checker referendum riclibre

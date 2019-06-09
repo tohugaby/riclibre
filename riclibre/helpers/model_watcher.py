@@ -16,6 +16,9 @@ class Register:
 
 
 class WatchedModel(ModelBase):
+    """
+    Override Django ModelBase metaclass to populate a model's custom register
+    """
     def __new__(cls, name, bases, attrs, **kwargs):
         Register.WATCHED_MODELS.append((name, attrs['__module__']))
         # LOGGER.info(Register.WATCHED_MODELS)

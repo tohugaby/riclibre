@@ -1,3 +1,7 @@
+"""
+Riclibre project : celery config
+"""
+
 from __future__ import absolute_import, unicode_literals
 
 import os
@@ -17,4 +21,7 @@ app.autodiscover_tasks()
 
 @app.task(bind=True)
 def debug_task(self):
+    """
+    Just a debug task
+    """
     print(f'Request: {self.request}')

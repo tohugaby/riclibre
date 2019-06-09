@@ -1,4 +1,6 @@
-# Create your views here.
+"""
+Id Card checker app: IdCard views
+"""
 import logging
 
 from django.conf import settings

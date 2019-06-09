@@ -21,8 +21,8 @@ class IndexView(ListView):
     def get_queryset(self):
         return self.model.objects.filter(publication_date__lte=timezone.now()).order_by("-creation_date")[:3]
 
-    def get_context_data(self, *args, object_list=None, **kwargs):
-        context = super().get_context_data(*args, object_list=object_list, **kwargs)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         context['voted_soon'] = [ref for ref in
                                  Referendum.objects.filter(event_start__isnull=False).order_by('event_start') if
                                  not ref.is_over][:3]

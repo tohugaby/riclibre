@@ -13,7 +13,7 @@ from django.template.defaultfilters import date
 from django.utils import timezone
 from passporteye import read_mrz
 
-from id_card_checker.helpers.mrz_check import check_french_mrz, split_mrz, french_structure
+from id_card_checker.helpers.mrz_check import check_french_mrz, split_mrz, FRENCH_STRUCTURE
 from id_card_checker.validators import validate_file_size
 from riclibre.helpers.model_watcher import WatchedModel
 from riclibre.helpers.observation_helpers import Observable
@@ -55,13 +55,12 @@ class IdCard(Observable, models.Model, metaclass=WatchedModel):
         "success_mrz_analysis": """Votre pièce d'identité a été analysée avec succès.""",
         "success_doc_valid": """Elle est valide jusqu'au {0}.""",
         "success_doc_expired": """Mais elle n'est plus valide""",
-        "error_doc_quality": """ 
-            Erreur d'analyse de votre pièce d'identité. Les causes possibles sont liées à la qualité du document, 
-            son cadrage, son format... 
-            Essayer de soumettre un nouveau document.
+        "error_doc_quality": """
+            Erreur d'analyse de votre pièce d'identité. Les causes possibles sont liées à la qualité du document, son
+            cadrage, son format... Essayer de soumettre un nouveau document.
             """,
         "error_mrz_value": """
-            Erreur d'analyse de votre pièce d'identité. Une valeur de la bande mrz est erronée... 
+            Erreur d'analyse de votre pièce d'identité. Une valeur de la bande mrz est erronée...
             Essayer de soumettre un nouveau document.
             """,
         "error_mrz_structure": """
@@ -69,7 +68,7 @@ class IdCard(Observable, models.Model, metaclass=WatchedModel):
             Essayer de soumettre un nouveau document.
             """,
         "error_unknown": """
-            Erreur d'analyse de votre pièce d'identité. La cause de l'erreur n'est pas identifiée. 
+            Erreur d'analyse de votre pièce d'identité. La cause de l'erreur n'est pas identifiée.
             Essayer de soumettre un nouveau document."""
     }
 
@@ -109,8 +108,7 @@ class IdCard(Observable, models.Model, metaclass=WatchedModel):
             if settings.ID_CARD_VALIDITY_LENGTH:
                 return creation_date + timezone.timedelta(days=settings.ID_CARD_VALIDITY_LENGTH)
         except AttributeError as no_id_card_validity_setting:
-            LOGGER.warning(
-                "No ID_CARD_VALIDITY_LENGTH defined in project's settings %s " % no_id_card_validity_setting)
+            LOGGER.warning("No ID_CARD_VALIDITY_LENGTH defined in project's settings %s ", no_id_card_validity_setting)
         return creation_date + timezone.timedelta(minutes=1)
 
     def process_id_card(self):
@@ -130,7 +128,7 @@ class IdCard(Observable, models.Model, metaclass=WatchedModel):
             mrz = read_mrz(self.document.file.file, extra_cmdline_params='--oem 0', save_roi=True)
             return mrz.aux['text'].replace('\n', '')
         except AttributeError as attr_error:
-            LOGGER.error("Error during idcard analysis (%s) : %s" % (self, attr_error))
+            LOGGER.error("Error during idcard analysis (%s) : %s", self, attr_error)
             raise attr_error
 
     def parse_mrz(self):
@@ -145,7 +143,7 @@ class IdCard(Observable, models.Model, metaclass=WatchedModel):
         try:
             mrz_text = self.extract_mrz()
             if check_french_mrz(mrz_text):
-                mrz_data = split_mrz(french_structure, mrz_text)
+                mrz_data = split_mrz(FRENCH_STRUCTURE, mrz_text)
                 delivery_date = timezone.datetime(year=int(mrz_data['delivery_year']),
                                                   month=int(mrz_data['delivery_month']), day=1)
                 mrz_is_parsed = True
@@ -183,7 +181,7 @@ class IdCard(Observable, models.Model, metaclass=WatchedModel):
                     comment += self.MRZ_ANALYSIS_MESSAGES['success_doc_expired']
             else:
                 self.change_status(self.FAILED)
-            LOGGER.info(f'Document {self.document} soumis par {self.user}:{comment}')
+            LOGGER.info("Document %s soumis par %s: %s", self.document, self.user, comment)
             self.comment = comment
             self.valid_until = expiration_date
             self.document.delete(save=True)
@@ -210,7 +208,7 @@ class IdCard(Observable, models.Model, metaclass=WatchedModel):
         Check if user has citizen achievements
         :return: A boolean
         """
-        return True if self.status == self.SUCCESS else False, self.user
+        return self.status == self.SUCCESS, self.user
 
 
 post_save.connect(notify_observers, sender=IdCard)

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block main_title %}
+    Contact
+{% endblock %}
+
+{% block content %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert white-bg bluefr alert-dismissible fade show" role="alert">
+                <strong>{{ message|escape }}</strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    {% include 'referendum/snippets/referendum_generic_form.html' %}
+{% endblock %}

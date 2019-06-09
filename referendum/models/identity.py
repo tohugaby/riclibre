@@ -22,13 +22,13 @@ def manage_citizen_perm(sender, instance, **kwargs):
     permission = Permission.objects.get(codename='is_citizen')
     user = get_user_model().objects.get(pk=instance.user.pk)
     user.user_permissions.remove(permission)
-    LOGGER.info(f"{user}: '{permission.codename}' permission removed")
+    LOGGER.info("%s: '%s' permission removed", user, permission.codename)
     identities = sender.objects.filter(user=user).order_by('-valid_until')
     highest_validity = identities.first()
     if highest_validity and highest_validity.is_valid_identity:
         user.user_permissions.add(permission)
         user.save()
-        LOGGER.info(f"{user}: '{permission.codename}' permission added")
+        LOGGER.info("%s: '%s' permission added", user, permission.codename)
 
 
 class Identity(models.Model):
@@ -63,7 +63,7 @@ class Identity(models.Model):
         for identity in cls.objects.filter(valid_until__lte=timezone.now()):
             if not identity.is_valid_identity:
                 identity.delete()
-                LOGGER.info(f"{identity}: removed")
+                LOGGER.info("%s: removed", identity)
 
 
 post_save.connect(manage_citizen_perm, sender=Identity)

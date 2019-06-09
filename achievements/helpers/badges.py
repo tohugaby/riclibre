@@ -21,4 +21,4 @@ def get_achievements():
     return achievements
 
 
-BADGES = sorted([(key, key) for key in get_achievements().keys()])
+BADGES = sorted([(key, key) for key in get_achievements()])

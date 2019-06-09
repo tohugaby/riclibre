@@ -1,3 +1,7 @@
+"""
+Referendum checker apps : tasks module
+"""
+
 import logging
 
 from celery import task

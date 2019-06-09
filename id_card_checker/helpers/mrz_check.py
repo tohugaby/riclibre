@@ -1,3 +1,7 @@
+"""
+Id Card checker apps : mrz check helper module
+"""
+
 from django.utils import timezone
 
 
@@ -33,7 +37,7 @@ def clean_stuffing_char(extracted_string: str):
     return extracted_string.replace('<', ' ')
 
 
-french_structure = {
+FRENCH_STRUCTURE = {
     'type': {'interval': (0, 2), 'methods': []},
     'country': {'interval': (2, 5), 'methods': []},
     'last_name': {'interval': (5, 30), 'methods': [clean_stuffing_char, str.strip]},

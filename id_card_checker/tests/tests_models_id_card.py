@@ -91,4 +91,3 @@ class IdCardTestCase(TestCase):
         result = id_card.check_document()
         self.assertFalse(result)
         self.assertEqual(len(mail.outbox), 1)
-

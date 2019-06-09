@@ -41,6 +41,10 @@ class Comment(Observable, models.Model, metaclass=WatchedModel):
         return f"{self.user} a commenté le référendum {self.referendum} le {self.publication_date} : {self.text}"
 
     def get_absolute_url(self):
+        """
+        Get comment absolute url
+        :return:
+        """
         return "%s#comment_%s" % (reverse('referendum', kwargs={'slug': self.referendum.slug}), self.pk)
 
     @property
@@ -55,7 +59,7 @@ class Comment(Observable, models.Model, metaclass=WatchedModel):
         Grant success to attached user
         :return: A boolean
         """
-        return True if self.pk else False, self.user
+        return bool(self.pk), self.user
 
 
 class Report(models.Model):

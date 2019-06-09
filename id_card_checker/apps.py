@@ -1,3 +1,6 @@
+"""
+Id Card checker app: app config module
+"""
 import logging
 
 from django.apps import AppConfig
@@ -8,6 +11,9 @@ LOGGER = logging.getLogger(__name__)
 
 
 class IdCardCheckerConfig(AppConfig):
+    """
+    Id Card app config class
+    """
     name = 'id_card_checker'
     verbose_name = "Gestionnaire de cartes d'identités"
 

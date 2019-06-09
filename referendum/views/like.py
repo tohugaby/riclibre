@@ -1,3 +1,7 @@
+"""
+Referendum's app : Like views
+"""
+
 import logging
 
 from django.http import HttpResponseForbidden
@@ -9,6 +13,9 @@ LOGGER = logging.getLogger(__name__)
 
 
 class LikeView(DetailView):
+    """
+    Like view
+    """
     model = Referendum
 
     def get(self, request, *args, **kwargs):

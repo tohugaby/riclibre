@@ -41,7 +41,7 @@ def register_observation_links(app_config_instance):
                     module_name, attribute_name = parse_observer_info(observer_full_name)
                     observer = getattr(import_module(module_name), attribute_name)
                     observable.register_observer(observer)
-                    LOGGER.info(f"Registered observation link: {observable} is now observed by {observer}.")
+                    LOGGER.info("Registered observation link: %s is now observed by %s.", observable, observer)
             except LookupError as lookup:
                 LOGGER.error(lookup)
 

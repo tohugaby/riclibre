@@ -1,3 +1,6 @@
+"""
+Id Card checker apps : tasks module
+"""
 from __future__ import absolute_import, unicode_literals
 
 from celery import shared_task
@@ -7,13 +10,13 @@ from riclibre.helpers.tasks_helpers import TransactionAwareTask
 
 
 @shared_task(base=TransactionAwareTask, bind=True)
-def add_check_job(self, pk):
+def add_check_job(self, primary_key):
     """
     add a ckeck identity job to queue
-    :param pk: Idcard primary key.
+    :param primary_key: Idcard primary key.
     :return:
     """
-    id_card = IdCard.objects.get(pk=pk)
+    id_card = IdCard.objects.get(pk=primary_key)
     return id_card.check_document()
 
 

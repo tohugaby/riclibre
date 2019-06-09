@@ -1,6 +1,8 @@
+"""
+Id Card checker apps : admin module
+"""
 from django.contrib import admin
 
-# Register your models here.
 from id_card_checker.models import IdCard
 
 

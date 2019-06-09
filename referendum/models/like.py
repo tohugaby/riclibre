@@ -38,7 +38,7 @@ class Like(Observable, models.Model, metaclass=WatchedModel):
         Grant "sympathisant" success
         :return: A boolean
         """
-        return True if self.pk else False, self.user
+        return bool(self.pk), self.user
 
 
 post_save.connect(default_notify_observers, sender=Like)

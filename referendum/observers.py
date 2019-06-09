@@ -1,5 +1,8 @@
+"""
+Referendum's apps : observers module
+"""
 from referendum.models import Identity
-from riclibre.helpers.observation_helpers import Observer
+from riclibre.helpers.observation_helpers import Observer, Observable
 
 
 class IdCheckerObserver(Observer):

@@ -1,3 +1,6 @@
+"""
+Referendum's app : Comment views
+"""
 import logging
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -31,6 +34,9 @@ def get_serialized_comment(comment):
 
 
 class CommentCreateView(LoginRequiredMixin, FormView):
+    """
+    Comment create view
+    """
     model = Comment
     template_name = 'referendum/snippets/comment_form.html'
     form_class = CommentForm
@@ -50,6 +56,9 @@ class CommentCreateView(LoginRequiredMixin, FormView):
 
 
 class CommentUpdateView(LoginRequiredMixin, UpdateView):
+    """
+    Comment update view
+    """
     model = Comment
     template_name = 'referendum/snippets/comment_form.html'
     fields = ['text']

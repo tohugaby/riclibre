@@ -21,6 +21,9 @@ LOGGER = logging.getLogger(__name__)
 
 
 class ReferendumListView(ListView):
+    """
+    Referendum list view
+    """
     model = Referendum
     template_name = 'referendum/referendum_list.html'
     queryset = Referendum.objects.filter(publication_date__isnull=False, publication_date__lte=timezone.now())
@@ -33,10 +36,17 @@ class ReferendumListView(ListView):
 
 
 class CategoryView(ListView):
+    """
+    Categories Referendum list view
+    """
     model = Category
     template_name = 'referendum/referendum_list.html'
 
     def get_object(self):
+        """
+        Get category.
+        :return: Category instance
+        """
         return self.model.objects.get(slug=self.kwargs['slug'])
 
     def get_queryset(self):
@@ -51,6 +61,9 @@ class CategoryView(ListView):
 
 
 class MyReferendumsView(LoginRequiredMixin, ListView):
+    """
+    User's referendums list view
+    """
     model = Referendum
     template_name = 'referendum/referendum_list.html'
 
@@ -65,6 +78,9 @@ class MyReferendumsView(LoginRequiredMixin, ListView):
 
 
 class ReferendumDetailView(DetailView):
+    """
+    Referendum detail view
+    """
     model = Referendum
     template_name = 'referendum/referendum_detail.html'
 
@@ -81,11 +97,17 @@ class ReferendumDetailView(DetailView):
         return context
 
     def get_comment_form(self):
+        """
+        Get an instance of comment form.
+        """
         form = CommentForm(initial={'referendum': self.object.pk})
         return form
 
 
 class ReferendumCreateView(CreateView):
+    """
+    Referendum crete view
+    """
     model = Referendum
     fields = ["title", "description", "question", "categories"]
     template_name = 'referendum/referendum_create.html'
@@ -104,6 +126,9 @@ class ReferendumCreateView(CreateView):
 
 
 class ReferendumUpdateView(UpdateView):
+    """
+    Referendum update view
+    """
     model = Referendum
     fields = []
     template_name = 'referendum/referendum_update.html'
@@ -139,8 +164,8 @@ class ReferendumUpdateView(UpdateView):
                 if field_name == 'event_start':
                     min_date = self.object.minimum_event_start_date.strftime('%Y-%m-%d')
                     options['minDate'] = min_date
-                    field.help_text = self.object.VALIDATION_MESSAGES[
-                                          'pub_gte_start'] % self.object.get_min_delay_before_event_start()
+                    min_delay_before_event = self.object.get_min_delay_before_event_start()
+                    field.help_text = self.object.VALIDATION_MESSAGES['pub_gte_start'] % min_delay_before_event
                 field.widget = DateTimePicker(
                     options=options,
                     attrs={
@@ -158,6 +183,9 @@ class ReferendumUpdateView(UpdateView):
 
 
 class ReferendumVoteView(FormMixin, DetailView):
+    """
+    Vote view
+    """
     slug_field = 'token'
     slug_url_kwarg = 'token'
     model = VoteToken
@@ -165,12 +193,24 @@ class ReferendumVoteView(FormMixin, DetailView):
     form_class = VoteForm
 
     def check_user_is_citizen(self):
+        """
+        Check if user has citizen perm
+        :return: A boolean
+        """
         return self.request.user.has_perm('referendum.is_citizen')
 
     def get_vote_token(self):
+        """
+        Get the user vote token for given referendum.
+        :return: a vote_token instance
+        """
         return self.model.objects.get(token=self.kwargs['token'])
 
     def check_token_user_is_request_user(self):
+        """
+        Check vote token validity.
+        :return: A boolean
+        """
         token_user = self.get_vote_token().user
         return token_user == self.request.user
 
@@ -188,14 +228,16 @@ class ReferendumVoteView(FormMixin, DetailView):
         return context
 
     def post(self, request, *args, **kwargs):
+        """
+        Custom post method in detailview
+        """
         if not request.user.is_authenticated:
             return HttpResponseForbidden()
         self.object = self.get_object()
         form = self.get_form()
         if form.is_valid():
             return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+        return self.form_invalid(form)
 
     def get_object(self, queryset=None):
         return self.get_vote_token().referendum

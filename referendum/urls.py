@@ -1,20 +1,23 @@
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView, PasswordChangeDoneView, \
-    PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
+    PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
 from django.urls import path
 
 from referendum.forms import CustomLoginForm, CustomPasswordResetForm, CustomSetPasswordForm, CustomPasswordChangeForm
-from referendum.views import IndexView, SignupView, SignupConfirmView, AccountActivationView, AskAccountActivationView, \
-    ReferendumDetailView, ReferendumVoteView, ReferendumListView, CategoryView, ReferendumCreateView, \
+from referendum.views import IndexView, SignupView, SignupConfirmView, AccountActivationView, \
+    AskAccountActivationView, ReferendumDetailView, ReferendumVoteView, ReferendumListView, CategoryView, \
+    ReferendumCreateView, \
     MyReferendumsView, ReferendumUpdateView, CustomPasswordResetView
 from referendum.views.account import AccountView
 from referendum.views.comment import CommentCreateView, CommentUpdateView
-from referendum.views.like import LikeView
+from referendum.views.contact import ContactView
 from referendum.views.legal import LegalView
+from referendum.views.like import LikeView
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
     path('legal', LegalView.as_view(), name='legal'),
+    path('contact', ContactView.as_view(), name='contact'),
     path('account/<pk>', AccountView.as_view(), name='account'),
     path('signup', SignupView.as_view(), name='signup'),
     path('signup-confirm', SignupConfirmView.as_view(), name='signup_confirm'),
@@ -29,8 +32,9 @@ urlpatterns = [
     path('password_change/done',
          PasswordChangeDoneView.as_view(template_name='registration/custom_password_change_done.html'),
          name='password_change_done'),
-    path('password_reset', CustomPasswordResetView.as_view(template_name='registration/custom_password_reset_form.html',
-                                                     form_class=CustomPasswordResetForm),
+    path('password_reset',
+         CustomPasswordResetView.as_view(template_name='registration/custom_password_reset_form.html',
+                                         form_class=CustomPasswordResetForm),
          name='password_reset'),
     path('password_reset/done',
          PasswordResetDoneView.as_view(template_name='registration/custom_password_reset_done.html'),

@@ -8,25 +8,31 @@ from referendum.models import Referendum
 
 
 class IndexAndReferendumSitemap(Sitemap):
+    """
+    Daily updated pages sitemap
+    """
     priority = 0.9
     changefreq = 'daily'
 
     def items(self):
         return ['index', 'referendum_list', 'my_referendums']
 
-    def location(self, item):
-        return reverse(item)
+    def location(self, obj):
+        return reverse(obj)
 
 
 class ReferendumStaticViewSitemap(Sitemap):
+    """
+    Never updated pages sitemap
+    """
     priority = 0.5
     changefreq = 'never'
 
     def items(self):
         return ['referendum_create', 'legal']
 
-    def location(self, item):
-        return reverse(item)
+    def location(self, obj):
+        return reverse(obj)
 
 
 class ReferendumSitemap(Sitemap):
