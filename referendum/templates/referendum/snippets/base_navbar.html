@@ -11,39 +11,11 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav ml-lg-auto col-lg-9">
-            {% url 'signup' as signup_url %}
-            {% url 'login' as login_url %}
-            {% if user.is_staff %}
-                <li class="nav-item my-1 col-lg-3 offset-lg-3">
-                    <a class="btn white-bg my-2 my-sm-0 col-12 redfr-bg" href="/admin" target="_blank">Admin</a>
-                </li>
-            {% endif %}
-            {% if not user.is_authenticated %}
-                {% if request.path != signup_url %}
-                    <li class="nav-item my-1 col-lg-3 offset-lg-6">
-                        <a class="btn bluefr-bg my-2 my-sm-0 col-12 white-text" href="{% url 'signup' %}">
-                            S'inscrire
-                        </a>
-                    </li>
-                {% endif %}
-
-                {% if request.path != login_url %}
-                    <li class="nav-item my-1 col-lg-3 {% if request.path == signup_url %}offset-lg-9{% endif %}">
-                        <a class="btn redfr-bg my-2 my-sm-0 col-12 white-text" href="{% url 'login' %}">
-                            Se connecter
-                        </a>
-                    </li>
-                {% endif %}
-            {% endif %}
+        <ul class="navbar-nav ml-lg-auto col-lg-8">
             {% if user.is_authenticated %}
-                <li class="nav-item my-1 col-lg-3 {% if not user.is_staff %}offset-lg-6{% endif %}">
-                    <a class="btn bluefr-bg my-2 my-sm-0 col-12 white-text" href="{% url 'account' user.pk %}">Mon
-                        compte</a>
-                </li>
-                <li class="nav-item my-1 col-lg-3">
-                    <a class="btn redfr-bg my-2 my-sm-0 col-12 white-text" href="{% url 'logout' %}">Se déconnecter</a>
-                </li>
+                {% include 'referendum/snippets/base_navbar/user_authenticated_navbar.html' %}
+            {% else %}
+                {% include 'referendum/snippets/base_navbar/user_anonymous_navbar.html' %}
             {% endif %}
         </ul>
     </div>

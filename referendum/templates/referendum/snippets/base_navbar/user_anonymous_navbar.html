@@ -1,0 +1,17 @@
+{% url 'signup' as signup_url %}
+{% url 'login' as login_url %}
+{% if request.path != signup_url %}
+    <li class="nav-item my-1 col-lg-3 offset-lg-6">
+        <a class="btn bluefr-bg my-2 my-sm-0 col-12 white-text" href="{% url 'signup' %}">
+            S'inscrire
+        </a>
+    </li>
+{% endif %}
+
+{% if request.path != login_url %}
+    <li class="nav-item my-1 col-lg-3 {% if request.path == signup_url %}offset-lg-9{% endif %}">
+        <a class="btn redfr-bg my-2 my-sm-0 col-12 white-text" href="{% url 'login' %}">
+            Se connecter
+        </a>
+    </li>
+{% endif %}

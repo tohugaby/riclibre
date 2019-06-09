@@ -1,0 +1,18 @@
+{% if user.is_staff %}
+    <li class="nav-item my-1 col-lg-3">
+        <a class="btn white-bg my-2 my-sm-0 col-12 redfr-bg" href="/admin" target="_blank">Admin</a>
+    </li>
+{% endif %}
+<li class="nav-item my-1 col-lg-3 {% if not user.is_staff %}offset-lg-3{% endif %}">
+    <a class="btn bluefr-bg my-2 my-sm-0 col-12 white-text" href="{% url 'account' user.pk %}">
+        Mon compte
+    </a>
+</li>
+<li class="nav-item my-1 col-lg-3">
+    <a class="btn white-bg my-2 my-sm-0 col-12 redfr" href="{% url 'achievements' %}">
+        Mes succès
+    </a>
+</li>
+<li class="nav-item my-1 col-lg-3">
+    <a class="btn redfr-bg my-2 my-sm-0 col-12 white-text" href="{% url 'logout' %}">Se déconnecter</a>
+</li>
