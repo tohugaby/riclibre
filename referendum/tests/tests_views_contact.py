@@ -1,6 +1,9 @@
 """
 Referendum's app: tests module for contact view test
 """
+import os
+import unittest
+
 from django.core import mail
 from django.test import TestCase, Client, override_settings
 from django.urls import reverse
@@ -14,6 +17,7 @@ class ContactViewTestCase(TestCase):
     def setUp(self) -> None:
         self.client = Client()
 
+    @unittest.skipIf(os.getenv('DJANGO_SETTINGS_MODULE') == 'riclibre.settings.travis', "Skip this test on travis")
     @override_settings(DESACTIVATE_RECAPTCHA=True)
     def test_contact_form(self):
         """
