@@ -104,7 +104,7 @@ class ReferendumDetailView(DetailView):
         return form
 
 
-class ReferendumCreateView(CreateView):
+class ReferendumCreateView(LoginRequiredMixin, CreateView):
     """
     Referendum crete view
     """
@@ -125,7 +125,7 @@ class ReferendumCreateView(CreateView):
         return HttpResponseRedirect('/')
 
 
-class ReferendumUpdateView(UpdateView):
+class ReferendumUpdateView(LoginRequiredMixin, UpdateView):
     """
     Referendum update view
     """

@@ -15,8 +15,6 @@ body
 }
 
 
-
-
 .content
 {
     flex: 1 0 auto;
@@ -111,75 +109,148 @@ input
 
 .redfr
 {
-    color: #ae1a2c;
+    color: #ae1a2c !important;
 }
 
 .redfr-bg
 {
-    background-color: #ae1a2c;
+    background-color: #ae1a2c !important;
 }
 
 .bluefr
 {
-    color: #133086;
+    color: #133086 !important;
 }
 
 .bluefr-bg
 {
-    background-color: #133086;
+    background-color: #133086 !important;
 }
 
 .blue2
 {
-    color: #4c86c5;
+    color: #4c86c5 !important;
 }
 
 .blue2-bg
 {
-    background-color: #4c86c5;
+    background-color: #4c86c5 !important;
 }
 
 .blue3
 {
-    color: #486f91;
+    color: #486f91 !important;
 }
 
 .blue3-bg
 {
-    background-color: #486f91;
+    background-color: #486f91 !important;
 }
 
 .white-bg
 {
-    background-color: white;
+    background-color: white !important;
 }
 
 .white-transp-bg
 {
-    background-color: rgba(255, 255, 255, .8);
+    background-color: rgba(255, 255, 255, .8) !important;
 }
 
 .white-very-transp-bg
 {
-    background-color: rgba(255, 255, 255, .4);
+    background-color: rgba(255, 255, 255, .4) !important;
 }
 
 .greyfr
 {
-    color: #91a3ad;
+    color: #91a3ad !important;
 }
 
 .greyfr-bg
 {
-    background-color: #91a3ad;
+    background-color: #91a3ad !important;
 }
 
 .white-text
 {
-    color: white;
+    color: white !important;
 }
 
 .badge-med
 {
     font-size: 1rem;
+}
+
+
+.dropdown-container
+{
+    position: relative;
+}
+
+.dropdown-menu
+{
+    position: absolute;
+    top: 100%; /* Bottom of button */
+    right: 0;
+}
+
+
+.faded-content
+{
+    -webkit-animation: fadein 2s ease-in-out; /* Safari et Chrome */
+       -moz-animation: fadein 2s ease-in-out; /* Firefox */
+         -o-animation: fadein 2s ease-in-out; /* Opera */
+            animation: fadein 2s ease-in-out;
+}
+
+@keyframes fadein
+{
+    from
+    {
+        opacity: 0;
+    }
+    to
+    {
+        opacity: 1;
+    }
+}
+
+@-moz-keyframes fadein
+{
+    /* sur Firefox */
+    from
+    {
+        opacity: 0;
+    }
+    to
+    {
+        opacity: 1;
+    }
+}
+
+@-webkit-keyframes fadein
+{
+    /* sur Safari et Chrome */
+    from
+    {
+        opacity: 0;
+    }
+    to
+    {
+        opacity: 1;
+    }
+}
+
+@-o-keyframes fadein
+{
+    /* sur Opera */
+    from
+    {
+        opacity: 0;
+    }
+    to
+    {
+        opacity: 1;
+    }
 }

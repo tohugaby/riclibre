@@ -1,0 +1,90 @@
+{% url 'account' user.pk as account_url %}
+{% url 'idcard' as idcard_url %}
+{% url 'achievements' as success_url %}
+{% url 'my_referendums' as my_referendum_url %}
+{% url 'signup' as signup_url %}
+{% url 'login' as login_url %}
+
+{% if user.is_authenticated %}
+    <li class="nav-item dropdown my-1 col-lg-3">
+        <div class="dropdown-container">
+            <button class="nav-link dropdown-toggle btn redfr-bg my-2 my-sm-0 col-12 white-text" id="navbarDropdown"
+                    type=button role="button"
+                    data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                Mon compte
+            </button>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                {% if not request.path == account_url %}
+                    <a href="{{ account_url }}" class="dropdown-item redfr">
+                        Mes Informations
+                    </a>
+                {% else %}
+                    <a class="dropdown-item disabled greyfr" aria-disabled="true">
+                        Mes Informations
+                    </a>
+                {% endif %}
+                {% if not request.path == idcard_url %}
+                    <a href="{{ idcard_url }}" class="dropdown-item redfr">
+                        Mes cartes d'identité
+                    </a>
+                {% else %}
+                    <a class="dropdown-item disabled greyfr" aria-disabled="true">
+                        Mes cartes d'identité
+                    </a>
+                {% endif %}
+                {% if not request.path == success_url %}
+                    <a href="{{ success_url }}" class="dropdown-item redfr">
+                        Mes Succès
+                    </a>
+                {% else %}
+                    <a class="dropdown-item disabled greyfr" aria-disabled="true">
+                        Mes Succès
+                    </a>
+                {% endif %}
+                {% if not request.path == my_referendum_url %}
+                    <a href="{{ my_referendum_url }}" class="dropdown-item redfr">Mes référendums</a>
+                {% else %}
+                    <a class="dropdown-item disabled greyfr" aria-disabled="true">Mes référendums</a>
+                {% endif %}
+                <div class="dropdown-divider"></div>
+                <a href="{% url 'logout' %}" class="dropdown-item redfr">
+                    Déconnexion
+                </a>
+            </div>
+        </div>
+    </li>
+{% else %}
+
+    <li class="nav-item dropdown my-1 col-lg-3">
+        <div class="dropdown-container">
+            <button class="nav-link dropdown-toggle btn redfr-bg my-2 my-sm-0 col-12 white-text" id="navbarDropdown"
+                    type=button role="button"
+                    data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                Connexion / Inscription
+            </button>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                {% if not request.path == login_url %}
+                    <a href="{% url 'login' %}" class="dropdown-item redfr">
+                        Connexion
+                    </a>
+                {% else %}
+                    <a class="dropdown-item disabled greyfr" aria-disabled="true">
+                        Connexion
+                    </a>
+                {% endif %}
+                {% if not request.path == signup_url %}
+                    <a href="{% url 'signup' %}" class="dropdown-item redfr">
+                        Inscription
+                    </a>
+                {% else %}
+                    <a class="dropdown-item disabled greyfr" aria-disabled="true">
+                        Inscription
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </li>
+{% endif %}
+

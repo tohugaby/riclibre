@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block main_title %}
-    Ajout d'une pièce d'identité à <a href="{% url 'account' user.pk %}">votre compte {{ user.email }}</a>
+    Mes cartes d'identité
 {% endblock %}
 
 {% block content %}
@@ -30,8 +30,6 @@
                             </div>
                         {% endfor %}
                     {% endif %}
-
-
                     <div class="form-group">
                         {{ form.document }}
                         {% if form.document.help_text %}
@@ -45,10 +43,8 @@
                     <button type="submit" class="btn bluefr-bg white-text">Soumettre la pièce d'identité</button>
                 </div>
             </form>
-
         </div>
     </div>
-
     <div class="row">
         <div class="col table-responsive">
             <table class="table white-transp-bg res">
@@ -119,5 +115,4 @@
             </table>
         </div>
     </div>
-
 {% endblock %}

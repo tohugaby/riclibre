@@ -28,13 +28,10 @@
         <h1 class="blue3 white-transp-bg text-center my-5 description-break">
             {% block main_title %}{% endblock %}
         </h1>
-        <div class="row mb-5">
-            {% block action_buttons %}
-                {% include 'referendum/snippets/base_action_buttons.html' %}
-            {% endblock %}
+        <div class="faded-content">
+            {% block filter_buttons %}{% endblock %}
+            {% block content %}{% endblock %}
         </div>
-        {% block filter_buttons %}{% endblock %}
-        {% block content %}{% endblock %}
     </div>
 </div>
 
