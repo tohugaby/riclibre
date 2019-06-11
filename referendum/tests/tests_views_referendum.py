@@ -9,6 +9,7 @@ from django.db.models import Q
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.text import slugify
 from freezegun import freeze_time
 
 from referendum.models import Referendum, Category, VoteToken
@@ -161,7 +162,7 @@ class ReferendumCreateViewTestCase(TestCase):
         }
         self.client.force_login(self.user)
         response = self.client.post(reverse('referendum_create'), data=data)
-        self.assertRedirects(response, reverse('index'))
+        self.assertRedirects(response, reverse('referendum', kwargs={'slug': slugify(data['title'])}))
 
     def test_referendum_creation_with_errors(self):
         """

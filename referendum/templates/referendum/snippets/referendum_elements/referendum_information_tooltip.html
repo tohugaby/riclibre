@@ -1,0 +1,14 @@
+<div>
+    <div class='text-truncate'>
+        Titre: {{ referendum.title }}
+    </div>
+    <div class='text-truncate'>
+        Question: {{ referendum.question }}
+    </div>
+    <div>
+        Publication: {{ referendum.publication_date|date }}
+    </div>
+    <div>
+        Vote le: {{ referendum.event_start|date }}
+    </div>
+</div>

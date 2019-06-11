@@ -1,0 +1,22 @@
+{% load referendum_extras %}
+{% if referendum.is_in_progress %}
+    <div class="col-12 text-center">
+        <div>
+            {% user_has_voted referendum user as has_voted %}
+            {% if has_voted %}
+                <small class="badge badge-pill white-text redfr-bg">Vous avez voté</small>
+            {% else %}
+                <a class="btn btn-sm redfr-bg white-text"
+                   href="{{ referendum.get_absolute_url }}"
+                   data-toggle="tooltip"
+                   data-html="false"
+                   title="Voter maintenant">
+                    Voter aujourd'hui</a>
+            {% endif %}
+        </div>
+    </div>
+{% else %}
+    <div class="col-12  text-center">
+        Vote le {{ referendum.event_start|date }}
+    </div>
+{% endif %}

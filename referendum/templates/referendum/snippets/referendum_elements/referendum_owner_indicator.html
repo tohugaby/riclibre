@@ -1,0 +1,8 @@
+{% if user.is_authenticated %}
+    <span class="btn badge bluefr" data-toggle="tooltip" data-html="false"
+           title="Créé par {% if referendum.creator == user %}vous{% else %}{{ referendum.creator }}{% endif %}">
+        <i class="fa {% if referendum.creator == user %}fa-user{% else %}fa-user-o greyfr{% endif %}"
+           aria-hidden="true"></i>
+    </span>
+{% endif %}
+

@@ -9,7 +9,8 @@
     {% include 'referendum/snippets/referendum_vote_errors.html' %}
     <div class="jumbotron white-transp-bg">
         <div class="d-flex justify-content-end" style=" font-size: 2em;">
-            {% include 'referendum/snippets/referendum_like_button.html' %}
+            {% include 'referendum/snippets/referendum_elements/referendum_like_button.html' %}
+            {% include 'referendum/snippets/referendum_elements/referendum_owner_indicator.html' %}
         </div>
         <h1 class="text-center text-truncate">
             {{ object.question|capfirst }}
@@ -24,16 +25,16 @@
                 </a>
             {% endfor %}
             <span class="float-md-right">
-            {% include 'referendum/snippets/referendum_publication_date.html' %}
-            {% include 'referendum/snippets/referendum_event_date.html' %}
-            {% include 'referendum/snippets/referendum_has_voted.html' %}
+            {% include 'referendum/snippets/referendum_elements/referendum_publication_date.html' %}
+            {% include 'referendum/snippets/referendum_elements/referendum_event_date.html' %}
+            {% include 'referendum/snippets/referendum_elements/referendum_has_voted.html' %}
         </span>
         </p>
 
         {% if referendum.is_in_progress and can_vote and valid_token and not already_voted %}
             <hr class="my-4">
             <div>
-                {% include 'referendum/snippets/referendum_generic_form.html' %}
+                {% include 'referendum/snippets/generic_form.html' %}
             </div>
         {% endif %}
         {% include 'referendum/snippets/referendum_results_block.html' %}
@@ -65,9 +66,7 @@
         </div>
     </div>
 
-    {% include 'referendum/snippets/comment_form.html' %}
-    {% include 'referendum/snippets/comment_list.html' %}
-    {% include 'referendum/snippets/fake_comment.html' %}
+    {% include 'referendum/snippets/comments.html' %}
 
 
 {% endblock %}

@@ -122,7 +122,7 @@ class ReferendumCreateView(LoginRequiredMixin, CreateView):
         self.object = form.save(commit=False)
         self.object.creator = self.request.user
         self.object.save()
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect(self.object.get_absolute_url())
 
 
 class ReferendumUpdateView(LoginRequiredMixin, UpdateView):
