@@ -9,8 +9,8 @@
     {% include 'referendum/snippets/referendum_vote_errors.html' %}
     <div class="jumbotron white-transp-bg">
         <div class="d-flex justify-content-end" style=" font-size: 2em;">
-            {% include 'referendum/snippets/referendum_elements/referendum_like_button.html' %}
-            {% include 'referendum/snippets/referendum_elements/referendum_owner_indicator.html' %}
+            {% include 'referendum/snippets/referendum_elements/buttons/referendum_like_button.html' %}
+            {% include 'referendum/snippets/referendum_elements/buttons/referendum_owner_indicator.html' %}
         </div>
         <h1 class="text-center text-truncate">
             {{ object.question|capfirst }}
@@ -72,9 +72,8 @@
 {% endblock %}
 
 {% block custom_js %}
-    <script src="{% static 'custom/js/generic_request.js' %}"></script>
+      {{ block.super }}
     <script src="{% static 'custom/js/toggle_hide.js' %}"></script>
-    <script src="{% static 'custom/js/like.js' %}"></script>
     <script src="{% static 'custom/js/comment_event_listeners.js' %}"></script>
     <script src="{% static 'custom/js/comment_card_add_event_listener.js' %}"></script>
     <script src="{% static 'custom/js/add_comment.js' %}"></script>

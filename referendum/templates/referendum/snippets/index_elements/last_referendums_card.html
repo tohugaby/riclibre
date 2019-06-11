@@ -1,0 +1,18 @@
+{% load referendum_extras %}
+<div class="card white-bg">
+    <div class="card-header py-2">
+        <h2 class="text-center greyfr">
+            Derniers référendums
+            {% include 'referendum/snippets/referendum_elements/buttons/referendum_help_button.html' %}
+            {% include 'referendum/snippets/referendum_elements/buttons/referendum_add_button.html' %}
+            {% include 'referendum/snippets/referendum_elements/buttons/referendum_list_button.html' %}
+        </h2>
+    </div>
+    {% for referendum in object_list %}
+        <div class="card-body blue3 py-0 border-bottom">
+            <div class="row">
+                {% include 'referendum/snippets/referendum_list_components/referendum_list_element.html' %}
+            </div>
+        </div>
+    {% endfor %}
+</div>

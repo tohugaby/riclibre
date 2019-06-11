@@ -61,7 +61,7 @@ class Referendum(Observable, FieldUpdateControlMixin, models.Model, metaclass=Wa
     class Meta:
         verbose_name = "Référendum"
         verbose_name_plural = "Référendums"
-        ordering = ('publication_date',)
+        ordering = ('-event_start',)
 
     def __str__(self):
         return self.title

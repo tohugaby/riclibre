@@ -1,22 +1,30 @@
 {% load referendum_extras %}
-{% if referendum.is_in_progress %}
-    <div class="col-12 text-center">
-        <div>
-            {% user_has_voted referendum user as has_voted %}
-            {% if has_voted %}
-                <small class="badge badge-pill white-text redfr-bg">Vous avez voté</small>
-            {% else %}
-                <a class="btn btn-sm redfr-bg white-text"
-                   href="{{ referendum.get_absolute_url }}"
-                   data-toggle="tooltip"
-                   data-html="false"
-                   title="Voter maintenant">
-                    Voter aujourd'hui</a>
-            {% endif %}
-        </div>
-    </div>
-{% else %}
-    <div class="col-12  text-center">
-        Vote le {{ referendum.event_start|date }}
-    </div>
-{% endif %}
+{% user_has_voted referendum user as has_voted %}
+<div class="col-12">
+    {% if has_voted %}
+        Vous avez voté
+        {% if referendum.is_in_progress %}
+            <br><span class="redfr">aujourd'hui</span>
+        {% else %}
+            le <br><span class="redfr">{{ referendum.event_start|date }}</span>
+        {% endif %}
+    {% else %}
+        {% if referendum.is_in_progress %}
+            <a tabindex="0"
+               class="btn btn-sm redfr-bg white-text"
+               href="{{ referendum.get_absolute_url }}"
+               data-toggle="popover"
+               data-trigger="hover"
+               data-html="false"
+               title="Voter"
+               data-content="Cliquez pour accéder à la page de vote.">
+                Voter aujourd'hui</a>
+        {% elif referendum.is_over %}
+            <span class="greyfr">Vote terminé le {{ referendum.event_start|date }}</span>
+        {% elif referendum.event_start %}
+            Vote le {{ referendum.event_start|date }}
+        {% else %}
+            <span class="blue2">Vote non planifié</span>
+        {% endif %}
+    {% endif %}
+</div>

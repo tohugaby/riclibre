@@ -121,7 +121,7 @@ class ReferendumDetailViewTestCase(TestCase):
         """
         nb_vote_token = VoteToken.objects.count()
         self.client.force_login(self.citizen)
-        self.assertEqual(int(self.client.session['_auth_user_id']), self.user.pk)
+        self.assertEqual(int(self.client.session['_auth_user_id']), self.citizen.pk)
         response = self.client.get(self.referendum.get_absolute_url())
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, "label='Vote'")

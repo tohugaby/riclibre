@@ -1,0 +1,33 @@
+{% if referendum.is_over %}
+    <a tabindex="0" class="btn badge redfr icon-btn"
+       data-toggle="popover"
+       title='Résultats'
+       data-html="true"
+       data-placement="top"
+       data-trigger="hover focus"
+       data-content='{% include 'referendum/snippets/referendum_elements/popover_content/referendum_small_results.html' %}'>
+        <i class="fa fa-bar-chart" aria-hidden="true"></i>
+    </a>
+{% elif referendum.is_in_progress %}
+    <a tabindex="0" class="btn badge blue3 icon-btn"
+       data-toggle="popover"
+       title='Tendances'
+       data-html="true"
+       data-placement="top"
+       data-trigger="hover focus"
+       data-content='{% include 'referendum/snippets/referendum_elements/popover_content/referendum_small_results.html' %}'>
+        <i class="fa fa-bar-chart" aria-hidden="true"></i>
+    </a>
+{% else %}
+    <a tabindex="0" class="btn badge greyfr icon-btn"
+       data-toggle="popover"
+       title="Pas de résultats"
+       data-html="true"
+       data-placement="top"
+       data-trigger="hover focus"
+       data-content="Aucun résultat disponible pour ce référendum."
+       aria-disabled="true">
+        <i class="fa fa-bar-chart" aria-hidden="true"></i>
+    </a>
+{% endif %}
+

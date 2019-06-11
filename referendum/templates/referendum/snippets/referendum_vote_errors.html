@@ -1,14 +1,14 @@
 {% if not can_vote and user.is_authenticated and referendum.is_in_progress %}
     <div class="alert white-transp-bg redfr text-center">
-        Pour obtenir le droit de vote sur ce référendum rendez-vous sur la page de
-        <a href="{% url 'account' user.pk %}">votre compte</a> et ajoutez un pièce d'identité valide.
+        Pour obtenir le droit de vote sur ce référendum vous devez fournir
+        <a href="{% url 'idcard' %}">une carte d'identité valide.</a>
     </div>
 {% endif %}
 {% if not user.is_authenticated %}
     <div class="alert white-transp-bg redfr text-center">
         Pour pouvoir voter il faut
-        <a href="{% url 'login' %}">vous connecter</a> ou en <a href="{% url 'signup' %}">créer un compte</a>
-        puis ajouter un pièce d'identité valide sur la page de votre compte.
+        <a href="{% url 'login' %}">vous connecter</a> ou <a href="{% url 'signup' %}">créer un compte</a> puis
+        fournir <a href="{% url 'idcard' %}">une carte d'identité valide.</a>
     </div>
 {% endif %}
 {% if already_voted %}

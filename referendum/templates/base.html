@@ -40,6 +40,19 @@
 {% endblock %}
 
 {% block custom_js %}
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        });
+        $('.popover-dismiss').popover({
+            trigger: 'focus'
+        });
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+    <script src="{% static 'custom/js/generic_request.js' %}"></script>
+    <script src="{% static 'custom/js/like.js' %}"></script>
 {% endblock %}
 
 </body>

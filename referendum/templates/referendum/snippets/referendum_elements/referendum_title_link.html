@@ -1,7 +1,10 @@
-<a class="title-link"
+<a tabindex="0"
+   class="title-link"
    href="{{ referendum.get_absolute_url }}"
-   data-toggle="tooltip"
+   data-toggle="popover"
+   data-trigger="hover"
    data-html="false"
    data-placement="left"
-   title="Cliquez pour accéder à la fiche du référendum">
+   title="Fiche du référendum"
+   data-content="Cliquez pour accéder à la fiche du référendum">
     {{ referendum.question|capfirst }}</a>

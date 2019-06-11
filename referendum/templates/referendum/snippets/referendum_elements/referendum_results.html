@@ -1,0 +1,17 @@
+{% load referendum_extras %}
+
+{% for choice in referendum.choice_set.all|order:'votes_percentage' %}
+    <div class="progress  position-relative my-3">
+        <div class="progress-bar white-text text-center {% if forloop.first %} bluefr-bg {% else %}redfr-bg{% endif %}"
+             role="progressbar"
+             style="width: {{ choice.votes_percentage|stringformat:"f" }}%"
+             aria-valuenow="{{ choice.votes_percentage|stringformat:"f" }}"
+             aria-valuemin="0"
+             aria-valuemax="100">
+            <strong class="justify-content-center d-flex position-absolute w-100"
+                    style="font-size: 1.4rem;">
+                {{ choice.title }} : {{ choice.votes_percentage }}%
+            </strong>
+        </div>
+    </div>
+{% endfor %}
