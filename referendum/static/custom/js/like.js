@@ -14,13 +14,13 @@ let toggleLikeClass = function (targetBtn) {
 };
 
 
-let likeButtons = document.querySelectorAll('.like-btn i');
+let likeButtons = document.querySelectorAll('.like-btn');
 
 
 likeButtons.forEach(function (btn) {
     btn.addEventListener('click', function (event) {
         let updateAllLike = function () {
-            let el = btn;
+            let el = btn.querySelector('i');
             let regex = RegExp('referendum_');
             if (el !== undefined) {
                 el.classList.forEach(function (cls) {
@@ -34,6 +34,6 @@ likeButtons.forEach(function (btn) {
                 });
             }
         };
-        genericGetRequest(event.target.parentElement.getAttribute('data-url'), updateAllLike)
+        genericGetRequest(btn.getAttribute('data-url'), updateAllLike)
     });
 })

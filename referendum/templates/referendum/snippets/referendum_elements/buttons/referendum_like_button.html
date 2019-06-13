@@ -10,7 +10,8 @@
        data-placement="top"
        title="Like"
        data-content="Cliquez pour indiquer que ce référendum vous intéresse.">
-        <i class="fa {% if like_referendum %}fa-star{% else %}fa-star-o bluefr{% endif %} referendum_{{ referendum.pk }}" aria-hidden="true"></i>
+        <i class="referendum_{{ referendum.pk }} fa {% if like_referendum %}fa-star
+{% else %}fa-star-o bluefr{% endif %}" aria-hidden="true"></i>{% if text_button %} <span>Liker</span>{% endif %}
     </a>
 {% endif %}
 

@@ -9,7 +9,10 @@ class VoteForm(forms.Form):
     """
     Vote form
     """
-    choice = forms.ChoiceField(widget=Select(attrs={'class': 'form-control'}), label="Vote")
+    choice = forms.ChoiceField(
+        widget=Select(attrs={'class': 'form-control offset-lg-4 col-lg-4 offset-md-3 col-md-6 col-12'}),
+        label="Vote"
+    )
 
 
 class CommentForm(forms.Form):

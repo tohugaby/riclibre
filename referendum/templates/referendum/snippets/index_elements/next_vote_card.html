@@ -3,9 +3,6 @@
     <div class="card-header py-2">
         <h2 class="text-center redfr">
             Prochains votes
-            {% include 'referendum/snippets/referendum_elements/buttons/referendum_help_button.html' %}
-            {% include 'referendum/snippets/referendum_elements/buttons/referendum_add_button.html' %}
-            {% include 'referendum/snippets/referendum_elements/buttons/referendum_list_button.html' %}
         </h2>
     </div>
     {% for referendum in voted_soon %}
@@ -19,7 +16,7 @@
                     </small>
                 </h3>
                 <div class="card-text text-center row">
-                    {% include 'referendum/snippets/referendum_elements/referendum_vote_informations.html' %}
+                    {% include 'referendum/snippets/referendum_elements/buttons/referendum_vote_informations.html' %}
                 </div>
             </div>
         {% else %}

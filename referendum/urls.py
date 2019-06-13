@@ -7,7 +7,7 @@ from referendum.forms import CustomLoginForm, CustomPasswordResetForm, CustomSet
 from referendum.views import IndexView, SignupView, SignupConfirmView, AccountActivationView, \
     AskAccountActivationView, ReferendumDetailView, ReferendumVoteView, ReferendumListView, CategoryView, \
     ReferendumCreateView, \
-    MyReferendumsView, ReferendumUpdateView, CustomPasswordResetView
+    MyReferendumsView, ReferendumUpdateView, CustomPasswordResetView, VoteControlView
 from referendum.views.account import AccountView
 from referendum.views.comment import CommentCreateView, CommentUpdateView
 from referendum.views.contact import ContactView
@@ -52,7 +52,8 @@ urlpatterns = [
     path('referendums', ReferendumListView.as_view(), name='referendum_list'),
     path('my-referendums', MyReferendumsView.as_view(), name='my_referendums'),
     path('category/<slug>', CategoryView.as_view(), name='category'),
-    path('vote/<token>', permission_required('referendum.is_citizen')(ReferendumVoteView.as_view()), name='vote'),
+    path('referendum/<slug>/vote', VoteControlView.as_view(), name='vote_control'),
+    path('vote/<token>', permission_required('referendum.is_citizen', raise_exception=True)(ReferendumVoteView.as_view()), name='vote'),
     path('comment/create', CommentCreateView.as_view(), name='comment_create'),
     path('comment/<pk>/update', CommentUpdateView.as_view(), name='comment_update'),
 ]

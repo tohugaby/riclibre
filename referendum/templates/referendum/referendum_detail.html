@@ -1,21 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load referendum_extras %}
 
 {% block main_title %}
     {{ object.title|capfirst }}
 {% endblock %}
 
 {% block content %}
-    {% include 'referendum/snippets/referendum_vote_errors.html' %}
-    <div class="jumbotron white-transp-bg">
-        <div class="d-flex justify-content-end" style=" font-size: 2em;">
-            {% include 'referendum/snippets/referendum_elements/buttons/referendum_like_button.html' %}
-            {% include 'referendum/snippets/referendum_elements/buttons/referendum_owner_indicator.html' %}
-        </div>
-        <h1 class="text-center text-truncate">
-            {{ object.question|capfirst }}
-        </h1>
-        <p class="lead">
+    <div class="card white-bg">
+        <div class="card-header text-center py-2">
             {% for categorie in referendum.categories.all %}
                 <a href="{% url 'category' categorie.slug %}"
                    class="badge white-text {% cycle 'bluefr-bg' 'redfr-bg' 'greyfr-bg' 'blue2-bg' 'blue3-bg' %}"
@@ -24,45 +17,55 @@
                     {{ categorie }} <small>({{ categorie.nb_published_referendums }})</small>
                 </a>
             {% endfor %}
-            <span class="float-md-right">
-            {% include 'referendum/snippets/referendum_elements/referendum_publication_date.html' %}
-            {% include 'referendum/snippets/referendum_elements/referendum_event_date.html' %}
-            {% include 'referendum/snippets/referendum_elements/referendum_has_voted.html' %}
-        </span>
-        </p>
-
-        {% if referendum.is_in_progress and can_vote and valid_token and not already_voted %}
-            <hr class="my-4">
-            <div>
-                {% include 'referendum/snippets/generic_form.html' %}
+        </div>
+        <div class="card-body blue3">
+            <div class="card-text text-center">
+                {% with True as text_button %}
+                    {% include 'referendum/snippets/referendum_elements/buttons/referendum_buttons.html' %}
+                {% endwith %}
             </div>
-        {% endif %}
-        {% include 'referendum/snippets/referendum_results_block.html' %}
-        <hr class="my-4">
-        <p class="description-break text-justify">{{ object.description }}</p>
-        <hr class="my-4">
-        <div class="lead">
-            {% if referendum.get_updatable_fields and referendum.creator == user %}
-                <a href="{% url 'referendum_update' referendum.slug %}" class="btn bluefr-bg white-text">
-                    {% if referendum.is_published %}
-                        Planifier le vote
-                    {% else %}
-                        Mettre à jour
+            <div class="card-text text-center py-3">
+                <p>
+                    {% if not referendum.is_published %}
+                        <small class="text-muted">
+                            Note: Le vote ne pourra être planifié que lorsque le référendum aura été publié.
+                        </small>
                     {% endif %}
-                </a>
-                {% if not referendum.is_published %}
-                    <br>
-                    <small class="text-muted">
-                        Note: Le vote ne pourra être planifié que lorsque le référendum aura été publié.
-                    </small>
-                {% endif %}
-                {% if referendum.is_published and not referendum.is_in_progress and not referendum.is_over %}
-                    <br>
-                    <small class="text-muted">
-                        Note: Le date de vote reste modifiable jusqu'à la veille de la date de vote actuellement fixée.
-                    </small>
-                {% endif %}
+                    {% if referendum.is_published and not referendum.is_in_progress and not referendum.is_over %}
+                        <br>
+                        <small class="text-muted">
+                            Note: Le date de vote reste modifiable jusqu'à la veille de la date de vote actuellement
+                            fixée.
+                        </small>
+                    {% endif %}
+                </p>
+                <p>
+                    {% if referendum.is_published %}
+                        Publié le {{ referendum.publication_date|date }}
+                    {% elif referendum.publication_date %}
+                        Sera publié le {{ referendum.publication_date|date }}
+                    {% else %}
+                        Non publié
+                    {% endif %}
+                </p>
+                {% include 'referendum/snippets/referendum_elements/buttons/referendum_vote_informations.html' %}
+            </div>
+            <div class="card-text text-center py-3">
+                <p id="question" class="redfr">Question posée aux citoyens :</p>
+                <p>{{ referendum.question|capfirst }}</p>
+            </div>
+            {% if referendum.is_in_progress or referendum.is_over %}
+                <div class="card-text text-center border-top py-3">
+                    <p id="resultats" class="redfr">
+                        {% if referendum.is_in_progress %} Tendances des votes {% else %} Résultats {% endif %}
+                    </p>
+                    {% include 'referendum/snippets/referendum_elements/referendum_results.html' %}
+                </div>
             {% endif %}
+            <div class="card-text py-3">
+                <p id="description" class="redfr text-center">Description :</p>
+                <p class="text-justify"> {{ object.description }}</p>
+            </div>
         </div>
     </div>
 
@@ -72,7 +75,7 @@
 {% endblock %}
 
 {% block custom_js %}
-      {{ block.super }}
+    {{ block.super }}
     <script src="{% static 'custom/js/toggle_hide.js' %}"></script>
     <script src="{% static 'custom/js/comment_event_listeners.js' %}"></script>
     <script src="{% static 'custom/js/comment_card_add_event_listener.js' %}"></script>

@@ -1,3 +1,4 @@
+{% url 'referendum' referendum.slug as referendum_url %}
 <div>
     <i class="fa fa-plus blue2" aria-hidden="true"></i> : <span>Créer un nouveau référendum.</span>
 </div>
@@ -18,13 +19,17 @@
         class="text-muted">Créé par un autre utilisateur.</span>
 </div>
 <div>
-    <i class="fa fa-info-circle greyfr" aria-hidden="true"></i> : <span>Description courte du référendum.</span>
+    <i class="fa fa-info-circle greyfr" aria-hidden="true"></i> : <span>Description{% if not referendum_url %} courte{% endif %}
+    du référendum.</span>
 </div>
 <div>
     <i class="fa fa-pencil-square-o blue3" aria-hidden="true"></i> : <span>Modifier le référendum.</span>
 </div>
 <div>
     <i class="fa fa-clock-o blue3" aria-hidden="true"></i> : <span>Modifier la date de vote.</span>
+</div>
+<div>
+    <i class="fa fa-circle redfr" aria-hidden="true"></i> : <span>Vote en cours. Modification impossible.</span>
 </div>
 <div>
     <i class="fa fa-ban greyfr" aria-hidden="true"></i> : <span class="text-muted">Modification impossible.</span>

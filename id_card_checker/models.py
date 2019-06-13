@@ -6,11 +6,12 @@ import logging
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
-from django.db import models
+from django.db import models, OperationalError
 from django.db.models import CASCADE
 from django.db.models.signals import post_save
 from django.template.defaultfilters import date
 from django.utils import timezone
+from kombu.exceptions import OperationalError
 from passporteye import read_mrz
 
 from id_card_checker.helpers.mrz_check import check_french_mrz, split_mrz, FRENCH_STRUCTURE
@@ -117,7 +118,11 @@ class IdCard(Observable, models.Model, metaclass=WatchedModel):
         """
         from id_card_checker.tasks import add_check_job
         LOGGER.info('Sending new id card checking job !')
-        add_check_job.delay(self.pk)
+        try:
+            add_check_job.delay(self.pk)
+        except OperationalError as ope_err:
+            LOGGER.error("Can't delegate the task to Celery. Check if message broker started: %s", ope_err)
+            raise ope_err
 
     def extract_mrz(self):
         """

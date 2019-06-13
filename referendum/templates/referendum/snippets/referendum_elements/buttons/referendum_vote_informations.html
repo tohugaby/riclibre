@@ -12,7 +12,7 @@
         {% if referendum.is_in_progress %}
             <a tabindex="0"
                class="btn btn-sm redfr-bg white-text"
-               href="{{ referendum.get_absolute_url }}"
+               href="{% url 'vote_control' referendum.slug %}"
                data-toggle="popover"
                data-trigger="hover"
                data-html="false"

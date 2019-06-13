@@ -6,10 +6,10 @@
        data-trigger="focus hover"
        title="Créateur"
        data-placement="top"
-       data-content="{{ referendum.creator }}"
-    >
+       data-content="{{ referendum.creator.username }}">
         <i class="fa {% if referendum.creator == user %}fa-user{% else %}fa-user-o blue2{% endif %}"
            aria-hidden="true"></i>
+        {% if text_button %}{{ referendum.creator.username }}{% endif %}
     </a>
 {% endif %}
 
