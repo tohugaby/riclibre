@@ -5,6 +5,6 @@ from __future__ import absolute_import, unicode_literals
 
 from .celery import app as celery_app
 
-__version__ = "1.4.0"
+__version__ = "1.4.1"
 
 __all__ = ('celery_app')
