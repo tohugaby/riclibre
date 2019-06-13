@@ -10,7 +10,7 @@
              aria-valuemax="100">
             <strong class="justify-content-center d-flex position-absolute w-100"
                     style="font-size: 1.4rem;">
-                {{ choice.title }} : {{ choice.votes_percentage }}%
+                {{ choice.title }} : {{ choice.votes_percentage|floatformat }}%
             </strong>
         </div>
     </div>

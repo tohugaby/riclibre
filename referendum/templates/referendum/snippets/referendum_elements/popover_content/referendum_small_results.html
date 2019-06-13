@@ -1,6 +1,6 @@
 {% load referendum_extras %}
 {% for choice in referendum.choice_set.all|order:'votes_percentage' %}
     <div>
-        {{ choice.title }} : {{ choice.votes_percentage }}%
+        {{ choice.title }} : {{ choice.votes_percentage|floatformat }}%
     </div>
 {% endfor %}
