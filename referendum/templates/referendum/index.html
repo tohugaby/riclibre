@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load referendum_extras %}
 
 {% block main_title %}
@@ -9,32 +10,20 @@
 {% block content %}
 
     <div class="row">
-        <div class="col-lg-6 col-md-12 my-2">
-            <h2 class="white-transp-bg text-center bluefr">Derniers Référendums</h2>
-            <div class="list-group">
-                {% for referendum in referendum_list %}
-                    {% include 'referendum/snippets/referendum_list_group_last.html' %}
-                {% endfor %}
-            </div>
+        <div class="col-lg-5 col-md-12 mt-1 mb-2">
+            {% if last_result %}
+                {% with last_result as referendum %}
+                    {% include 'referendum/snippets/index_elements/last_result_card.html' %}
+                {% endwith %}
+            {% endif %}
         </div>
-        <div class="col-lg-6 col-md-12 my-2">
-            <h2 class=" white-transp-bg text-center greyfr">Journées de votes à venir</h2>
-            <div class="list-group">
-                {% for referendum in voted_soon %}
-                    {% include 'referendum/snippets/referendum_list_group_next_votes.html' %}
-                {% endfor %}
-            </div>
+        <div class="col-lg-7 col-md-12 mt-1 mb-2">
+            {% with voted_soon as referendum_list %}
+                {% include 'referendum/snippets/index_elements/next_vote_card.html' %}
+            {% endwith %}
         </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12 my-2">
-            <h2 class="white-transp-bg text-center redfr">Derniers résultats</h2>
-            <div class="list-group">
-                {% for referendum in results_available %}
-                    {% include 'referendum/snippets/referendum_list_group_last_results.html' %}
-                {% endfor %}
-            </div>
+        <div class="col-12 my-2  mt-1 mb-2">
+            {% include 'referendum/snippets/index_elements/last_referendums_card.html' %}
         </div>
     </div>
-
 {% endblock %}

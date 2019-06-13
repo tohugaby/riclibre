@@ -25,16 +25,19 @@
 <div class="content mb-5">
     {% block header %}{% include 'referendum/snippets/base_navbar.html' %}{% endblock %}
     <div class="container">
-        <h1 class="blue3 white-transp-bg text-center my-5 description-break">
-            {% block main_title %}{% endblock %}
+        <h1 class="blue3 white-transp-bg text-center my-4 px-5 pt-5 pb-3 description-break title-with-buttons">
+            <div>{% block main_title %}{% endblock %}</div>
+            <div class="common-buttons small">
+                {% include 'referendum/snippets/referendum_elements/buttons/referendum_help_button.html' %}
+                {% include 'referendum/snippets/referendum_elements/buttons/referendum_add_button.html' %}
+                {% include 'referendum/snippets/referendum_elements/buttons/referendum_list_button.html' %}
+            </div>
         </h1>
-        <div class="row mb-5">
-            {% block action_buttons %}
-                {% include 'referendum/snippets/base_action_buttons.html' %}
-            {% endblock %}
+        {% include 'messages_snippet.html' %}
+        <div class="faded-content">
+            {% block filter_buttons %}{% endblock %}
+            {% block content %}{% endblock %}
         </div>
-        {% block filter_buttons %}{% endblock %}
-        {% block content %}{% endblock %}
     </div>
 </div>
 
@@ -43,6 +46,19 @@
 {% endblock %}
 
 {% block custom_js %}
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover()
+        });
+        $('.popover-dismiss').popover({
+            trigger: 'focus'
+        });
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
+    <script src="{% static 'custom/js/generic_request.js' %}"></script>
+    <script src="{% static 'custom/js/like.js' %}"></script>
 {% endblock %}
 
 </body>

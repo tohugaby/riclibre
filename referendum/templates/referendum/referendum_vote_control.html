@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load referendum_extras %}
+
+{% block main_title %}
+    Réalisation des contrôles avant vote.
+{% endblock %}
+
+{% block content %}
+    <div class="card white-bg">
+        <div class="card-header text-center py-2">
+            {% for categorie in referendum.categories.all %}
+                <a href="{% url 'category' categorie.slug %}"
+                   class="badge white-text {% cycle 'bluefr-bg' 'redfr-bg' 'greyfr-bg' 'blue2-bg' 'blue3-bg' %}"
+                   data-toggle="tooltip" data-placement="top"
+                   title="Voir les {{ categorie.nb_published_referendums }} référendum(s) de la catégorie {{ categorie }}">
+                    {{ categorie }} <small>({{ categorie.nb_published_referendums }})</small>
+                </a>
+            {% endfor %}
+        </div>
+        <div class="card-body blue3">
+            <div class="card-text text-center py-3">
+                Vote du {{ referendum.event_start|date }}
+            </div>
+            <div class="card-text text-center py-3">
+                <p id="question" class="redfr">Question posée aux citoyens :</p>
+                <p>{{ referendum.question|capfirst }}</p>
+            </div>
+            {% if referendum.is_in_progress %}
+                {% include 'referendum/snippets/referendum_vote_errors.html' %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block custom_js %}
+{% endblock %}

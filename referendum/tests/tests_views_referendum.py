@@ -9,6 +9,7 @@ from django.db.models import Q
 from django.test import TestCase, Client
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.text import slugify
 from freezegun import freeze_time
 
 from referendum.models import Referendum, Category, VoteToken
@@ -120,8 +121,8 @@ class ReferendumDetailViewTestCase(TestCase):
         """
         nb_vote_token = VoteToken.objects.count()
         self.client.force_login(self.citizen)
-        self.assertEqual(int(self.client.session['_auth_user_id']), self.user.pk)
-        response = self.client.get(self.referendum.get_absolute_url())
+        self.assertEqual(int(self.client.session['_auth_user_id']), self.citizen.pk)
+        response = self.client.get(reverse('vote_control',kwargs={'slug':self.referendum_not_started.slug}))
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, "label='Vote'")
         self.referendum_not_started.event_start = timezone.now()
@@ -129,7 +130,7 @@ class ReferendumDetailViewTestCase(TestCase):
         self.referendum_not_started.refresh_from_db()
         self.assertGreaterEqual(timezone.now(), self.referendum_not_started.event_start)
         self.assertTrue(self.referendum_not_started.is_in_progress)
-        response = self.client.get(self.referendum_not_started.get_absolute_url())
+        response = self.client.get(reverse('vote_control',kwargs={'slug':self.referendum_not_started.slug}))
         self.assertEqual(nb_vote_token + 1, VoteToken.objects.count())
         last_token = VoteToken.objects.last()
         self.assertEqual(last_token.user, self.citizen)
@@ -161,7 +162,7 @@ class ReferendumCreateViewTestCase(TestCase):
         }
         self.client.force_login(self.user)
         response = self.client.post(reverse('referendum_create'), data=data)
-        self.assertRedirects(response, reverse('index'))
+        self.assertRedirects(response, reverse('referendum', kwargs={'slug': slugify(data['title'])}))
 
     def test_referendum_creation_with_errors(self):
         """
@@ -364,7 +365,7 @@ class ReferendumVoteViewTestCase(TestCase):
         data = {'choice': self.referendum.choice_set.first().pk}
         vote_token = VoteToken.objects.create(user=self.citizen, referendum=self.referendum)
         response = self.client.post(reverse('vote', kwargs={'token': vote_token.token}), data=data)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(old_nb_votes, self.referendum.nb_votes)
 
     def test_authenticated_vote_valid_data(self):

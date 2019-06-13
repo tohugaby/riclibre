@@ -4,11 +4,13 @@ Id Card checker app: IdCard views
 import logging
 
 from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views.generic import CreateView
 from django.views.generic.list import MultipleObjectMixin, MultipleObjectTemplateResponseMixin
+from kombu.exceptions import OperationalError
 
 from id_card_checker.forms import IdCardForm
 from id_card_checker.models import IdCard
@@ -48,7 +50,11 @@ class IdCardUploadView(LoginRequiredMixin, MultipleObjectMixin, MultipleObjectTe
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.user = self.request.user
-        self.object.save()
+        try:
+            self.object.save()
+        except OperationalError:
+            messages.add_message(self.request, messages.INFO, """Le service de traitement des cartes est momentanément 
+            indisponible. Votre carte a bien été enregistrée et sera traitée ultérieurement.""")
         return HttpResponseRedirect(reverse('idcard'))
 
     def form_invalid(self, form):

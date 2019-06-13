@@ -108,7 +108,7 @@ class LikeViewLiveTestCase(StaticLiveServerTestCase):
         nb_like = self.referendum.like_set.count()
         self.force_login_user()
         self.selenium.get("%s%s" % (self.live_server_url, self.referendum.get_absolute_url()))
-        like_btn = self.selenium.find_element_by_id('like-btn')
+        like_btn = self.selenium.find_element_by_class_name('like-btn')
         like_btn.click()
         self.referendum.refresh_from_db()
         self.assertEqual(nb_like + 1, self.referendum.like_set.count())
@@ -121,7 +121,7 @@ class LikeViewLiveTestCase(StaticLiveServerTestCase):
         nb_like = self.referendum.like_set.count()
         self.force_login_user()
         self.selenium.get("%s%s" % (self.live_server_url, self.referendum.get_absolute_url()))
-        like_btn = self.selenium.find_element_by_id('like-btn')
+        like_btn = self.selenium.find_element_by_class_name('like-btn')
         like_btn.click()
         self.referendum.refresh_from_db()
         self.assertEqual(nb_like - 1, self.referendum.like_set.count())
@@ -132,4 +132,4 @@ class LikeViewLiveTestCase(StaticLiveServerTestCase):
         """
         self.selenium.get("%s%s" % (self.live_server_url, self.referendum.get_absolute_url()))
         with self.assertRaises(NoSuchElementException):
-            self.selenium.find_element_by_id('like-btn')
+            self.selenium.find_element_by_class_name('like-btn')

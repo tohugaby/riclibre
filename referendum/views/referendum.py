@@ -84,13 +84,6 @@ class ReferendumDetailView(DetailView):
     model = Referendum
     template_name = 'referendum/referendum_detail.html'
 
-    def get(self, request, *args, **kwargs):
-        response = super().get(request, *args, **kwargs)
-        if self.object.is_in_progress and self.request.user.has_perm('referendum.is_citizen'):
-            vote_token, created = VoteToken.objects.get_or_create(user=self.request.user, referendum=self.object)
-            return redirect(reverse_lazy('vote', kwargs={'token': vote_token.token}))
-        return response
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['comment_form'] = self.get_comment_form()
@@ -104,7 +97,7 @@ class ReferendumDetailView(DetailView):
         return form
 
 
-class ReferendumCreateView(CreateView):
+class ReferendumCreateView(LoginRequiredMixin, CreateView):
     """
     Referendum crete view
     """
@@ -122,10 +115,10 @@ class ReferendumCreateView(CreateView):
         self.object = form.save(commit=False)
         self.object.creator = self.request.user
         self.object.save()
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect(self.object.get_absolute_url())
 
 
-class ReferendumUpdateView(UpdateView):
+class ReferendumUpdateView(LoginRequiredMixin, UpdateView):
     """
     Referendum update view
     """
@@ -181,6 +174,19 @@ class ReferendumUpdateView(UpdateView):
         """If the form is invalid, render the invalid form."""
         return self.render_to_response(self.get_context_data(form=form))
 
+class VoteControlView(DetailView):
+    """
+    Control that user is allowed to vote and redirect him/her to vote page.
+    """
+    model = Referendum
+    template_name = 'referendum/referendum_vote_control.html'
+
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+        if self.object.is_in_progress and self.request.user.has_perm('referendum.is_citizen'):
+            vote_token, created = VoteToken.objects.get_or_create(user=self.request.user, referendum=self.object)
+            return redirect(reverse_lazy('vote', kwargs={'token': vote_token.token}))
+        return response
 
 class ReferendumVoteView(FormMixin, DetailView):
     """
@@ -189,7 +195,7 @@ class ReferendumVoteView(FormMixin, DetailView):
     slug_field = 'token'
     slug_url_kwarg = 'token'
     model = VoteToken
-    template_name = 'referendum/referendum_detail.html'
+    template_name = 'referendum/referendum_vote.html'
     form_class = VoteForm
 
     def check_user_is_citizen(self):

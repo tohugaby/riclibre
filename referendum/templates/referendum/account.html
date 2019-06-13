@@ -1,9 +1,8 @@
 {% extends 'base.html' %}
 {% load referendum_extras %}
 
-
 {% block main_title %}
-    Votre compte
+    Mes informations
 {% endblock %}
 
 {% block content %}
@@ -11,7 +10,7 @@
         <div class="col-lg-6 my-1">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Vos informations actuelles</h5>
+                    <h5 class="card-title">Mes informations actuelles</h5>
                     <small class="muted greyfr">
                         Profil créé le {{ user.date_joined | date }} / modifié le {{ user.last_update | date }}
                     </small>
@@ -63,19 +62,17 @@
                     </li>
                 </ul>
                 <div class="card-body">
-                    <a class="btn blue2-bg white-text" href="{% url 'idcard' %}">Ajouter une pièce d'identité</a>
+                    <a class="btn blue2-bg white-text" href="{% url 'idcard' %}">Ajouter une carte d'identité</a>
                 </div>
             </div>
-
         </div>
         <div class="col-lg-6 my-1">
             <form class="card" action="" method="post">
                 {% csrf_token %}
                 <div class="card-body">
-                    <h5 class="card-title">Modifier vos informations</h5>
+                    <h5 class="card-title">Modifier mes informations</h5>
                     <small class="muted greyfr">
                         Profil créé le {{ user.date_joined | date }} / modifié le {{ user.last_update | date }}
-
                     </small>
                 </div>
                 <ul class="list-group list-group-flush">
@@ -131,7 +128,4 @@
             </form>
         </div>
     </div>
-
-
-
 {% endblock %}

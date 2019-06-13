@@ -1,8 +1,0 @@
-{% load referendum_extras %}
-{% if user.is_authenticated %}
-    {% like_referendum referendum user as like_referendum %}
-    <small id="like-btn" class="btn badge bluefr" data-url="{% url 'like' referendum.slug %}">
-        <i class="fa {% if like_referendum %}fa-star{% else %}fa-star-o{% endif %}" aria-hidden="true"></i>
-    </small>
-{% endif %}
-

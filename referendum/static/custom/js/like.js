@@ -1,8 +1,7 @@
 // Manage like button
 
-let likeBtn = document.querySelector('#like-btn i');
-let toggleLikeClass = function () {
-    let el = likeBtn
+let toggleLikeClass = function (targetBtn) {
+    let el = targetBtn;
     let likeCssClass = 'fa-star';
     let unLikeCssClass = 'fa-star-o';
     if (el.classList.contains(unLikeCssClass)) {
@@ -15,7 +14,26 @@ let toggleLikeClass = function () {
 };
 
 
-likeBtn.addEventListener('click', function (event) {
-    likeBtn.parentElement
-    genericGetRequest(event.target.parentElement.getAttribute('data-url'), toggleLikeClass)
-});
+let likeButtons = document.querySelectorAll('.like-btn');
+
+
+likeButtons.forEach(function (btn) {
+    btn.addEventListener('click', function (event) {
+        let updateAllLike = function () {
+            let el = btn.querySelector('i');
+            let regex = RegExp('referendum_');
+            if (el !== undefined) {
+                el.classList.forEach(function (cls) {
+                    if (regex.test(cls)) {
+                        let targetClassName = '.' + cls;
+                        let sameReferendumLikeButtons = document.querySelectorAll(targetClassName);
+                        sameReferendumLikeButtons.forEach(function (targetBtn) {
+                            toggleLikeClass(targetBtn);
+                        })
+                    }
+                });
+            }
+        };
+        genericGetRequest(btn.getAttribute('data-url'), updateAllLike)
+    });
+})

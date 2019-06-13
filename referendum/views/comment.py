@@ -38,7 +38,7 @@ class CommentCreateView(LoginRequiredMixin, FormView):
     Comment create view
     """
     model = Comment
-    template_name = 'referendum/snippets/comment_form.html'
+    template_name = 'referendum/snippets/comments_elements/comment_form.html'
     form_class = CommentForm
 
     def get_success_url(self):
@@ -60,7 +60,7 @@ class CommentUpdateView(LoginRequiredMixin, UpdateView):
     Comment update view
     """
     model = Comment
-    template_name = 'referendum/snippets/comment_form.html'
+    template_name = 'referendum/snippets/comments_elements/comment_form.html'
     fields = ['text']
 
     def get_success_url(self):

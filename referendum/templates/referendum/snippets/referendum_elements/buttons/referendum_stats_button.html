@@ -1,0 +1,45 @@
+{% url 'referendum' referendum.slug as referendum_url %}
+{% if referendum.is_over %}
+    <a {% if request.path == referendum_url %}
+        href="#resultats"
+    {% else %}
+        data-toggle="popover"
+    {% endif %}
+        tabindex="0" class="btn badge redfr icon-btn"
+        title='Résultats'
+        data-html="true"
+        data-placement="top"
+        data-trigger="hover focus"
+        data-content='{% include 'referendum/snippets/referendum_elements/popover_content/referendum_small_results.html' %}'>
+        <i class="fa fa-bar-chart" aria-hidden="true"></i>
+        {% if text_button %}Résultats{% endif %}
+    </a>
+{% elif referendum.is_in_progress %}
+    <a {% if request.path == referendum_url %}
+        href="#resultats"
+    {% else %}
+        data-toggle="popover"
+    {% endif %}
+        tabindex="0" class="btn badge blue3 icon-btn"
+        title='Tendances'
+        data-html="true"
+        data-placement="top"
+        data-trigger="hover focus"
+        data-content='{% include 'referendum/snippets/referendum_elements/popover_content/referendum_small_results.html' %}'>
+        <i class="fa fa-bar-chart" aria-hidden="true"></i>
+        {% if text_button %}Tendances{% endif %}
+    </a>
+{% else %}
+    <a tabindex="0" class="btn badge greyfr icon-btn"
+       data-toggle="popover"
+       title="Pas de résultats"
+       data-html="true"
+       data-placement="top"
+       data-trigger="hover focus"
+       data-content="Aucun résultat disponible pour ce référendum."
+       aria-disabled="true">
+        <i class="fa fa-bar-chart" aria-hidden="true"></i>
+        {% if text_button %}Pas de résultats{% endif %}
+    </a>
+{% endif %}
+

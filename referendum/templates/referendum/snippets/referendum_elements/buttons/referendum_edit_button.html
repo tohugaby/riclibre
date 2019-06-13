@@ -1,0 +1,78 @@
+{% if referendum.creator == user %}
+    {% if referendum.get_updatable_fields and not referendum.is_published %}
+        <a tabindex="0" class="btn badge blue3 icon-btn"
+           href="{% url 'referendum_update' referendum.slug %}"
+           data-toggle="popover"
+           title='Modification'
+           data-html="true"
+           data-trigger="hover"
+           data-placement="top"
+           data-content='Cliquez pour mettre à jour ce référendum'>
+            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+            {% if text_button %}Mettre à jour{% endif %}
+        </a>
+    {% elif referendum.get_updatable_fields and referendum.is_published and not referendum.is_in_progress and not referendum.is_over %}
+        <a tabindex="0" class="btn badge blue3 icon-btn"
+           href="{% url 'referendum_update' referendum.slug %}"
+           data-toggle="popover"
+           title='Modification'
+           data-html="true"
+           data-trigger="hover"
+           data-placement="top"
+           data-content='Cliquez pour mettre à jour la date de vote du référendum.'>
+            <i class="fa fa-clock-o" aria-hidden="true"></i>
+            {% if text_button %}Planifier le vote{% endif %}
+        </a>
+    {% elif referendum.is_in_progress %}
+        <a tabindex="0" class="btn badge greyfr"
+           data-toggle="popover"
+           title='Vote en cours'
+           data-html="true"
+           data-trigger="hover"
+           data-placement="top"
+           data-content="Vous ne pouvez pas mettre à jour un référendum en cours."
+           aria-disabled="true">
+            <i class="fa fa-circle redfr" aria-hidden="true"></i>
+            {% if text_button %}<span class="redfr">Vote en cours</span>{% endif %}
+        </a>
+    {% else %}
+        <a tabindex="0" class="btn badge greyfr"
+           data-toggle="popover"
+           title='Modification impossible'
+           data-html="true"
+           data-trigger="hover"
+           data-placement="top"
+           data-content="Vous ne pouvez pas mettre à jour un référendum terminé."
+           aria-disabled="true">
+            <i class="fa fa-ban" aria-hidden="true"></i>
+            {% if text_button %}Modification impossible{% endif %}
+        </a>
+    {% endif %}
+{% else %}
+    {% if referendum.is_in_progress %}
+        <a tabindex="0" class="btn badge greyfr"
+           data-toggle="popover"
+           title='Vote en cours'
+           data-html="true"
+           data-trigger="hover"
+           data-placement="top"
+           data-content="Vous ne pouvez pas mettre à jour un référendum en cours (de plus vous n'en êtes pas le
+           créateur)."
+           aria-disabled="true">
+            <i class="fa fa-circle redfr" aria-hidden="true"></i>
+            {% if text_button %}<span class="redfr">Vote en cours</span>{% endif %}
+        </a>
+    {% else %}
+        <a tabindex="0" class="btn badge greyfr"
+           data-toggle="popover"
+           title='Modification impossible'
+           data-html="true"
+           data-trigger="hover"
+           data-placement="top"
+           data-content="Vous ne pouvez pas mettre à jour un référendum dont vous n'êtes pas le créateur."
+           aria-disabled="true">
+            <i class="fa fa-ban" aria-hidden="true"></i>
+            {% if text_button %}Modification impossible{% endif %}
+        </a>
+    {% endif %}
+{% endif %}

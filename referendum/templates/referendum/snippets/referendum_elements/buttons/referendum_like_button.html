@@ -1,0 +1,17 @@
+{% load referendum_extras %}
+{% if user.is_authenticated %}
+    {% like_referendum referendum user as like_referendum %}
+    <a tabindex="0"
+       class="btn badge bluefr icon-btn like-btn"
+       data-url="{% url 'like' referendum.slug %}"
+       data-toggle="popover"
+       data-trigger="hover"
+       data-html="true"
+       data-placement="top"
+       title="Like"
+       data-content="Cliquez pour indiquer que ce référendum vous intéresse.">
+        <i class="referendum_{{ referendum.pk }} fa {% if like_referendum %}fa-star
+{% else %}fa-star-o bluefr{% endif %}" aria-hidden="true"></i>{% if text_button %} <span>Liker</span>{% endif %}
+    </a>
+{% endif %}
+

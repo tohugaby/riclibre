@@ -1,0 +1,33 @@
+{% url 'referendum_list' as referendum_list_url %}
+{% url 'referendum_create' as referendum_create_url %}
+
+<li class="nav-item dropdown my-1 col-lg-3">
+    <div class="dropdown-container">
+        <button class="nav-link dropdown-toggle btn white-bg my-2 my-sm-0 col-12 blue3" id="navbarDropdown"
+                type="button" role="button"
+                data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+            Référendum
+        </button>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {% if not request.path == referendum_list_url %}
+                <a href="{{ referendum_list_url }}" class="dropdown-item blue3">
+                    Tous les référendums
+                </a>
+            {% else %}
+                <a class="dropdown-item disabled greyfr" aria-disabled="true">
+                    Tous les référendums
+                </a>
+            {% endif %}
+            {% if not request.path == referendum_create_url %}
+                <a href="{{ referendum_create_url }}" class="dropdown-item blue3">
+                    Nouveau référendum
+                </a>
+            {% else %}
+                <a class="dropdown-item disabled greyfr" aria-disabled="true">
+                    Nouveau référendum
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</li>

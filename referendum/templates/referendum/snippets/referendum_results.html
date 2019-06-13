@@ -1,6 +1,0 @@
-{% load referendum_extras %}
-{% for choice in referendum.choice_set.all|order:'votes_percentage' %}
-    <span class="badge badge-pill {% if forloop.first %}white-bg bluefr {% else %}white-bg greyfr{% endif %}">
-        {{ choice.title }} : {{ choice.votes_percentage }} %
-    </span>
-{% endfor %}

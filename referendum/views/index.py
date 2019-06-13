@@ -26,6 +26,10 @@ class IndexView(ListView):
         context['voted_soon'] = [ref for ref in
                                  Referendum.objects.filter(event_start__isnull=False).order_by('event_start') if
                                  not ref.is_over][:3]
-        context['results_available'] = [ref for ref in Referendum.objects.all().order_by('-event_start') if
-                                        ref.is_over][:3]
+        try:
+            context['last_result'] = [ref for ref in Referendum.objects.all().order_by('-event_start') if ref.is_over][
+                0]
+        except IndexError:
+            context['last_result'] = None
+
         return context

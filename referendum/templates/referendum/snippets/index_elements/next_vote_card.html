@@ -1,0 +1,30 @@
+{% load referendum_extras %}
+<div class="card white-bg">
+    <div class="card-header py-2">
+        <h2 class="text-center redfr">
+            Prochains votes
+        </h2>
+    </div>
+    {% for referendum in voted_soon %}
+        {% if forloop.first %}
+            <div class="card-body blue3 border-bottom">
+                <h3 class="card-title text-center text-truncate">
+                    {% include 'referendum/snippets/referendum_elements/referendum_title_link.html' %}
+                    <br>
+                    <small>
+                        {% include 'referendum/snippets/referendum_elements/buttons/referendum_buttons.html' %}
+                    </small>
+                </h3>
+                <div class="card-text text-center row">
+                    {% include 'referendum/snippets/referendum_elements/buttons/referendum_vote_informations.html' %}
+                </div>
+            </div>
+        {% else %}
+            <div class="card-body blue3 py-0 border-bottom">
+                <div class="row">
+                    {% include 'referendum/snippets/referendum_list_components/referendum_list_element.html' %}
+                </div>
+            </div>
+        {% endif %}
+    {% endfor %}
+</div>

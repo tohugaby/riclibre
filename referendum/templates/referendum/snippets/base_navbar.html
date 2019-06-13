@@ -9,14 +9,12 @@
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
-
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-lg-auto col-lg-12 col-xl-10">
-            {% if user.is_authenticated %}
-                {% include 'referendum/snippets/base_navbar/user_authenticated_navbar.html' %}
-            {% else %}
-                {% include 'referendum/snippets/base_navbar/user_anonymous_navbar.html' %}
-            {% endif %}
+            {% include 'referendum/snippets/base_navbar_elements/navbar_admin_button.html' %}
+            {% include 'referendum/snippets/base_navbar_elements/navbar_home_button.html' %}
+            {% include 'referendum/snippets/base_navbar_elements/navbar_referendum_dropdown_button.html' %}
+            {% include 'referendum/snippets/base_navbar_elements/navbar_account_dropdown_button.html' %}
         </ul>
     </div>
 </nav>
