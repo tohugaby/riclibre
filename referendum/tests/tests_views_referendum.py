@@ -439,7 +439,7 @@ class ReferendumVoteViewTestCase(TestCase):
         """
         self.client.force_login(self.citizen)
         old_nb_votes = self.referendum.nb_votes
-        data = {'choice': self.referendum.choice_set.first().pk}
+        data = {'choice': self.referendum.choice_set.first().pk, 'confirm': True}
         vote_token = VoteToken.objects.create(user=self.citizen, referendum=self.referendum)
         response = self.client.post(reverse('vote', kwargs={'token': vote_token.token}), data=data)
         self.assertEqual(response.status_code, 302)
@@ -462,3 +462,17 @@ class ReferendumVoteViewTestCase(TestCase):
         self.assertEqual(old_nb_votes, self.referendum.nb_votes)
         vote_token.refresh_from_db()
         self.assertFalse(vote_token.voted)
+
+    def test_vote_confirmed_view_when_user_has_voted(self):
+        """
+        Test vote confirmed view when user has voted
+        :return:
+        """
+        self.client.force_login(self.citizen)
+        vote_token = VoteToken.objects.create(user=self.citizen, referendum=self.referendum)
+        response = self.client.get(reverse('vote_confirmed', kwargs={'slug': self.referendum.slug}))
+        self.assertRedirects(response, reverse('vote_control', kwargs={'slug': self.referendum.slug}))
+        vote_token.voted = True
+        vote_token.save()
+        response = self.client.get(reverse('vote_confirmed', kwargs={'slug': self.referendum.slug}))
+        self.assertEqual(response.status_code, 200)

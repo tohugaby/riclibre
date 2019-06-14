@@ -17,11 +17,3 @@ app = Celery('riclibre', broker=os.getenv('BROKER_URL', 'redis://localhost:6379'
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
 app.autodiscover_tasks()
-
-
-@app.task(bind=True)
-def debug_task(self):
-    """
-    Just a debug task
-    """
-    print(f'Request: {self.request}')

@@ -8,7 +8,7 @@ from referendum.views import IndexView, SignupView, SignupConfirmView, AccountAc
     AskAccountActivationView, ReferendumDetailView, ReferendumVoteView, ReferendumListView, CategoryView, \
     ReferendumCreateView, \
     MyReferendumsView, ReferendumUpdateView, CustomPasswordResetView, VoteControlView, InProgressReferendumListView, \
-    FavoritesReferendumListView, OverReferendumListView, UserVotedForReferendumListView
+    FavoritesReferendumListView, OverReferendumListView, UserVotedForReferendumListView, VoteConfirmedView
 from referendum.views.account import AccountView
 from referendum.views.comment import CommentCreateView, CommentUpdateView
 from referendum.views.contact import ContactView
@@ -46,10 +46,7 @@ urlpatterns = [
     path('reser/done',
          PasswordResetCompleteView.as_view(template_name='registration/custom_password_reset_complete.html'),
          name='password_reset_complete'),
-    path('referendums/<slug>', ReferendumDetailView.as_view(), name='referendum'),
-    path('referendum/create', ReferendumCreateView.as_view(), name='referendum_create'),
-    path('referendum/<slug>/update', ReferendumUpdateView.as_view(), name='referendum_update'),
-    path('referendum/<slug>/like', LikeView.as_view(), name='like'),
+
     path('referendums', ReferendumListView.as_view(), name='referendum_list'),
     path('my-referendums', MyReferendumsView.as_view(), name='my_referendums'),
     path('category/<slug>', CategoryView.as_view(), name='category'),
@@ -57,7 +54,14 @@ urlpatterns = [
     path('over', OverReferendumListView.as_view(), name='over'),
     path('favorites', FavoritesReferendumListView.as_view(), name='favorites'),
     path('voted', UserVotedForReferendumListView.as_view(), name='voted'),
+
+    path('add-referendum', ReferendumCreateView.as_view(), name='referendum_create'),
+
+    path('referendum/<slug>', ReferendumDetailView.as_view(), name='referendum'),
+    path('referendum/<slug>/update', ReferendumUpdateView.as_view(), name='referendum_update'),
+    path('referendum/<slug>/like', LikeView.as_view(), name='like'),
     path('referendum/<slug>/vote', VoteControlView.as_view(), name='vote_control'),
+    path('referendum/<slug>/vote-confirmed', VoteConfirmedView.as_view(), name='vote_confirmed'),
     path('vote/<token>',
          permission_required('referendum.is_citizen', raise_exception=True)(ReferendumVoteView.as_view()),
          name='vote'),

@@ -294,7 +294,7 @@ class ReferendumVoteView(FormMixin, DetailView):
         return token_user == self.request.user
 
     def get_success_url(self):
-        return reverse_lazy('referendum', kwargs={'slug': self.object.slug})
+        return reverse_lazy('vote_confirmed', kwargs={'slug': self.object.slug})
 
     def get_context_data(self, **kwargs):
 
@@ -331,3 +331,18 @@ class ReferendumVoteView(FormMixin, DetailView):
         choice = Choice.objects.get(pk=form.cleaned_data['choice'])
         self.get_vote_token().vote(choice=choice)
         return super().form_valid(form)
+
+
+class VoteConfirmedView(DetailView):
+    """
+    Confirmed vote view.
+    """
+    model = Referendum
+    template_name = 'referendum/referendum_vote_confirmed.html'
+
+    def get(self, request, *args, **kwargs):
+        super_get = super().get(request, *args, **kwargs)
+        vote_token = VoteToken.objects.filter(user=request.user, referendum=self.object, voted=True)
+        if vote_token.exists():
+            return super_get
+        return HttpResponseRedirect(reverse_lazy('vote_control', kwargs={'slug': self.object.slug}))
