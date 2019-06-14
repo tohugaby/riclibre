@@ -12,6 +12,7 @@ COPY achievements ./achievements
 
 COPY manage.py requirements.txt ./
 RUN apt-get update -y && apt-get -y install tesseract-ocr libtesseract-dev
+RUN pip install --upgrade pip
 RUN pip install -r ./requirements.txt
 RUN wget https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh && chmod +x wait-for-it.sh
 EXPOSE 8000
