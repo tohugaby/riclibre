@@ -89,12 +89,15 @@ class FiltersViewTestCase(TestCase):
         """
         Test in progress view filters referendum
         """
+        self.in_progress_referendum = Referendum.objects.create(title='test in progress',
+                                                                creator=self.user,
+                                                                description='test in progress',
+                                                                question='test in progress',
+                                                                publication_date=timezone.now() - timezone.timedelta(
+                                                                    days=20),
+                                                                event_start=timezone.now())
         self.client = Client()
-        self.in_progress_referendum = Referendum.objects.last()
-        self.in_progress_referendum.publication_date = timezone.now() - timezone.timedelta(days=1)
-        self.in_progress_referendum.event_start = timezone.now()
-        self.in_progress_referendum.save()
-        self.in_progress_referendum.refresh_from_db()
+        self.client.force_login(self.user)
         response = self.client.get(reverse('in_progress'))
         self.assertEqual(response.status_code, 200)
         self.assertIn(self.in_progress_referendum, response.context_data['object_list'])
