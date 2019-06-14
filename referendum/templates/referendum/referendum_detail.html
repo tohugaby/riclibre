@@ -11,7 +11,8 @@
         <div class="card-header text-center py-2">
             {% for categorie in referendum.categories.all %}
                 <a href="{% url 'category' categorie.slug %}"
-                   class="badge white-text {% cycle 'bluefr-bg' 'redfr-bg' 'greyfr-bg' 'blue2-bg' 'blue3-bg' %}"
+                   class="badge badge-med white-text
+{% cycle 'bluefr-bg' 'redfr-bg' 'greyfr-bg' 'blue2-bg' 'blue3-bg' %}"
                    data-toggle="tooltip" data-placement="top"
                    title="Voir les {{ categorie.nb_published_referendums }} référendum(s) de la catégorie {{ categorie }}">
                     {{ categorie }} <small>({{ categorie.nb_published_referendums }})</small>
