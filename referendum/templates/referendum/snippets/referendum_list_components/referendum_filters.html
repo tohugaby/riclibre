@@ -1,18 +1,47 @@
 <div class="white-transp-bg mb-1 justify-content-md-around">
-    <p class="text-center">Filtrer par catégorie : </p>
-    <div class="d-flex flex-wrap white-transp-bg mb-1 p-1">
+    <p class="text-center">Filtrer par statut</p>
+    <div class="d-flex flex-wrap white-transp-bg mb-1 p-1 justify-content-center">
         <a href="{% url 'referendum_list' %}" class="badge badge-med white-text blue3-bg m-1"
            data-toggle="tooltip" data-placement="top"
            title="Voir tous les référendums">
             Tous
         </a>
+        <a href="{% url 'in_progress' %}" class="badge badge-med white-text blue3-bg m-1"
+           data-toggle="tooltip" data-placement="top"
+           title="Vote en cours">
+            Votes en cours
+        </a>
+        <a href="{% url 'over' %}" class="badge badge-med white-text blue3-bg m-1"
+           data-toggle="tooltip" data-placement="top"
+           title="Vote terminé">
+            Votes terminés
+        </a>
         {% if user.is_authenticated %}
-            <a href="{% url 'my_referendums' %}" class="badge badge-med white-text greyfr-bg m-1"
+            <a href="{% url 'my_referendums' %}" class="badge badge-med white-text redfr-bg m-1"
                data-toggle="tooltip" data-placement="top"
                title="Voir vos {{ user.referendum_set.count }} référendums">
                 Mes référendums <small>({{ user.referendum_set.count }})</small>
             </a>
+            <a href="{% url 'favorites' %}" class="badge badge-med white-text redfr-bg m-1"
+               data-toggle="tooltip" data-placement="top"
+               title="Liké par vous">
+                Mes like <small>({{ user.like_set.count }})</small>
+            </a>
+            <a href="{% url 'voted' %}" class="badge badge-med white-text redfr-bg m-1"
+               data-toggle="tooltip" data-placement="top"
+               title="Vous avez voté pour ce référendum">
+                Mes participations
+            </a>
         {% endif %}
+
+    </div>
+    <p class="text-center">Filtrer par catégorie</p>
+    <div class="d-flex flex-wrap white-transp-bg mb-1 p-1 justify-content-center">
+        <a href="{% url 'referendum_list' %}" class="badge badge-med white-text blue3-bg m-1"
+           data-toggle="tooltip" data-placement="top"
+           title="Voir tous les référendums">
+            Tous
+        </a>
         {% for categorie in categories %}
             <a href="{% url 'category' categorie.slug %}"
                class="badge badge-med white-text m-1

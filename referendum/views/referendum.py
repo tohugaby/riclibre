@@ -35,6 +35,77 @@ class ReferendumListView(ListView):
         return context
 
 
+class InProgressReferendumListView(ListView):
+    """
+    In progress referendum list view
+    """
+    model = Referendum
+    template_name = 'referendum/referendum_list.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context['categories'] = Category.objects.all()
+        context['title'] = "Liste des référendums en cours de vote"
+        return context
+
+    def get_queryset(self):
+        return [referendum for referendum in Referendum.objects.all() if referendum.is_in_progress]
+
+
+class OverReferendumListView(ListView):
+    """
+    Over referendum list view
+    """
+    model = Referendum
+    template_name = 'referendum/referendum_list.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context['categories'] = Category.objects.all()
+        context['title'] = "Liste des référendums terminés"
+        return context
+
+    def get_queryset(self):
+        return [referendum for referendum in Referendum.objects.all() if referendum.is_over]
+
+
+class FavoritesReferendumListView(LoginRequiredMixin, ListView):
+    """
+    Favorites referendum list view
+    """
+    model = Referendum
+    template_name = 'referendum/referendum_list.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context['categories'] = Category.objects.all()
+        context['title'] = "Les référendums que vous avez liké"
+        return context
+
+    def get_queryset(self):
+        return sorted([like.referendum for like in self.request.user.like_set.all()], key=lambda x: x.event_start,
+                      reverse=True)
+
+
+class UserVotedForReferendumListView(LoginRequiredMixin, ListView):
+    """
+    Referendum for those user has voted list view
+    """
+    model = Referendum
+    template_name = 'referendum/referendum_list.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context['categories'] = Category.objects.all()
+        context['title'] = "Les référendums pour lesquels vous avez voté"
+        return context
+
+    def get_queryset(self):
+        return sorted([token.referendum for token in self.request.user.votetoken_set.filter(voted=True)],
+                      key=lambda x: x.event_start,
+                      reverse=True)
+
+
 class CategoryView(ListView):
     """
     Categories Referendum list view
@@ -174,6 +245,7 @@ class ReferendumUpdateView(LoginRequiredMixin, UpdateView):
         """If the form is invalid, render the invalid form."""
         return self.render_to_response(self.get_context_data(form=form))
 
+
 class VoteControlView(DetailView):
     """
     Control that user is allowed to vote and redirect him/her to vote page.
@@ -187,6 +259,7 @@ class VoteControlView(DetailView):
             vote_token, created = VoteToken.objects.get_or_create(user=self.request.user, referendum=self.object)
             return redirect(reverse_lazy('vote', kwargs={'token': vote_token.token}))
         return response
+
 
 class ReferendumVoteView(FormMixin, DetailView):
     """
@@ -221,7 +294,7 @@ class ReferendumVoteView(FormMixin, DetailView):
         return token_user == self.request.user
 
     def get_success_url(self):
-        return reverse_lazy('referendum', kwargs={'slug': self.object.slug})
+        return reverse_lazy('vote_confirmed', kwargs={'slug': self.object.slug})
 
     def get_context_data(self, **kwargs):
 
@@ -258,3 +331,18 @@ class ReferendumVoteView(FormMixin, DetailView):
         choice = Choice.objects.get(pk=form.cleaned_data['choice'])
         self.get_vote_token().vote(choice=choice)
         return super().form_valid(form)
+
+
+class VoteConfirmedView(DetailView):
+    """
+    Confirmed vote view.
+    """
+    model = Referendum
+    template_name = 'referendum/referendum_vote_confirmed.html'
+
+    def get(self, request, *args, **kwargs):
+        super_get = super().get(request, *args, **kwargs)
+        vote_token = VoteToken.objects.filter(user=request.user, referendum=self.object, voted=True)
+        if vote_token.exists():
+            return super_get
+        return HttpResponseRedirect(reverse_lazy('vote_control', kwargs={'slug': self.object.slug}))

@@ -12,7 +12,7 @@ from django.utils import timezone
 from django.utils.text import slugify
 from freezegun import freeze_time
 
-from referendum.models import Referendum, Category, VoteToken
+from referendum.models import Referendum, Category, VoteToken, Like
 
 LOGGER = logging.getLogger(__name__)
 
@@ -50,6 +50,71 @@ class CategoryViewTestCase(TestCase):
         response = self.client.get(reverse('category', kwargs={'slug': self.category.slug}))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(list(self.referendum_list), list(response.context_data['object_list']))
+
+
+class FiltersViewTestCase(TestCase):
+    """
+    Test referendum filter View.
+    """
+    fixtures = ['test_data.json']
+
+    def setUp(self) -> None:
+        self.user = get_user_model().objects.first()
+
+    def test_favorites_filter(self):
+        """
+        Test favorites view filters referendum
+        """
+        self.favorite_referendum = Referendum.objects.first()
+        Like.objects.create(user=self.user, referendum=self.favorite_referendum)
+        self.client = Client()
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('favorites'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(self.favorite_referendum, response.context_data['object_list'])
+
+    def test_voted_filter(self):
+        """
+        Test voted referendums view filters
+        """
+        self.voted_referendum = Referendum.objects.first()
+        VoteToken.objects.create(user=self.user, voted=True, referendum=self.voted_referendum)
+        self.client = Client()
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('voted'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(self.voted_referendum, response.context_data['object_list'])
+
+    def test_in_progress_filter(self):
+        """
+        Test in progress view filters referendum
+        """
+        self.in_progress_referendum = Referendum.objects.create(title='test in progress',
+                                                                creator=self.user,
+                                                                description='test in progress',
+                                                                question='test in progress',
+                                                                publication_date=timezone.now() - timezone.timedelta(
+                                                                    days=20),
+                                                                event_start=timezone.now())
+        self.client = Client()
+        self.client.force_login(self.user)
+        response = self.client.get(reverse('in_progress'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(self.in_progress_referendum, response.context_data['object_list'])
+
+    def test_over_filter(self):
+        """
+        Test over view filters referendum
+        """
+        self.client = Client()
+        self.over_referendum = Referendum.objects.last()
+        self.over_referendum.publication_date = timezone.now() - timezone.timedelta(days=3)
+        self.over_referendum.event_start = timezone.now() - timezone.timedelta(days=2)
+        self.over_referendum.save()
+        self.over_referendum.refresh_from_db()
+        response = self.client.get(reverse('over'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(self.over_referendum, response.context_data['object_list'])
 
 
 class MyReferendumsViewTestCase(TestCase):
@@ -122,7 +187,7 @@ class ReferendumDetailViewTestCase(TestCase):
         nb_vote_token = VoteToken.objects.count()
         self.client.force_login(self.citizen)
         self.assertEqual(int(self.client.session['_auth_user_id']), self.citizen.pk)
-        response = self.client.get(reverse('vote_control',kwargs={'slug':self.referendum_not_started.slug}))
+        response = self.client.get(reverse('vote_control', kwargs={'slug': self.referendum_not_started.slug}))
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, "label='Vote'")
         self.referendum_not_started.event_start = timezone.now()
@@ -130,7 +195,7 @@ class ReferendumDetailViewTestCase(TestCase):
         self.referendum_not_started.refresh_from_db()
         self.assertGreaterEqual(timezone.now(), self.referendum_not_started.event_start)
         self.assertTrue(self.referendum_not_started.is_in_progress)
-        response = self.client.get(reverse('vote_control',kwargs={'slug':self.referendum_not_started.slug}))
+        response = self.client.get(reverse('vote_control', kwargs={'slug': self.referendum_not_started.slug}))
         self.assertEqual(nb_vote_token + 1, VoteToken.objects.count())
         last_token = VoteToken.objects.last()
         self.assertEqual(last_token.user, self.citizen)
@@ -374,7 +439,7 @@ class ReferendumVoteViewTestCase(TestCase):
         """
         self.client.force_login(self.citizen)
         old_nb_votes = self.referendum.nb_votes
-        data = {'choice': self.referendum.choice_set.first().pk}
+        data = {'choice': self.referendum.choice_set.first().pk, 'confirm': True}
         vote_token = VoteToken.objects.create(user=self.citizen, referendum=self.referendum)
         response = self.client.post(reverse('vote', kwargs={'token': vote_token.token}), data=data)
         self.assertEqual(response.status_code, 302)
@@ -397,3 +462,17 @@ class ReferendumVoteViewTestCase(TestCase):
         self.assertEqual(old_nb_votes, self.referendum.nb_votes)
         vote_token.refresh_from_db()
         self.assertFalse(vote_token.voted)
+
+    def test_vote_confirmed_view_when_user_has_voted(self):
+        """
+        Test vote confirmed view when user has voted
+        :return:
+        """
+        self.client.force_login(self.citizen)
+        vote_token = VoteToken.objects.create(user=self.citizen, referendum=self.referendum)
+        response = self.client.get(reverse('vote_confirmed', kwargs={'slug': self.referendum.slug}))
+        self.assertRedirects(response, reverse('vote_control', kwargs={'slug': self.referendum.slug}))
+        vote_token.voted = True
+        vote_token.save()
+        response = self.client.get(reverse('vote_confirmed', kwargs={'slug': self.referendum.slug}))
+        self.assertEqual(response.status_code, 200)
