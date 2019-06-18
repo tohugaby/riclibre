@@ -36,7 +36,7 @@ class IdCardTestCase(TestCase):
         """
         del settings.ID_CARD_VALIDITY_LENGTH
         with self.assertRaises(AttributeError):
-            validity_length = settings.ID_CARD_VALIDITY_LENGTH
+            getattr(settings, 'ID_CARD_VALIDITY_LENGTH')
         creation_date = timezone.now()
         self.assertEqual(IdCard.get_expiration_date(creation_date), creation_date + timezone.timedelta(minutes=1))
 

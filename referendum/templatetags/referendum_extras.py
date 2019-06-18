@@ -1,11 +1,14 @@
 """
 Referendum's app: template's custom filters and tags
 """
+import logging
+
 from django import template
 from django.contrib.auth.models import AnonymousUser
 
 from referendum.models import VoteToken, Like
 
+LOGGER = logging.getLogger(__name__)
 register = template.Library()
 
 
@@ -45,6 +48,7 @@ def user_has_voted(referendum, user):
         token = VoteToken.objects.get(referendum=referendum, user=user)
         return token.voted
     except VoteToken.DoesNotExist as vote_token_dne:
+        LOGGER.info("%s", vote_token_dne)
         return False
 
 

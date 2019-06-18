@@ -35,7 +35,7 @@ class CustomUser(Observable, AbstractUser, metaclass=WatchedModel):
         Check if user is 'utilisateur'
         :return: a Boolean
         """
-        return True if self.is_active else False, self
+        return self.is_active, self
 
 
 post_save.connect(default_notify_observers, sender=CustomUser)

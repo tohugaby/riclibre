@@ -53,7 +53,7 @@ class IdCardUploadView(LoginRequiredMixin, MultipleObjectMixin, MultipleObjectTe
         try:
             self.object.save()
         except OperationalError:
-            messages.add_message(self.request, messages.INFO, """Le service de traitement des cartes est momentanément 
+            messages.add_message(self.request, messages.INFO, """Le service de traitement des cartes est momentanément
             indisponible. Votre carte a bien été enregistrée et sera traitée ultérieurement.""")
         return HttpResponseRedirect(reverse('idcard'))
 

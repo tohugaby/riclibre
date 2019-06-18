@@ -16,7 +16,7 @@ class AchievementsObserver(Observer):
     Observes models that provides achievements.
     """
 
-    def update(self, observable: 'Observable', *args, **kwargs) -> None:
+    def update(self, observable: Observable, *args, **kwargs) -> None:
         """
         Get update information from observable.
         """
@@ -28,7 +28,7 @@ class AchievementsObserver(Observer):
                     try:
                         with transaction.atomic():
                             Achievement.objects.create(user=user, badge=badge)
-                    except IntegrityError as unique_constraint:
+                    except IntegrityError:
                         LOGGER.info("User %s still got '%s' badge.", user, badge)
 
 

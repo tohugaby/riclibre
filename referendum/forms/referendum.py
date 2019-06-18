@@ -13,10 +13,10 @@ class VoteForm(forms.Form):
         label="Vote"
     )
     confirm = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}), required=True,
-                                 label="""Je confirme mon vote et comprends que la validation de ce formulaire est 
+                                 label="""Je confirme mon vote et comprends que la validation de ce formulaire est
                                  définitive.""",
-                                 help_text="""Votre vote va être enregistré de façon totalement anonyme. De ce fait, 
-                                 il vous sera impossible de le modifier ou de consulter l'historique de vos choix de 
+                                 help_text="""Votre vote va être enregistré de façon totalement anonyme. De ce fait,
+                                 il vous sera impossible de le modifier ou de consulter l'historique de vos choix de
                                  vote après validation de ce formulaire.""")
 
     def clean_confirm(self):

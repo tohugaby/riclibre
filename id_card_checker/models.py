@@ -6,7 +6,7 @@ import logging
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
-from django.db import models, OperationalError
+from django.db import models
 from django.db.models import CASCADE
 from django.db.models.signals import post_save
 from django.template.defaultfilters import date
@@ -145,6 +145,7 @@ class IdCard(Observable, models.Model, metaclass=WatchedModel):
         mrz_is_parsed = False
         delivery_date = None
         comment = ''
+        log_error = None
         try:
             mrz_text = self.extract_mrz()
             if check_french_mrz(mrz_text):
@@ -157,12 +158,18 @@ class IdCard(Observable, models.Model, metaclass=WatchedModel):
                 comment = self.MRZ_ANALYSIS_MESSAGES['error_mrz_value']
         except AttributeError as attr_error:
             comment = self.MRZ_ANALYSIS_MESSAGES['error_doc_quality']
+            log_error = attr_error
         except ValueError as val_error:
             comment = self.MRZ_ANALYSIS_MESSAGES['error_mrz_value']
+            log_error = val_error
         except IndexError as index_error:
             comment = self.MRZ_ANALYSIS_MESSAGES['error_mrz_structure']
+            log_error = index_error
         except Exception as unknown_exception:
             comment = self.MRZ_ANALYSIS_MESSAGES['error_unknown']
+            log_error = unknown_exception
+        if log_error:
+            LOGGER.info("%s : %s", log_error, comment)
 
         return mrz_is_parsed, delivery_date, comment
 

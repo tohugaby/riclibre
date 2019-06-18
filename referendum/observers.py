@@ -10,7 +10,7 @@ class IdCheckerObserver(Observer):
     Observes Id checker
     """
 
-    def update(self, observable: 'Observable', *args, **kwargs) -> None:
+    def update(self, observable: Observable, *args, **kwargs) -> None:
         """
 
         :param observable:
