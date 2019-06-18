@@ -10,6 +10,7 @@ from django.http import HttpResponseForbidden, HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
+from django.utils.timezone import make_aware
 from django.views.generic import DetailView, ListView, CreateView, UpdateView
 from django.views.generic.edit import FormMixin
 from tempus_dominus.widgets import DateTimePicker
@@ -18,6 +19,18 @@ from referendum.forms import VoteForm, CommentForm
 from referendum.models import Referendum, Category, VoteToken, Choice
 
 LOGGER = logging.getLogger(__name__)
+
+
+def replace_none_datetime(datetime_to_check):
+    """
+    Return a far future datetime if datetime to check is none else provided datetime.
+    :param datetime_to_check: datetime to check
+    :return: a datetime
+    """
+    if datetime_to_check is None:
+        fake_date = make_aware(timezone.datetime(year=3000, month=1, day=1))
+        return fake_date
+    return datetime_to_check
 
 
 class ReferendumListView(ListView):
@@ -83,7 +96,8 @@ class FavoritesReferendumListView(LoginRequiredMixin, ListView):
         return context
 
     def get_queryset(self):
-        return sorted([like.referendum for like in self.request.user.like_set.all()], key=lambda x: x.event_start,
+        return sorted([like.referendum for like in self.request.user.like_set.all()],
+                      key=lambda x: replace_none_datetime(x.event_start),
                       reverse=True)
 
 
@@ -102,7 +116,7 @@ class UserVotedForReferendumListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return sorted([token.referendum for token in self.request.user.votetoken_set.filter(voted=True)],
-                      key=lambda x: x.event_start,
+                      key=lambda x: replace_none_datetime(x.event_start),
                       reverse=True)
 
 
